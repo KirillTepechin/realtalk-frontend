@@ -1,28 +1,39 @@
 <template>
-  <RegisterPage/>
-  <LoginPage/>
+  <BorthdateForm/>
 </template>
 
 <script>
-import RegisterPage from './pages/RegisterPage.vue'
-import LoginPage from './pages/LoginPage.vue'
+//import RegisterPage from './pages/RegisterPage.vue'
+//import LoginPage from './pages/LoginPage.vue'
+import BorthdateForm from './components/SubcrList.vue'
 
 export default {
   name: 'App',
   components: {
-    RegisterPage,
-    LoginPage
+    //RegisterPage,
+    //LoginPage
+    BorthdateForm
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Georgia, serif;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: black;
+  font-size: 22pt;
+}
+body{
+  background-image: url('assets/background.jpg');
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+h4{    
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #D276FD;
 }
 </style>
