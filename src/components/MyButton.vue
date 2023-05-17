@@ -19,5 +19,6 @@ export default {
     background-color: #D276FD;
     border-color: #D276FD;
     text-align: center;
+    cursor: pointer;
 }
 </style>

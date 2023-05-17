@@ -1,64 +1,18 @@
 <template>
-    <form @submit.prevent="login" enctype="multipart/form-data">
-      <h4>Вход</h4>
-      <input
-          v-model="user.login"
-          type="text"
-          placeholder="Введите логин"
-      />
-      <input
-          v-model="user.password"
-          type="password"
-          placeholder="Введите пароль"
-      />
-      <button
-          type="submit"
-      >
-        Войти
-      </button>
-    </form>
-    <button
-          v-on:click="get"
-      >
-        получай
-      </button>
+    <LoginForm/>
   </template>
   
   <script>
   
-  
-  import UserService from "@/services/UserService";
-  
+  import LoginForm from "@/components/LoginForm";
+
   export default {
     name: "LoginPage",
-    data(){
-      return {
-        user:{},
-      }
-    },
-    methods: {
-      login() {
-         UserService.login(this.user).then(
-            response => {
-              console.log("токен "+response.data)
-              localStorage.setItem('jwt', response.data)
-            }
-        )
-      },
-      get(){
-        UserService.me().then(
-            response => {
-              console.log("ПОльзователь - "+response.data)
-            }
-        )
-      }
+    components: {LoginForm},
     }
-  }
-  
-  
   
   </script>
   
   <style scoped>
-  
+   
   </style>

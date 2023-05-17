@@ -6,6 +6,7 @@
         :height="this.height"
         >
         <input
+        :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
         :placeholder="this.placeholder"
         :type="this.type"
         >
@@ -14,21 +15,23 @@
 
 <script>
 
-export default{
+export default {
     props: {
-        type: String, 
+        type: String,
         placeholder: String,
         src: String,
         width: Number,
-        height: Number
-  },
-  methods:{
-    getImgUrl: function (path) {
-      let images = require.context('../assets/', false, /.png$|.jpg$/)
-      return images("./"+path)
-    }
-  }
+        height: Number,
+        modelValue: String
+    },
     
+    methods: {
+        getImgUrl: function (path) {
+            let images = require.context('../assets/', false, /.png$|.jpg$/)
+            return images("./" + path)
+        },
+    }
+
 }
 </script>
 

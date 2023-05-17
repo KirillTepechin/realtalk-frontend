@@ -1,15 +1,13 @@
 <template>
-    <form @submit.prevent>
+    <form>
         <h4>Установите фото профиля</h4>
-        <input id="file" type="file" accept="image/*">
+        <input @change="onFileChange" id="file" type="file" accept="image/*">
         <label for="file">
             <span class="input-file-btn">Выберите файл</span>
         </label>
         <div class="image-area">
             <img 
             src="../assets/surname.png"
-            width="200"
-            height="150"
             >
         </div>        
         <div class="btn-bar">
@@ -24,6 +22,28 @@ import MyButton from './MyButton.vue';
 export default {
     components:{
         MyButton
+    },
+    methods:{
+        onFileChange(e) {
+            console.log(e)
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+                return;
+            this.createImage(files[0]);
+        },
+        createImage(file) {
+            
+            var reader = new FileReader();
+            var vm = this;
+            
+            reader.onload = (e) => {
+                var preview = document.querySelector("#app > form > div.image-area > img")
+                vm.image = e.target.result;
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            //this.actor.photo = file;
+        },
     }
   
 }
@@ -35,7 +55,7 @@ form{
     flex-direction: column;
     width: 35%;
     margin: auto;
-    margin-top: 3%;
+    margin-top: 10%;
     background-color: #ffffff50;
     border-radius: 30px; 
     border: 1px solid;
@@ -86,9 +106,19 @@ h4{
 
 .image-area{
     border: 2px solid;
-    max-width: 50%;
     align-self: center;
     border-color: #D276FD;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border-radius: 50%;
+    
+    width: 150px;
+    height: 150px;
+}
+img{
+    width: auto;
+    height: 100%;
+    margin: 0 auto;
 }
 
 /*::-webkit-file-upload-button {

@@ -1,7 +1,7 @@
 <template>
     <div class="profile-container">
         <div class="user-photo">
-            <img src="../assets/realtalk.png" width="200" height="150">
+            <img src="../assets/realtalk.png" class ="img-photo" >
         </div>
         <div class="user-info">
             <div class="name-surname">
@@ -23,7 +23,7 @@
                 <img class="icon" src="../assets/news.png" width="20" height="20">
                 <label>Количество постов: 11</label>
             </div>
-            <MyButton>Редактировать профиль</MyButton> 
+            <MyButton :onclick="goTo">Редактировать профиль</MyButton> 
         </div>
     </div>
 </template>
@@ -33,8 +33,12 @@ import MyButton from './MyButton.vue';
 export default {
     components:{
         MyButton
+    },
+    methods:{
+        goTo(){
+            this.$router.push("/edit-profile")
+        }
     }
-  
 }
 </script>
 
@@ -45,11 +49,9 @@ export default {
     flex-wrap: wrap;
     justify-content: space-evenly;
     background-color: white;
-    width: 800px;
     min-height: 250px;
     font-family: Georgia, serif;
     font-size: 12pt;
-    margin: 10px;
     border-radius: 10px;
     border: 1px solid;
     padding: 25px 30px;
@@ -65,9 +67,22 @@ export default {
 }
 
 .user-photo{
-    width: 30%;
+    /* width: 30%;
+    border: 2px solid;
+    border-color: #D276FD; */
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    overflow: hidden;
     border: 2px solid;
     border-color: #D276FD;
+    border-radius: 50%;
+}
+
+.img-photo {
+    width: auto;
+    height: 100%;
+    margin: 0 auto;
 }
 
 .name-surname{

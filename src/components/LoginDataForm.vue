@@ -43,9 +43,10 @@ form{
     display: flex;
     flex-direction: column;
     width: 35%;
-    margin: auto;
-    margin-top: 3%;
     background-color: white;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: #D276FD;
 }
 .btn{
     margin: 30px 50px;

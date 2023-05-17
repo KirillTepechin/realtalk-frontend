@@ -1,9 +1,9 @@
 <template>
     <div id="btn-bar">
-        <button>
+        <button :onclick="goToPersonalData">
         Личные данные
         </button>
-        <button>
+        <button :onclick="goToLoginData">
         Данные входа
         </button>
     </div>
@@ -12,11 +12,18 @@
 <script>
 export default {
     components:{
+    },
+    methods:{
+        goToPersonalData(){
+            this.$router.push("personal")
+        },
+        goToLoginData(){
+            this.$router.push("login-data")
+        }
     }
-  
 }
 </script>
-
+    
 <style scoped>
 #btn-bar{
     display: flex;

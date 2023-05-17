@@ -44,9 +44,6 @@ export default {
     border-color: #D276FD;
 }
 
-.filters{
-    
-}
 
 .btn{
     padding: 10px;

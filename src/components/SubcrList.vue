@@ -40,7 +40,6 @@ export default {
 #users-list{
     display: flex;
     flex-direction: column;
-    width: 20%;
     background-color: white;
     border-radius: 10px;
     border: 1px solid;
@@ -48,6 +47,7 @@ export default {
     font-family: Georgia, serif;
     font-size: 11pt;
     padding: 10px 10px;
+    margin-bottom: 10px;
 }
 
 .title{
@@ -73,6 +73,7 @@ export default {
 .user-photo{
     border: 2px solid;
     border-color: #D276FD;
+    border-radius: 50%;
 }
 
 a{

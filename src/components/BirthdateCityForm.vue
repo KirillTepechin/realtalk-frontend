@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent>
+    <form>
         <h4>Укажите дату рождения и свой город</h4>
         <InputIcon
         :type = "'date'"
@@ -16,7 +16,7 @@
         :height = "'18'"
         />
         <div class="btn-bar">
-            <MyButton>Пропустить</MyButton>
+            <MyButton :onclick="goToStep3">Пропустить</MyButton>
             <MyButton>Далее</MyButton>
         </div>        
     </form>
@@ -29,6 +29,11 @@ export default {
     components:{
         MyButton,
         InputIcon
+    },
+    methods:{
+        goToStep3(){
+            this.$router.push("/registration/step-3")
+        }
     }
   
 }
@@ -40,7 +45,7 @@ form{
     flex-direction: column;
     width: 35%;
     margin: auto;
-    margin-top: 3%;
+    margin-top: 12%;
     background-color: #ffffff50;
     border-radius: 30px; 
     border: 1px solid;

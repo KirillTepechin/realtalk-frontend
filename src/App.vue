@@ -1,18 +1,13 @@
 <template>
-  <BorthdateForm/>
+  <router-view/>
 </template>
 
 <script>
-//import RegisterPage from './pages/RegisterPage.vue'
-//import LoginPage from './pages/LoginPage.vue'
-import BorthdateForm from './components/SubcrList.vue'
 
 export default {
   name: 'App',
   components: {
-    //RegisterPage,
-    //LoginPage
-    BorthdateForm
+
   }
 }
 </script>
@@ -26,6 +21,7 @@ export default {
 }
 body{
   background-image: url('assets/background.jpg');
+  background-size: cover; 
   width: 100%;
   height: 100%;
   margin: 0;

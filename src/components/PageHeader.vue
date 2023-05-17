@@ -1,16 +1,19 @@
 <template>
     <div id="navbar">
+        
         <ul class="navbar-list">
             <li>
-                <img src="../assets/logo.png" width="35" height="30">
+                <router-link :to="'/feed'">
+                    <img src="../assets/realtalk.png" width="60" height="45" >
+                </router-link>
             </li>
             <li>
                 <img src="../assets/news.png" width="20" height="20">
-                <a href="#">Новости</a>
+                <router-link :to="'/feed'">Новости</router-link>
             </li>
             <li>
                 <img src="../assets/profile.png" width="20" height="20">
-                <a href="#">Мой профиль</a>
+                <router-link :to="'/profile'">Мой профиль</router-link>
             </li>
             <li>
                 <img src="../assets/message.png" width="20" height="20">
@@ -43,7 +46,13 @@ export default {
 </script>
 
 <style scoped>
+.sticky {
+  width: 100%;
+}
+
 #navbar{
+  
+
     display: flex;
     flex-direction: row;
     width: 100%;

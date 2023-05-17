@@ -14,7 +14,7 @@
             </div>            
         </div>
         <div class="post-text">
-            <label>text text text text text text texttext text text texttext text text text text text textexttext text text text text text textexttext text text text text text textexttext text text text text text tex texttext text text text text text text</label>
+            <label> text text text text text text text text text text text text text text text text texttext text text texttext text text text text text textexttext text text text text text textexttext text text text text text textexttext text text text text text tex texttext text text text text text text</label>
         </div>
         <div class="likes-comms">
             <div class="likes">                
@@ -38,11 +38,10 @@
     display: flex;
     flex-direction: column;
     background-color: white;
-    width: 500px;
     min-height: 150px;
     font-family: Georgia, serif;
     font-size: 12pt;
-    margin: 10px;
+    margin-bottom: 10px;
     border-radius: 10px;
     border: 1px solid;
     padding: 25px 30px;
@@ -70,6 +69,7 @@
 .user-photo{
     border: 2px solid;
     border-color: #D276FD;
+    border-radius: 50%;
 }
 
 .btns-bar{

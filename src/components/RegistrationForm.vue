@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent>
+    <form>
         <h4>Регистрация</h4>
         <InputIcon
         :type = "'text'"
@@ -37,7 +37,7 @@
         :height = "'19'"
         />
 
-        <MyButton>Зарегистрироваться</MyButton>
+        <MyButton :onclick="goToStep2">Зарегистрироваться</MyButton>
     </form>
 </template>
 
@@ -48,6 +48,11 @@ export default {
     components:{
         MyButton,
         InputIcon
+    },
+    methods:{
+        goToStep2(){
+            this.$router.push("/registration/step-2")
+        }
     }
   
 }
@@ -59,7 +64,7 @@ form{
     flex-direction: column;
     width: 35%;
     margin: auto;
-    margin-top: 3%;
+    margin-top: 7%;
     background-color: #ffffff50;
     border-radius: 30px; 
     border: 1px solid;
