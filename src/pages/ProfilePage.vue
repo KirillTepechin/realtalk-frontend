@@ -15,16 +15,12 @@
                     <PostView/>
                     <PostView/>
                 </div>
-
             <div class="sub-sub">
                 <SubcrList/>
                 <SubcrList/>
-            </div>
-        
-        </div>
-        
-    </div>
-   
+            </div>        
+        </div>        
+    </div>   
 </template>
 
 <script>
@@ -49,12 +45,14 @@ export default {
 
 <style>
 .profile-body{
-    margin-block: 20px;
-    margin-inline: 10%;
+    display: flex;
+    flex-direction: column;
+    margin: 0px 300px 20px 300px;
+    padding: 0px 0px 20px 0px;
 
 }
 .profile-top{
-    margin-block: 20px;
+    margin-block: 15px;
 }
 
 .profile-bottom{

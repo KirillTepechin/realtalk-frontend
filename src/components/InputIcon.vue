@@ -43,15 +43,16 @@ export default {
     border: 2px solid;
     border-radius: 10px;
     border-color: #D276FD;
-    margin: 12px 50px;
-     
+    margin: 12px 50px;     
 }
 input{
     outline: none;
     border: hidden;
     font-family: Georgia, serif;
     padding: 10px;
-    width: 75%;
+    font-size: 13pt;
+    border-radius: 8px;
+    width: 100%;
     margin-left: 5px;
 }
 img{

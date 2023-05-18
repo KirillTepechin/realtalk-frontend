@@ -1,6 +1,6 @@
 <template>
-    <LoginForm/>
-  </template>
+    <LoginForm class="login-form"/>
+</template>
   
   <script>
   
@@ -14,5 +14,10 @@
   </script>
   
   <style scoped>
-   
+    .login-form{
+      left: 50%;
+      top: 45%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
   </style>

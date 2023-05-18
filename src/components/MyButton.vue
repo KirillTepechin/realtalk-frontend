@@ -13,7 +13,7 @@ export default {
 <style>
 .btn{
     font-family: Georgia, serif;
-    font-size: 10pt;
+    font-size: 12pt;
     color: white;
     border-radius: 50px;
     background-color: #D276FD;

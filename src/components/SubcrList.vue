@@ -1,7 +1,7 @@
 <template>
     <div id="users-list">
         <div class="title">
-            <a href="#">Подписки</a>
+            <router-link :to="'/subscriptions'">Подписки</router-link>
             <label class="subscr-count">11</label>
         </div>
         <div class="user">

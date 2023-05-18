@@ -17,7 +17,7 @@
         />
         <div class="btn-bar">
             <MyButton :onclick="goToStep3">Пропустить</MyButton>
-            <MyButton>Далее</MyButton>
+            <MyButton :onclick="goToStep3">Далее</MyButton>
         </div>        
     </form>
 </template>

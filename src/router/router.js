@@ -5,6 +5,10 @@ import RegistrationPage from "@/pages/RegistrationPage";
 import FeedPage from "@/pages/FeedPage";
 import ProfilePage from "@/pages/ProfilePage";
 import EditProfilePage from "@/pages/EditProfilePage";
+import ChatsPage from "@/pages/ChatsPage";
+import SubscriptionsPage from "@/pages/SubscriptionsPage";
+import SubscribersPage from "@/pages/SubscribersPage";
+import SearchPage from "@/pages/SearchPage";
 
 import RegistrationForm from "@/components/RegistrationForm";
 import BirthdateCityForm from "@/components/BirthdateCityForm";
@@ -46,7 +50,10 @@ const routes = [
         },
        
     ] },
-
+    { path: '/chats', component: ChatsPage },
+    { path: '/subscribers', component: SubscribersPage },
+    { path: '/subscriptions', component: SubscriptionsPage },
+    { path: '/search', component: SearchPage },
 ]
 
 export default new VueRouter.createRouter({

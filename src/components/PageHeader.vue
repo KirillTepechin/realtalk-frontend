@@ -17,20 +17,20 @@
             </li>
             <li>
                 <img src="../assets/message.png" width="20" height="20">
-                <a href="#">Сообщения</a>
+                <router-link :to="'/chats'">Сообщения</router-link>
             </li>
             <li>
                 <img src="../assets/subscriptions.png" width="20" height="20">
-                <a href="#">Подписки</a>
+                <router-link :to="'/subscriptions'">Подписки</router-link>
             </li>
             <li>
                 <img src="../assets/search.png" width="20" height="20">
-                <a href="#">Поиск</a>
+                <router-link :to="'/search'">Поиск</router-link>
             </li>
             <div class="navbar-item-last">
                 <li>
                     <img src="../assets/exit.png" width="20" height="20">
-                    <a href="#">Выйти</a>
+                    <router-link :to="'/auth'">Выйти</router-link>
                 </li>
             </div>
         </ul>

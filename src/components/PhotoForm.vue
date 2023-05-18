@@ -6,13 +6,12 @@
             <span class="input-file-btn">Выберите файл</span>
         </label>
         <div class="image-area">
-            <img 
-            src="../assets/surname.png"
-            >
+            <img src="../assets/profile-photo.png">
         </div>        
         <div class="btn-bar">
-            <MyButton>Пропустить</MyButton>
-            <MyButton>Готово</MyButton>
+            <!-- "Успешная регистрация" попа окно -->
+            <MyButton :onclick="goToLogin">Пропустить</MyButton>            
+            <MyButton :onclick="goToLogin">Готово</MyButton>
         </div>        
     </form>
 </template>
@@ -44,6 +43,9 @@ export default {
             reader.readAsDataURL(file);
             //this.actor.photo = file;
         },
+        goToLogin(){
+            this.$router.push('/auth')
+        }
     }
   
 }
@@ -111,7 +113,6 @@ h4{
     margin-bottom: 10px;
     overflow: hidden;
     border-radius: 50%;
-    
     width: 150px;
     height: 150px;
 }

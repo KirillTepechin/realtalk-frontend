@@ -30,6 +30,5 @@ export default {
     }
     .filter, .route {
         margin-inline-start: 300px;
-    }
-    
+    }    
 </style>

@@ -62,13 +62,15 @@ export default {
 form{
     display: flex;
     flex-direction: column;
-    width: 35%;
-    margin: auto;
-    margin-top: 12%;
-    background-color: #ffffff50;
+    min-width: 30%;
+    min-height: 60%;
+    /* margin: auto;
+    margin-top: 12%; */
+    background-color: #ffffff7c;
     border-radius: 30px; 
     border: 1px solid;
     border-color: #D276FD;
+    justify-content: center;
 }
 .btn{
     padding: 10px;
