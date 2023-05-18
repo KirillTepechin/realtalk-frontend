@@ -3,7 +3,7 @@
         <h4>Вход</h4>
         <InputIcon
         v-model="user.login"
-        :type = "'email'"
+        :type = "'text'"
         :placeholder = "'Логин'"
         :src = "'email.png'"
         :width = "'18'"

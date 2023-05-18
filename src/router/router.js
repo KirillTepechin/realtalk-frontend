@@ -24,7 +24,7 @@ const routes = [
      children: [
         {
             path: 'step-1',
-            component: RegistrationForm,
+            component: RegistrationForm
         },
         {
             path: 'step-2',

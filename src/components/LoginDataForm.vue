@@ -2,7 +2,7 @@
     <form @submit.prevent>
         <h4>Данные входа</h4>
         <InputIcon
-        :type = "'email'"
+        :type = "'text'"
         :placeholder = "'Логин'"
         :src = "'email.png'"
         :width = "'18'"

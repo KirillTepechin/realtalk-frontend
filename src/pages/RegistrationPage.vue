@@ -1,5 +1,5 @@
 <template>
-    <router-view :user="user" @updateUser="onUpdateUser"/>
+    <router-view :user="user" @updateUser="onUpdateUser" @registerUser="onRegister"/>
   </template>
   
   <script>
@@ -15,17 +15,12 @@
           file: null,
           password: '',
           login: '',
-          borthdate: '',
+          borthdate: Date,
           city: ''
         },
     }
   },
     methods: {
-      register() {
-        UserService.register(this.user).then((response)=> {
-          if(response.status!==400) window.location.href = "/auth"
-        });
-      },
       onUpdateUser(data) {
         if(data.name!=null)this.user.name=data.name
         if(data.surname!=null)this.user.surname=data.surname
@@ -34,6 +29,11 @@
         if(data.file!=null)this.user.file=data.file
         if(data.city!=null)this.user.city=data.city
         if(data.borthdate!=null)this.user.borthdate=data.borthdate
+      },
+      onRegister(){
+        UserService.register(this.user).then((response)=> {
+          if(response.status != 400) console.log(response)
+        });
       }
     }
   }

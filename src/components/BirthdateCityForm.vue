@@ -18,8 +18,8 @@
         :height = "'18'"
         />
         <div class="btn-bar">
-            <MyButton :onclick="goToStep3(false)" >Пропустить</MyButton>
-            <MyButton :onclick="goToStep3(true)">Далее</MyButton>
+            <MyButton @click="goToStep3(false)">Пропустить</MyButton>
+            <MyButton @click="goToStep3(true)">Далее</MyButton>
         </div>        
     </form>
 </template>
@@ -35,7 +35,7 @@ export default {
     props: ['user'],
     data() {
         return {
-            borthdate: '',
+            borthdate: Date,
             city: ''
         }
     },

@@ -21,7 +21,7 @@ class UserService{
     }
     register(user){
         let URL = USER_API_BASE_URL+'register'
-        return axios.post(URL, user)
+        return axios.postForm(URL, user)
     }
 
     //GET

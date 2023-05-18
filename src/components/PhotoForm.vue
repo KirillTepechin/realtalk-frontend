@@ -1,5 +1,5 @@
 <template>
-    <form>
+    <form @submit.prevent>
         <h4>Установите фото профиля</h4>
         <input @change="onFileChange" id="file" type="file" accept="image/*">
         <label for="file">
@@ -10,8 +10,8 @@
         </div>        
         <div class="btn-bar">
             <!-- "Успешная регистрация" попа окно -->
-            <MyButton  >Пропустить</MyButton>            
-            <MyButton :onclick="goToLogin()">Готово</MyButton>
+            <MyButton @click="goToLogin(false)">Пропустить</MyButton>            
+            <MyButton @click="goToLogin(true)">Готово</MyButton>
         </div>        
     </form>
 </template>
@@ -53,8 +53,9 @@ export default {
             if (flag) {
                 this.$emit('updateUser', {
                     file: this.file,
-                })
-            }
+                })                
+            }            
+            this.$emit('registerUser')
             this.$router.push('/auth')
         }
     },

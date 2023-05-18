@@ -1,5 +1,4 @@
-<template>
-    
+<template>    
         <form novalidate="true">
         <h4>Регистрация</h4>
         <div class="errors">
@@ -29,7 +28,7 @@
         />
         <InputIcon
         v-model="login"
-        :type = "'email'"
+        :type = "'text'"
         :placeholder = "'Логин'"
         :src = "'email.png'"
         :width = "'18'"
@@ -52,7 +51,7 @@
         :height = "'19'"
         />
 
-        <MyButton :onclick="goToStep2">Зарегистрироваться</MyButton>
+        <MyButton @click="goToStep2">Зарегистрироваться</MyButton>
     </form>
 </template>
 
