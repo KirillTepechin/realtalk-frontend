@@ -18,13 +18,13 @@ import LoginDataForm from "@/components/LoginDataForm";
 
 
 const routes = [
-    { path: '/', component: LoginPage, meta:{reload: true} },
-    { path: '/auth', component: LoginPage, meta:{reload: true} },
-    { path: '/registration', component: RegistrationPage, redirect: { path: "registration/step-1" },
+    { path: '/', component: LoginPage, },
+    { path: '/auth', component: LoginPage },
+    { path: '/registration', component: RegistrationPage, redirect: { path: "/registration/step-1" },
      children: [
         {
             path: 'step-1',
-            component: RegistrationForm
+            component: RegistrationForm,
         },
         {
             path: 'step-2',

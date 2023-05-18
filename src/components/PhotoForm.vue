@@ -10,8 +10,8 @@
         </div>        
         <div class="btn-bar">
             <!-- "Успешная регистрация" попа окно -->
-            <MyButton :onclick="goToLogin">Пропустить</MyButton>            
-            <MyButton :onclick="goToLogin">Готово</MyButton>
+            <MyButton  >Пропустить</MyButton>            
+            <MyButton :onclick="goToLogin()">Готово</MyButton>
         </div>        
     </form>
 </template>
@@ -21,6 +21,12 @@ import MyButton from './MyButton.vue';
 export default {
     components:{
         MyButton
+    },
+    props: ['user'],
+    data() {
+        return {
+            file: null,
+        }
     },
     methods:{
         onFileChange(e) {
@@ -41,11 +47,27 @@ export default {
                 preview.src = e.target.result;
             };
             reader.readAsDataURL(file);
-            //this.actor.photo = file;
+            this.file = file;
         },
-        goToLogin(){
+        goToLogin(flag){
+            if (flag) {
+                this.$emit('updateUser', {
+                    file: this.file,
+                })
+            }
             this.$router.push('/auth')
         }
+    },
+    created(){
+        if(this.$props.user.file!=null){
+            this.createImage(this.$props.user.file)
+            this.file = this.$props.user.file
+        }
+    },
+    unmounted() {
+        this.$emit('updateUser', {
+            file: this.file,
+        })
     }
   
 }

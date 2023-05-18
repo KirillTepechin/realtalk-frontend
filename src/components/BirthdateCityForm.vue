@@ -2,6 +2,7 @@
     <form>
         <h4>Укажите дату рождения и свой город</h4>
         <InputIcon
+        v-model="borthdate"
         :type = "'date'"
         :placeholder = "'Дата рождения'"
         :src = "'cake.png'"
@@ -9,6 +10,7 @@
         :height = "'18'"
         />
         <InputIcon
+        v-model="city"
         :type = "'text'"
         :placeholder = "'Город'"
         :src = "'city.png'"
@@ -16,8 +18,8 @@
         :height = "'18'"
         />
         <div class="btn-bar">
-            <MyButton :onclick="goToStep3">Пропустить</MyButton>
-            <MyButton :onclick="goToStep3">Далее</MyButton>
+            <MyButton :onclick="goToStep3(false)" >Пропустить</MyButton>
+            <MyButton :onclick="goToStep3(true)">Далее</MyButton>
         </div>        
     </form>
 </template>
@@ -30,10 +32,34 @@ export default {
         MyButton,
         InputIcon
     },
-    methods:{
-        goToStep3(){
-            this.$router.push("/registration/step-3")
+    props: ['user'],
+    data() {
+        return {
+            borthdate: '',
+            city: ''
         }
+    },
+    methods:{
+        goToStep3(flag) {
+            if (flag) {
+                this.$emit('updateUser', {
+                    borthdate: this.borthdate,
+                    city: this.city
+                })
+            }
+            this.$router.push("/registration/step-3")
+        },
+        
+    },
+    created() {
+        this.borthdate = this.$props.user.borthdate
+        this.city = this.$props.user.city
+    },
+    unmounted() {
+        this.$emit('updateUser', {
+            borthdate: this.borthdate,
+            city: this.city
+        })
     }
   
 }
