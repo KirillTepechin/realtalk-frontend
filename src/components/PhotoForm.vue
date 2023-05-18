@@ -55,8 +55,7 @@ export default {
                     file: this.file,
                 })                
             }            
-            this.$emit('registerUser')
-            this.$router.push('/auth')
+            this.$emit('registerUser')            
         }
     },
     created(){
