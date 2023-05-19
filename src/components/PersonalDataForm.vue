@@ -27,7 +27,7 @@
         :height = "'18'"
         />
         <InputIcon
-        v-bind:modelValue = "user.borthdate"
+        v-model = "year"
         :type = "'date'"
         :placeholder = "'Дата рождения'"
         :src = "'cake.png'"
@@ -60,7 +60,7 @@ export default {
                 surname:"",
                 photo:"",
                 city:"",
-                borthdate: "",
+                borthdate: Date,
                 subscribers:[],
                 subscriptions:[]
             }
@@ -100,9 +100,13 @@ export default {
             console.log(this.user)
           }          
         })
+    },
+    computed:{
+        year(){
+            console.log(new Date(this.user.borthdate).getFullYear())
+            return new Date(this.user.borthdate)
         }
-    
-  
+  }
 }
 </script>
 

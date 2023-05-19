@@ -1,12 +1,17 @@
 <template>
     <PageHeader />
     <div class="feed-body">
-        <div class="feed-posts">
+        <div class="feed-posts" v-if="getFeedType()">
+            <div class="post" v-for='post in recommendations' v-bind:key="post.id">
+            <PostView :post="post"/>
+            </div>
+        </div>
+        <div class="feed-posts" v-else>
             <div class="post" v-for='post in posts' v-bind:key="post.id">
             <PostView :post="post"/>
             </div>
-        </div>        
-        <FilterNews class="feed-filters"/>
+        </div>     
+        <FilterNews class="feed-filters" @chooseNews="onChooseNews"/>
     </div>
 </template>
 
@@ -20,7 +25,8 @@ import FilterNews from "@/components/FilterNews";
 export default {
     data(){
         return {
-            posts:[]
+            posts:[],
+            recommendations:[]
         }
     },
     components:{
@@ -28,13 +34,33 @@ export default {
         PostView,
         FilterNews
     },
+    methods:{
+        onChooseNews(data){
+            localStorage.setItem('feedType', data.feedType)
+            console.log(localStorage.getItem('feedType'))
+        },
+        getFeedType(){
+            if(localStorage.getItem('feedType') == 'recommend') return true
+            else return false
+        }
+    },
     mounted(){
-        FeedService.getFeed().then((response)=> {
-          if(response.status == 200) {            
-            this.posts = response.data
-            console.log(this.posts)
-          }          
-        })      
+        if(localStorage.getItem('feedType') == 'feed'){
+            FeedService.getFeed().then((response)=> {
+                if(response.status == 200) {            
+                    this.posts = response.data
+                    console.log('feed' + this.posts)
+                }          
+            })
+        }
+        if(localStorage.getItem('feedType') == 'recommend'){
+            FeedService.getFeedRec().then((response)=> {
+                if(response.status == 200) {        
+                this.recommendations = response.data
+                console.log('rec' + this.recommendations)
+                }          
+            })
+        }
     }
 }
 </script>

@@ -16,7 +16,7 @@
         </div>
         <div class="user-info">
             <div class="name-surname">
-                <label>{{ user.name }}</label>
+                <label style="margin-right: 5px;">{{ user.name }}</label>
                 <label>{{ user.surname }}</label>
             </div>
             <div class="nickname">
@@ -48,6 +48,7 @@ export default {
     methods:{
         goTo(){
             this.$router.push("/edit-profile")
+            console.log('edit')
         }
     },
     props:{

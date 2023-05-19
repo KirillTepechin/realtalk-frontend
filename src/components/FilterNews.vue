@@ -1,9 +1,9 @@
 <template>
     <div id="btn-bar">
-        <button>
+        <button @click="feed()">
         Подписки
         </button>
-        <button>
+        <button @click="rec()">
         Рекомендации
         </button>
     </div>
@@ -11,7 +11,20 @@
 
 <script>
 export default {
-    
+    methods:{
+        feed(){
+            this.$emit('chooseNews', {
+                feedType: 'feed'
+            })
+            this.$router.push("/feed")
+        },
+        rec(){
+            this.$emit('chooseNews', {
+                feedType: 'recommend'
+            })
+            this.$router.push("/feed")
+        }
+    }
   
 }
 </script>

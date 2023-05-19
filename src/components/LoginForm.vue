@@ -18,8 +18,8 @@
         :height = "'19'"
         />
         <div class="btn-bar">
-            <MyButton @click.once="login($event)">Войти</MyButton>
-            <MyButton @click.once="goToRegistration($event)">Зарегистрироваться</MyButton>
+            <MyButton @click="login($event)">Войти</MyButton>
+            <MyButton @click="goToRegistration($event)">Зарегистрироваться</MyButton>
         </div>     
     </form>
 </template>
@@ -41,7 +41,7 @@ export default {
       }
     },
     methods: {
-      login() {        
+      login(e) {        
          UserService.login(this.user).then(
             response => {
               console.log("токен "+response.data)
@@ -49,9 +49,11 @@ export default {
               this.$router.push('/feed')
             }
         )
+        e.preventDefault()
       },
-      goToRegistration(){
+      goToRegistration(e){
         this.$router.push('/registration')
+        e.preventDefault()
       }
     }
 }
