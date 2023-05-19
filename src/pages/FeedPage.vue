@@ -1,11 +1,6 @@
 <template>
     <PageHeader />
     <div class="feed-body">
-        <!-- <div class="feed-posts" v-if="getFeedType()">
-            <div class="post" v-for='post in recommendations' v-bind:key="post.id">
-            <PostView :post="post"/>
-            </div>
-        </div> -->
         <div class="feed-posts">
             <div class="post" v-for='post in posts' v-bind:key="post.id">
             <PostView :post="post"/>

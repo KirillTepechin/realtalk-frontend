@@ -3,7 +3,16 @@
         <h4>Личные данные</h4>
         <div class="image-area">
             <img 
-            src="../assets/realtalk.png"
+            v-if="user.photo"
+            v-bind:src= "'/photos/'+ user.photo"
+            width="50" 
+            height="50"
+            >
+            <img class="img-photo"
+            v-else
+            src= "../assets/profile-photo.png" 
+            width="50" 
+            height="50"
             >
         </div>
         <input @change="onFileChange" id="file" type="file" accept="image/*">
@@ -149,6 +158,7 @@ input{
     border: 0.5px solid;
     border-color: #D276FD;
     margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 .image-area{
@@ -158,7 +168,6 @@ input{
     margin-bottom: 10px;
     overflow: hidden;
     border-radius: 50%;
-
     width: 150px;
     height: 150px;
 }

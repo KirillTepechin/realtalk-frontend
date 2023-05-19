@@ -3,7 +3,7 @@
         <div class="user-photo">
             <img class="img-photo"
             v-if="user.photo"
-            v-bind:src= "'../../realtalk/img/'+ user.photo"
+            v-bind:src= "'/photos/'+ user.photo"
             width="50" 
             height="50"
             >
