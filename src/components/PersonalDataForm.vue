@@ -27,7 +27,7 @@
         :height = "'18'"
         />
         <InputIcon
-        v-model = "year"
+        v-model = "user.borthdate"
         :type = "'date'"
         :placeholder = "'Дата рождения'"
         :src = "'cake.png'"
@@ -60,7 +60,7 @@ export default {
                 surname:"",
                 photo:"",
                 city:"",
-                borthdate: Date,
+                borthdate: "",
                 subscribers:[],
                 subscriptions:[]
             },
@@ -97,16 +97,14 @@ export default {
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user = response.data
-            console.log(this.user)
+            this.user.borthdate = new Date(this.user.borthdate).toISOString().split('T')[0]
+            console.log(this.user.borthdate)
           }          
         })
+        
+        
     },
-    computed:{
-        year(){
-            console.log(new Date(this.user.borthdate))
-            return new Date(this.user.borthdate)
-        }
-  }
+    
 }
 </script>
 

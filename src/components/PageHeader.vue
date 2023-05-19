@@ -13,7 +13,7 @@
             </li>
             <li>
                 <img src="../assets/profile.png" width="20" height="20">
-                <router-link :to="'/profile'">Мой профиль</router-link>
+                <router-link :to="'/'+this.login">Мой профиль</router-link>
             </li>
             <li>
                 <img src="../assets/message.png" width="20" height="20">
@@ -38,13 +38,29 @@
 </template>
 
 <script>
+import UserService from "@/services/UserService";
 export default {
+    data(){
+        return{
+            login:{}
+        }
+    },
     methods:{
         logout(){            
             localStorage.setItem('jwt', null)
             console.log(localStorage.getItem('jwt'))
             this.$router.push('/auth')
+        },
+        getUserLogin(){
+            return '/'+this.login
         }
+    },
+    mounted(){
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.login = response.data.login 
+          }          
+        })       
     }
   
 }

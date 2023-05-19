@@ -36,7 +36,7 @@ const routes = [
         },
     ] },
     { path: '/feed', component: FeedPage },
-    { path: '/profile', component: ProfilePage }, // Будет заменено на  { path: ':login', component: ProfilePage },
+    { path: '/:login', component: ProfilePage },
     { path: '/edit-profile', component: EditProfilePage, redirect: { path: "/edit-profile/personal" },
      children: [
         {
