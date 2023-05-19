@@ -46,6 +46,14 @@ export default {
             response => {
               console.log("токен "+response.data)
               localStorage.setItem('jwt', response.data)
+
+              // UserService.me().then((response)=> {
+              //   if(response.status == 200) {            
+              //       localStorage.setItem('me', response.data)
+              //       console.log("me" + response.data)
+              //   }          
+              // })
+              
               //this.$router.push('/feed')
               window.location.href = '/feed'
             }

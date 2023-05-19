@@ -19,10 +19,10 @@
                     <label style="font-size: 10pt;">{{post.date}}</label>
                 </div>
             </div>
-            <div class="btns-bar">
+            <div class="btns-bar" v-if="post.user.login == this.me.login">
                 <img class="icon" src="../assets/edit.png" width="20" height="20">
                 <img class="icon" src="../assets/delete.png" width="20" height="20">
-            </div>            
+            </div>
         </div>
         <div class="post-text">
             <label>{{ post.text }}</label>
@@ -41,7 +41,13 @@
 </template>
 
 <script>
+import UserService from "@/services/UserService";
     export default{
+        data(){
+            return {
+                me:{}
+            }
+        },
         props:{
             post:{
                 text:"",
@@ -51,6 +57,18 @@
                 comments:[],
                 likesCount: 0
             }
+        },
+        mounted(){
+            UserService.me().then((response)=> {
+                if(response.status == 200) {            
+                    this.me = response.data
+                    console.log("me" + response.data)
+                }                
+            })
+            console.log("me id " + this.me.login)
+            console.log("post user id " + this.post.user.id)
+            // this.me = localStorage.getItem("me")
+            // console.log("me" + this.me)
         }
     }
 </script>

@@ -5,7 +5,7 @@
         <div class="profile-bottom">
             <div class="posts-form">
                     <div class="post-create">
-                        <input type="text" placeholder="Что у Вас нового?">
+                        <textarea type="text" placeholder="Что у Вас нового?"></textarea>
                         <MyButton>
                             Создать пост
                         </MyButton>
@@ -95,7 +95,7 @@ export default {
 .posts-form{
     flex: auto;
 }
-.post-create input{
+.post-create textarea{
     outline: none;
     padding: 10px;
     width: 100%;
@@ -124,6 +124,6 @@ export default {
     padding: 10px;
     min-width: 150px;
     font-family: Georgia, serif;
-
+    align-self: center;
 }
 </style>

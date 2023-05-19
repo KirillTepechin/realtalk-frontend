@@ -4,14 +4,12 @@
             <router-link :to="link">{{ title }}</router-link>
             <label class="subscr-count">{{ count }}</label>
         </div>
-        <div v-for='(user, index) in usersList' v-bind:key="user.id">
-            <div class="user" v-if="index <= 1">
-                <img class="user-photo" src="../assets/profile.png" width="50" height="50">
-                <div class="user-info">
-                    <a href="#">{{ user.name }} {{ user.surname }}</a>
-                    <label>@{{user.login}}</label>
-                </div>            
-            </div>
+        <div class="user" v-for='user in newUsersList.slice(0,3)' v-bind:key="user.id">
+            <img class="user-photo" src="../assets/profile.png" width="50" height="50">
+            <div class="user-info">
+                <a href="#">{{ user.name }} {{ user.surname }}</a>
+                <label>@{{user.login}}</label>
+            </div>            
         </div>
     </div>
 </template>
@@ -20,7 +18,8 @@
     export default {
         data(){
             return{
-                count: 0
+                count: 0,
+                newUsersList: [],
             }            
         },
         props:{
@@ -31,6 +30,7 @@
         updated(){
             this.count = this.usersList.length
             console.log(this.count)
+            this.newUsersList = this.usersList
         }
     }
 </script>
