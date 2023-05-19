@@ -10,8 +10,8 @@
         </div>        
         <div class="btn-bar">
             <!-- "Успешная регистрация" попа окно -->
-            <MyButton @click="goToLogin(false)">Пропустить</MyButton>            
-            <MyButton @click="goToLogin(true)">Готово</MyButton>
+            <MyButton @click.once="goToLogin(false, $event)">Пропустить</MyButton>            
+            <MyButton @click.once="goToLogin(true, $event)">Готово</MyButton>
         </div>        
     </form>
 </template>
@@ -49,13 +49,15 @@ export default {
             reader.readAsDataURL(file);
             this.file = file;
         },
-        goToLogin(flag){
+        goToLogin(flag, e){
+            e.preventDefault()
+            console.log("go to login")
             if (flag) {
                 this.$emit('updateUser', {
                     file: this.file,
                 })                
             }            
-            this.$emit('registerUser')            
+            this.$emit('registerUser')
         }
     },
     created(){

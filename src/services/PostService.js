@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const POST_API_BASE_URL='http://localhost:9000/post/'
+const POST_API_BASE_URL='http://localhost:9000/post'
 
 class PostService{
 

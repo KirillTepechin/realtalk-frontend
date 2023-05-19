@@ -7,14 +7,18 @@
 </template>
   
 <script>
+
+
 import PageHeader from "@/components/PageHeader";
 import FilterProfileEdit from "@/components/FilterProfileEdit";
 
 export default {
+    
     components: {
         PageHeader,
         FilterProfileEdit
-    }
+    },
+    
 }
 </script>
   

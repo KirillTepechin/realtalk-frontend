@@ -30,7 +30,7 @@
             <div class="navbar-item-last">
                 <li>
                     <img src="../assets/exit.png" width="20" height="20">
-                    <router-link :to="'/auth'">Выйти</router-link>
+                    <router-link :to="'/auth'" @click="logout()">Выйти</router-link>
                 </li>
             </div>
         </ul>
@@ -39,7 +39,12 @@
 
 <script>
 export default {
-    components:{
+    methods:{
+        logout(){            
+            localStorage.setItem('jwt', null)
+            console.log(localStorage.getItem('jwt'))
+            this.$router.push('/auth')
+        }
     }
   
 }

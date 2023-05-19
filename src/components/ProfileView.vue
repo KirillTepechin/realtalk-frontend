@@ -1,27 +1,38 @@
 <template>
     <div class="profile-container">
         <div class="user-photo">
-            <img src="../assets/realtalk.png" class ="img-photo" >
+            <img class="img-photo"
+            v-if="user.photo"
+            src= "../assets/profile-photo.png"
+            width="50" 
+            height="50"
+            >
+            <img class="img-photo"
+            v-else
+            src= "../assets/profile-photo.png" 
+            width="50" 
+            height="50"
+            >
         </div>
         <div class="user-info">
             <div class="name-surname">
-                <label>Маргарита</label>
-                <label>Машкова</label>
+                <label>{{ user.name }}</label>
+                <label>{{ user.surname }}</label>
             </div>
             <div class="nickname">
-                <label>@Ritysik</label>
+                <label>@{{ user.login }}</label>
             </div>            
             <div class="borthdate">
                 <img class="icon" src="../assets/cake.png" width="20" height="20">
-                <label>Дата рождения: 11.04.2002</label>
+                <label>Дата рождения: {{ user.borthdate }}</label>
             </div>
             <div class="city">
                 <img class="icon" src="../assets/city.png" width="20" height="20">
-                <label>Город: Ульяновск</label>
+                <label>Город: {{ user.city }}</label>
             </div>
             <div class="post-count">
                 <img class="icon" src="../assets/news.png" width="20" height="20">
-                <label>Количество постов: 11</label>
+                <label>Количество постов: {{ posts.length }}</label>
             </div>
             <MyButton :onclick="goTo">Редактировать профиль</MyButton> 
         </div>
@@ -38,7 +49,26 @@ export default {
         goTo(){
             this.$router.push("/edit-profile")
         }
-    }
+    },
+    props:{
+        user:{
+            login:"",
+            name:"",
+            surname:"",
+            photo:"",
+            city:"",
+            borthdate: "",
+            subscribers:[],
+            subscriptions:[]
+        },
+        posts:{}
+    },
+    // computed: {
+    //     itemImage() {
+    //         const fileName = this.user.photo;
+    //         return require(`F:/3 курс/blog course/realtalk/img/${fileName}`);
+    //     }
+    // }
 }
 </script>
 

@@ -5,8 +5,8 @@
         </div>
         <div class="user-profile">
             <div class="user-info">
-                    <label class="username">Кирилл Тепечин</label>
-                    <label class="login">@KirTep</label>
+                    <label class="username">{{ user.name }} {{ user.surname }}</label>
+                    <label class="login">@{{ user.login }}</label>
             </div>
             <div class="btn-bar">
                 <MyButton>Сообщение</MyButton>
@@ -21,6 +21,9 @@ import MyButton from './MyButton.vue';
 export default {
     components:{
         MyButton,
+    },
+    props:{
+        user:{}
     }
   
 }

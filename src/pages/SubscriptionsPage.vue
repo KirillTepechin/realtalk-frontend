@@ -1,6 +1,6 @@
 <template>
     <PageHeader/>
-    <div class="page-subscribers">        
+    <div class="page-subscribtions">        
         <div class="users-list">
             <InputIcon
             class="input-icon"
@@ -10,34 +10,44 @@
             :width = "'18'"
             :height = "'18'"
             />
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
+            <div class="subscr" v-for='sub in user.subscriptions' v-bind:key="sub.id">
+                <SubscrView :user="sub"/>
+            </div>            
         </div>        
     </div>
 </template>
   
 <script>
+import UserService from "@/services/UserService";
+
 import PageHeader from "@/components/PageHeader";
 import SubscrView from "@/components/SubscrView";
 import InputIcon from "@/components/InputIcon";
 
 export default {
+    data(){
+        return {
+            user:{}
+        }
+    },
     components: {
         PageHeader,
         SubscrView,
         InputIcon
+    },
+    mounted(){
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.user = response.data
+            console.log(this.user)
+          }          
+        })        
     }
 }
 </script>
   
 <style>
-    .page-subscribers{
+    .page-subscribtions{
         display: flex;
         flex-direction: column;
     }

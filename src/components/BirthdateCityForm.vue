@@ -41,6 +41,7 @@ export default {
     },
     methods:{
         goToStep3(flag) {
+            console.log('click')
             if (flag) {
                 this.$emit('updateUser', {
                     borthdate: this.borthdate,

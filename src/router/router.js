@@ -46,7 +46,7 @@ const routes = [
         },
         {
             path: 'login-data',
-            component: LoginDataForm
+            component: LoginDataForm,
         },
        
     ] },

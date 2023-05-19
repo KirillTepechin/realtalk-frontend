@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const CHAT_API_BASE_URL='http://localhost:9000/chat/'
+const CHAT_API_BASE_URL='http://localhost:9000/chat'
 
 class ChatService{
 

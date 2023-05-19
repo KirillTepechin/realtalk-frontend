@@ -2,10 +2,21 @@
     <div class="post-container">
         <div class="user">
             <div class="user-profile">
-                <img class="user-photo" src="../assets/profile.png" width="50" height="50">
+                <img class="user-photo"
+                 v-if="this.post.user.photo"
+                 v-bind:src= "'./realtalk/img/'+'post.user.photo'" 
+                 width="50" 
+                 height="50"
+                 >
+                 <img class="user-photo"
+                 v-else
+                 src= "../assets/profile.png" 
+                 width="50" 
+                 height="50"
+                 >
                 <div class="user-info">
-                    <a href="#">@Ritysik</a>
-                    <label style="font-size: 10pt;">12 мая в 21:44</label>
+                    <a href="#">{{ post.user.login }}</a>
+                    <label style="font-size: 10pt;">{{post.date}}</label>
                 </div>
             </div>
             <div class="btns-bar">
@@ -14,23 +25,34 @@
             </div>            
         </div>
         <div class="post-text">
-            <label> text text text text text text text text text text text text text text text text texttext text text texttext text text text text text textexttext text text text text text textexttext text text text text text textexttext text text text text text tex texttext text text text text text text</label>
+            <label>{{ post.text }}</label>
         </div>
         <div class="likes-comms">
             <div class="likes">                
                 <img src="../assets/unlike.png" width="20" height="22">
-                <label class="likes-count">35</label>
+                <label class="likes-count">{{post.likesCount}}</label>
             </div>
             <div class="comms">
                 <img src="../assets/comment.png" width="16" height="16">
-                <label class="comms-count">35</label>
+                <label class="comms-count">{{post.comments.length}}</label>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-
+    export default{
+        props:{
+            post:{
+                text:"",
+                date:"",
+                tag:"",
+                user:{},
+                comments:[],
+                likesCount: 0
+            }
+        }
+    }
 </script>
 
 <style scoped>

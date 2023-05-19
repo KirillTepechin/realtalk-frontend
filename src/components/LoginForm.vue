@@ -1,5 +1,5 @@
 <template>
-    <form>
+    <form @submit.prevent>
         <h4>Вход</h4>
         <InputIcon
         v-model="user.login"
@@ -18,15 +18,15 @@
         :height = "'19'"
         />
         <div class="btn-bar">
-            <MyButton :onclick="login">Войти</MyButton>
-            <MyButton :onclick="goToRegistration">Зарегистрироваться</MyButton>
+            <MyButton @click.once="login($event)">Войти</MyButton>
+            <MyButton @click.once="goToRegistration($event)">Зарегистрироваться</MyButton>
         </div>     
     </form>
 </template>
 
 <script>
 
-//import UserService from "@/services/UserService";
+import UserService from "@/services/UserService";
 
 import MyButton from './MyButton.vue';
 import InputIcon from './InputIcon.vue';
@@ -41,16 +41,14 @@ export default {
       }
     },
     methods: {
-      login() {
-        this.$router.push('/feed')
-
-        //  UserService.login(this.user).then(
-        //     response => {
-        //       console.log("токен "+response.data)
-        //       localStorage.setItem('jwt', response.data)
-        //       this.$router.push('/feed')
-        //     }
-        // )
+      login() {        
+         UserService.login(this.user).then(
+            response => {
+              console.log("токен "+response.data)
+              localStorage.setItem('jwt', response.data)
+              this.$router.push('/feed')
+            }
+        )
       },
       goToRegistration(){
         this.$router.push('/registration')

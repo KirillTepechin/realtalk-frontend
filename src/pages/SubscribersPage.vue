@@ -1,7 +1,7 @@
 <template>
     <PageHeader/>
     <div class="page-subscribers">        
-        <div class="subscr-list">
+        <div class="users-list">
             <InputIcon
             class="input-icon"
             :type = "'text'"
@@ -10,28 +10,38 @@
             :width = "'18'"
             :height = "'18'"
             />
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
+            <div class="subscr" v-for='sub in user.subscribers' v-bind:key="sub.id">
+                <SubscrView :user="sub"/>
+            </div>            
         </div>        
     </div>
 </template>
   
 <script>
+import UserService from "@/services/UserService";
+
 import PageHeader from "@/components/PageHeader";
 import SubscrView from "@/components/SubscrView";
 import InputIcon from "@/components/InputIcon";
 
 export default {
+    data(){
+        return {
+            user:{}
+        }
+    },
     components: {
         PageHeader,
         SubscrView,
         InputIcon
+    },
+    mounted(){
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.user = response.data
+            console.log(this.user)
+          }          
+        })        
     }
 }
 </script>
@@ -42,8 +52,8 @@ export default {
         flex-direction: column;
     }
     
-    .subscr-list{
-        margin: 15px 400px 20px 400px;
+    .users-list{
+        margin: 15px 300px 20px 300px;
         padding: 0px 0px 20px 0px;
         background-color: white;
         border-radius: 20px;
@@ -52,7 +62,7 @@ export default {
     }
 
     .input-icon{
-        margin: 3px !important;
+        margin: 5px !important;
         border: 0px !important;        
     }
     

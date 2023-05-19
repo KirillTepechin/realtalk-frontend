@@ -10,27 +10,20 @@
             :width = "'18'"
             :height = "'18'"
             />
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
-            <SubscrView/>
+            <!-- <SubscrView/> -->
         </div>        
     </div>
 </template>
   
 <script>
 import PageHeader from "@/components/PageHeader";
-import SubscrView from "@/components/SubscrView";
+// import SubscrView from "@/components/SubscrView";
 import InputIcon from "@/components/InputIcon";
 
 export default {
     components: {
         PageHeader,
-        SubscrView,
+        // SubscrView,
         InputIcon
     }
 }

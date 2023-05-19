@@ -11,6 +11,7 @@
             <span class="input-file-btn">Выберите файл</span>
         </label>        
         <InputIcon
+        v-model = "user.name"
         :type = "'text'"
         :placeholder = "'Имя'"
         :src = "'name.png'"
@@ -18,6 +19,7 @@
         :height = "'18'"
         />
         <InputIcon
+        v-bind:modelValue = "user.surname"
         :type = "'text'"
         :placeholder = "'Фамилия'"
         :src = "'name.png'"
@@ -25,6 +27,7 @@
         :height = "'18'"
         />
         <InputIcon
+        v-bind:modelValue = "user.borthdate"
         :type = "'date'"
         :placeholder = "'Дата рождения'"
         :src = "'cake.png'"
@@ -32,6 +35,7 @@
         :height = "'18'"
         />
         <InputIcon
+        v-bind:modelValue = "user.city"
         :type = "'text'"
         :placeholder = "'Город'"
         :src = "'city.png'"
@@ -43,9 +47,25 @@
 </template>
 
 <script>
+import UserService from "@/services/UserService";
+
 import MyButton from './MyButton.vue';
 import InputIcon from './InputIcon.vue';
 export default {
+    data(){
+        return {
+            user:{
+                login:"",
+                name:"",
+                surname:"",
+                photo:"",
+                city:"",
+                borthdate: "",
+                subscribers:[],
+                subscriptions:[]
+            }
+        }
+    },
     components: {
         MyButton,
         InputIcon
@@ -71,7 +91,16 @@ export default {
             reader.readAsDataURL(file);
             //this.actor.photo = file;
         },
-    }
+        
+    },
+    mounted(){
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.user = response.data
+            console.log(this.user)
+          }          
+        })
+        }
     
   
 }

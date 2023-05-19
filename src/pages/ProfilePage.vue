@@ -1,20 +1,19 @@
 <template>
     <PageHeader/>
     <div class="profile-body">
-        <ProfileView class ="profile-top"/>
+        <ProfileView class ="profile-top" :user="this.user" :posts="this.posts"/>
         <div class="profile-bottom">
-            <div class="posts">
+            <div class="posts-form">
                     <div class="post-create">
                         <input type="text" placeholder="Что у Вас нового?">
                         <MyButton>
                             Создать пост
                         </MyButton>
                     </div>
-                    <PostView/>
-                    <PostView/>
-                    <PostView/>
-                    <PostView/>
-                </div>
+                    <div class="post" v-for='post in posts' v-bind:key="post.id">
+                    <PostView :post="post"/>
+                    </div>
+            </div>
             <div class="sub-sub">
                 <SubcrList/>
                 <SubcrList/>
@@ -24,6 +23,8 @@
 </template>
 
 <script>
+import PostService from "@/services/PostService";
+import UserService from "@/services/UserService";
 
 import PageHeader from "@/components/PageHeader";
 import ProfileView from "@/components/ProfileView";
@@ -32,14 +33,33 @@ import SubcrList from "@/components/SubcrList";
 import MyButton from "@/components/MyButton";
 
 export default {
+    data(){
+        return {
+            posts:[],
+            user:{}
+        }
+    },
     components:{
         PageHeader,
         ProfileView,
         SubcrList,
         PostView,
         MyButton,
+    },
+    mounted(){
+        PostService.getPostByUser().then((response)=> {
+          if(response.status == 200) {            
+            this.posts = response.data
+            console.log(this.posts)
+          }          
+        })
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.user = response.data
+            console.log(this.user)
+          }          
+        })        
     }
-  
 }
 </script>
 
@@ -68,8 +88,8 @@ export default {
 .sub-sub{
     margin-left: 10px;
 }
-.posts{
-    margin-right: 10px;
+.posts-form{
+    flex: auto;
 }
 .post-create input{
     outline: none;

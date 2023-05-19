@@ -2,6 +2,7 @@
     <form @submit.prevent>
         <h4>Данные входа</h4>
         <InputIcon
+        v-bind:modelValue = "user.login"
         :type = "'text'"
         :placeholder = "'Логин'"
         :src = "'email.png'"
@@ -27,12 +28,36 @@
 </template>
 
 <script>
+import UserService from "@/services/UserService";
+
 import MyButton from './MyButton.vue';
 import InputIcon from './InputIcon.vue';
 export default {
+    data(){
+        return {
+            user:{
+            login:"",
+            name:"",
+            surname:"",
+            photo:"",
+            city:"",
+            borthdate: "",
+            subscribers:[],
+            subscriptions:[]
+            }
+        }
+    },
     components:{
         MyButton,
         InputIcon
+    },
+    mounted(){
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.user = response.data
+            console.log(this.user)
+          }          
+        })        
     }
   
 }
