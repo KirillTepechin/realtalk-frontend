@@ -63,7 +63,7 @@ export default {
                 borthdate: Date,
                 subscribers:[],
                 subscriptions:[]
-            }
+            },
         }
     },
     components: {
@@ -103,7 +103,7 @@ export default {
     },
     computed:{
         year(){
-            console.log(new Date(this.user.borthdate).getFullYear())
+            console.log(new Date(this.user.borthdate))
             return new Date(this.user.borthdate)
         }
   }

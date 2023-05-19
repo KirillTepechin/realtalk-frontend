@@ -15,9 +15,13 @@
                     </div>
             </div>
             <div class="sub-sub">
-                <SubcrList/>
-                <SubcrList/>
-            </div>        
+                <div class="subscriptions">
+                    <SubcrList :usersList="user.subscriptions" :title="'Подписки'" :link="'/subscriptions'"/>
+                </div>
+                <div class="subscribers">
+                    <SubcrList :usersList="user.subscribers" :title="'Подписчики'" :link="'/subscribers'"/>
+                </div> 
+            </div>            
         </div>        
     </div>   
 </template>

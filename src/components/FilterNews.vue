@@ -16,13 +16,11 @@ export default {
             this.$emit('chooseNews', {
                 feedType: 'feed'
             })
-            this.$router.push("/feed")
         },
         rec(){
             this.$emit('chooseNews', {
                 feedType: 'recommend'
             })
-            this.$router.push("/feed")
         }
     }
   

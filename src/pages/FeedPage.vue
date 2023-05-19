@@ -1,12 +1,12 @@
 <template>
     <PageHeader />
     <div class="feed-body">
-        <div class="feed-posts" v-if="getFeedType()">
+        <!-- <div class="feed-posts" v-if="getFeedType()">
             <div class="post" v-for='post in recommendations' v-bind:key="post.id">
             <PostView :post="post"/>
             </div>
-        </div>
-        <div class="feed-posts" v-else>
+        </div> -->
+        <div class="feed-posts">
             <div class="post" v-for='post in posts' v-bind:key="post.id">
             <PostView :post="post"/>
             </div>
@@ -36,8 +36,25 @@ export default {
     },
     methods:{
         onChooseNews(data){
-            localStorage.setItem('feedType', data.feedType)
-            console.log(localStorage.getItem('feedType'))
+            // localStorage.setItem('feedType', data.feedType)
+            // console.log(localStorage.getItem('feedType'))
+
+            if(data.feedType == 'feed'){
+            FeedService.getFeed().then((response)=> {
+                if(response.status == 200) {            
+                    this.posts = response.data
+                    console.log('feed' + this.posts)
+                }          
+            })
+            }
+            if(data.feedType == 'recommend'){
+                FeedService.getFeedRec().then((response)=> {
+                    if(response.status == 200) {        
+                    this.posts = response.data
+                    console.log('rec' + this.posts)
+                    }          
+                })
+            }
         },
         getFeedType(){
             if(localStorage.getItem('feedType') == 'recommend') return true
@@ -45,23 +62,42 @@ export default {
         }
     },
     mounted(){
-        if(localStorage.getItem('feedType') == 'feed'){
+        // if(localStorage.getItem('feedType') == 'feed'){
             FeedService.getFeed().then((response)=> {
                 if(response.status == 200) {            
                     this.posts = response.data
                     console.log('feed' + this.posts)
                 }          
             })
-        }
-        if(localStorage.getItem('feedType') == 'recommend'){
-            FeedService.getFeedRec().then((response)=> {
-                if(response.status == 200) {        
-                this.recommendations = response.data
-                console.log('rec' + this.recommendations)
-                }          
-            })
-        }
-    }
+        // }
+        // if(localStorage.getItem('feedType') == 'recommend'){
+        //     FeedService.getFeedRec().then((response)=> {
+        //         if(response.status == 200) {        
+        //         this.recommendations = response.data
+        //         console.log('rec' + this.recommendations)
+        //         }          
+        //     })
+        // }
+        
+    },
+    // updated(){
+    //     if(localStorage.getItem('feedType') == 'feed'){
+    //         FeedService.getFeed().then((response)=> {
+    //             if(response.status == 200) {            
+    //                 this.posts = response.data
+    //                 console.log('feed' + this.posts)
+    //             }          
+    //         })
+    //     }
+    //     if(localStorage.getItem('feedType') == 'recommend'){
+    //         FeedService.getFeedRec().then((response)=> {
+    //             if(response.status == 200) {        
+    //             this.recommendations = response.data
+    //             console.log('rec' + this.recommendations)
+    //             }          
+    //         })
+    //     }
+    // }
 }
 </script>
 

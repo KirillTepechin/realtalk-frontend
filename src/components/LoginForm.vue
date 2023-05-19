@@ -46,7 +46,8 @@ export default {
             response => {
               console.log("токен "+response.data)
               localStorage.setItem('jwt', response.data)
-              this.$router.push('/feed')
+              //this.$router.push('/feed')
+              window.location.href = '/feed'
             }
         )
         e.preventDefault()
