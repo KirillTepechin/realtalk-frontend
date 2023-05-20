@@ -15,6 +15,7 @@ import BirthdateCityForm from "@/components/BirthdateCityForm";
 import PhotoForm from "@/components/PhotoForm";
 import PersonalDataForm from "@/components/PersonalDataForm";
 import LoginDataForm from "@/components/LoginDataForm";
+import ChatView from "@/components/ChatView"; 
 
 
 const routes = [
@@ -51,6 +52,7 @@ const routes = [
        
     ] },
     { path: '/chats', component: ChatsPage },
+    { path: '/chat', component: ChatView },
     { path: '/subscribers', component: SubscribersPage },
     { path: '/subscriptions', component: SubscriptionsPage },
     { path: '/search', component: SearchPage },

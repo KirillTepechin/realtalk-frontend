@@ -1,6 +1,6 @@
 <template>
     <router-view :user="user" @updateUser="onUpdateUser" @registerUser="onRegister"/>
-  </template>
+</template>
   
   <script>
   import UserService from "@/services/UserService";

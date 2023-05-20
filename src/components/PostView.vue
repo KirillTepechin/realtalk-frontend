@@ -4,13 +4,13 @@
             <div class="user-profile">
                 <img class="user-photo"
                  v-if="this.post.user.photo"
-                 v-bind:src= "'/photos/'+post.user.photo" 
+                 v-bind:src= "'/photos/'+ this.post.user.photo"
                  width="50" 
                  height="50"
                  >
                  <img class="user-photo"
                  v-else
-                 src= "../assets/profile.png" 
+                 src= "../assets/profile-photo.png" 
                  width="50" 
                  height="50"
                  >

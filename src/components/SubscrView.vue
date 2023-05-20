@@ -1,7 +1,18 @@
 <template>
     <div class="subscr-container">        
         <div class="user-photo">
-            <img src="../assets/realtalk.png" width="150" height="150">                
+            <img
+            v-if="this.user.photo"
+            v-bind:src= "'/photos/'+ this.user.photo"
+            width="150" 
+            height="150"
+            >
+            <img
+            v-else
+            src= "../assets/profile-photo.png" 
+            width="150" 
+            height="150"
+            >              
         </div>
         <div class="user-profile">
             <div class="user-info">

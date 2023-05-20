@@ -1,10 +1,29 @@
 <template>
-    <div class="message-container">
+    <div class="message-container" @click="$emit('click')">
         <div class="user">
             <div class="user-profile">
-                <img class="user-photo" src="../assets/profile.png" width="50" height="50">
+                <img class="user-photo"
+                 v-if="this.chat.image"
+                 v-bind:src= "'/photos/'+ this.chat.image"
+                 width="50" 
+                 height="50"
+                 >
+                <img class="user-photo"
+                v-else-if="this.chat.users.length == 2 && this.chat.users[0].photo"
+                v-bind:src= "'/photos/'+ this.chat.users[0].photo"
+                width="50" 
+                height="50"
+                >
+                <img class="user-photo"
+                 v-else
+                 src= "../assets/profile-photo.png"
+                 width="50" 
+                 height="50"
+                 >
                 <div class="user-info">
-                    <label class="username">Кирилл Тепечин</label>
+                    <label class="username" 
+                    v-if="this.chat.users.length == 2">{{ this.chat.users[0].name }} {{ this.chat.users[0].surname }}</label>
+                    <label class="username" v-else>{{ this.chat.name }}</label>
                     <label class="message-text">Привет</label>
                 </div>
             </div>
@@ -16,7 +35,17 @@
 </template>
 
 <script>
-
+    export default{
+        props:{
+            chat:{
+                id:"",
+                name:"",
+                image:"",
+                user:[]
+            }
+        },
+        
+    }
 </script>
 
 <style scoped>

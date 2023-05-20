@@ -10,28 +10,51 @@
             :width = "'18'"
             :height = "'18'"
             />
-            <MessageView/>
-            <MessageView/>
-            <MessageView/>
-            <MessageView/>
-            <MessageView/>
-            <MessageView/>
-            <MessageView/>
-            <MessageView/>
+            <div v-for='chat in chats' v-bind:key="chat.id">
+                <MessageView :chat="chat" @click="click(chat.id)"/>               
+            </div>            
         </div>        
     </div>
 </template>
   
 <script>
+import ChatService from "@/services/ChatService";
+
 import PageHeader from "@/components/PageHeader";
 import MessageView from "@/components/MessageView";
 import InputIcon from "@/components/InputIcon";
 
 export default {
+    data(){
+        return {
+            chats:[],
+            chat:{}
+        }
+    },
     components: {
         PageHeader,
         MessageView,
         InputIcon
+    },
+    mounted(){
+        ChatService.getChatsByUser().then((response)=> {
+            if(response.status == 200) {            
+                this.chats = response.data
+                console.log(response.data)
+            }          
+        })
+    },
+    methods:{
+        click(chatId, e){
+            ChatService.getChatById(chatId).then((response)=> {
+                if(response.status == 200) {            
+                    this.chat = response.data
+                }
+            })
+            localStorage.setItem('chatId', chatId)
+            this.$router.push('/chat')            
+            e.preventDefault()
+        }
     }
 }
 </script>

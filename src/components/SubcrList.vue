@@ -5,7 +5,18 @@
             <label class="subscr-count">{{ count }}</label>
         </div>
         <div class="user" v-for='user in newUsersList.slice(0,3)' v-bind:key="user.id">
-            <img class="user-photo" src="../assets/profile.png" width="50" height="50">
+            <img class="user-photo"
+            v-if="user.photo"
+            v-bind:src= "'/photos/'+ user.photo"
+            width="50"
+            height="50"
+            >
+            <img class="user-photo"
+            v-else
+            src= "../assets/profile-photo.png" 
+            width="50" 
+            height="50"
+            >
             <div class="user-info">
                 <a href="#">{{ user.name }} {{ user.surname }}</a>
                 <label>@{{user.login}}</label>

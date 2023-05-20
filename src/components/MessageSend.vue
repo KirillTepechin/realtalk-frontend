@@ -1,6 +1,6 @@
 <template>
-    <div class="post-create">
-        <input type="text" placeholder="Напишите сообщение...">
+    <div class="sms-create">
+        <textarea type="text" placeholder="Напишите сообщение..."></textarea>
         <img src="../assets/send.png" width="35" height="35" >
     </div>
 </template>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style>
-.post-create input{
+.sms-create textarea{
     outline: none;
     padding: 10px;
     width: 100%;
@@ -27,20 +27,20 @@ export default {
     font-family: Georgia, serif;
 
 }
-.post-create{
+.sms-create{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-block-end: 10px;
     padding-inline: 10px;
     padding-block: 20px;
     background-color: #ffffff;
     border: 1px solid;
     border-radius: 10px;
     border-color: #D276FD;
+}
 
-
-    width: 60%;
+.sms-create img{
+    align-self: center;
 }
 
 </style>

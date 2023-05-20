@@ -1,12 +1,13 @@
 <template>
     <div class="companion-container">
         <div class="user">
-            <div class="back">
-                <img src="../assets/back.png" width="15" height="15">
+            <div class="back" @click="back()">
+                <img src="../assets/back.png" width="15" height="15" >
                 <label>Назад</label>
             </div>
             <div class="user-info">
-                    <label class="username">Кирилл Тепечин</label>
+
+                    <label class="username" >Кирилл Тепечин</label>
                     <label class="login">@KirTep</label>
                 </div>
             <div class="user-profile">
@@ -17,8 +18,20 @@
 </template>
 
 <script>
-
+    export default{
+        props:{
+            length: Number,
+            users:[]
+        },
+        methods:{
+            back(e){
+                this.$router.push("/chats")
+                e.preventDefault()
+            }
+        }        
+    }
 </script>
+    
 
 <style scoped>
 .companion-container{
@@ -27,7 +40,6 @@
     background-color: white;
     font-family: Georgia, serif;
     font-size: 12pt;
-    margin-bottom: 10px;
     border-radius: 10px;
     border: 1px solid;
     padding: 10px 20px;
