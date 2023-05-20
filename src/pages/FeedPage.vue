@@ -57,42 +57,13 @@ export default {
         }
     },
     mounted(){
-        // if(localStorage.getItem('feedType') == 'feed'){
-            FeedService.getFeed().then((response)=> {
-                if(response.status == 200) {            
-                    this.posts = response.data
-                    console.log('feed' + this.posts)
-                }          
-            })
-        // }
-        // if(localStorage.getItem('feedType') == 'recommend'){
-        //     FeedService.getFeedRec().then((response)=> {
-        //         if(response.status == 200) {        
-        //         this.recommendations = response.data
-        //         console.log('rec' + this.recommendations)
-        //         }          
-        //     })
-        // }
-        
-    },
-    // updated(){
-    //     if(localStorage.getItem('feedType') == 'feed'){
-    //         FeedService.getFeed().then((response)=> {
-    //             if(response.status == 200) {            
-    //                 this.posts = response.data
-    //                 console.log('feed' + this.posts)
-    //             }          
-    //         })
-    //     }
-    //     if(localStorage.getItem('feedType') == 'recommend'){
-    //         FeedService.getFeedRec().then((response)=> {
-    //             if(response.status == 200) {        
-    //             this.recommendations = response.data
-    //             console.log('rec' + this.recommendations)
-    //             }          
-    //         })
-    //     }
-    // }
+        FeedService.getFeed().then((response)=> {
+            if(response.status == 200) {            
+                this.posts = response.data
+                console.log('feed' + this.posts)
+            }          
+        })
+    }
 }
 </script>
 
