@@ -106,8 +106,9 @@ export default {
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user = response.data
-            this.user.borthdate = new Date(this.user.borthdate).toISOString().split('T')[0]
-            console.log(this.user.borthdate)
+            if(this.user.borthdate!=null){
+                this.user.borthdate = new Date(this.user.borthdate).toISOString().split('T')[0]
+            }
           }          
         })
         

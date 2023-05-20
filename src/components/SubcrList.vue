@@ -29,7 +29,6 @@
         },
         updated(){
             this.count = this.usersList.length
-            console.log(this.count)
             this.newUsersList = this.usersList
         }
     }

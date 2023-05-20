@@ -4,7 +4,7 @@
             <div class="user-profile">
                 <img class="user-photo"
                  v-if="this.post.user.photo"
-                 v-bind:src= "'./realtalk/img/'+'post.user.photo'" 
+                 v-bind:src= "'/photos/'+post.user.photo" 
                  width="50" 
                  height="50"
                  >
@@ -15,7 +15,7 @@
                  height="50"
                  >
                 <div class="user-info">
-                    <a href="#">{{ post.user.login }}</a>
+                    <router-link :to="'/'+post.user.login">{{ post.user.login }}</router-link>
                     <label style="font-size: 10pt;">{{post.date}}</label>
                 </div>
             </div>
@@ -62,13 +62,8 @@ import UserService from "@/services/UserService";
             UserService.me().then((response)=> {
                 if(response.status == 200) {            
                     this.me = response.data
-                    console.log("me" + response.data)
                 }                
             })
-            console.log("me id " + this.me.login)
-            console.log("post user id " + this.post.user.id)
-            // this.me = localStorage.getItem("me")
-            // console.log("me" + this.me)
         }
     }
 </script>

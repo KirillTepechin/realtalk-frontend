@@ -1,12 +1,12 @@
 <template>
     <PageHeader/>
-    <div class="profile-body">
+    <div class="profile-body" v-if="this.user.login == this.getLoginByRoute()">
         <ProfileView class ="profile-top" :user="this.user" :posts="this.posts"/>
         <div class="profile-bottom">
             <div class="posts-form">
                     <div class="post-create">
-                        <textarea type="text" placeholder="Что у Вас нового?"></textarea>
-                        <MyButton>
+                        <textarea v-model="this.postText" type="text" placeholder="Что у Вас нового?"></textarea>
+                        <MyButton @click="createPost($event)">
                             Создать пост
                         </MyButton>
                     </div>
@@ -20,6 +20,25 @@
                 </div>
                 <div class="subscribers">
                     <SubcrList :usersList="user.subscribers" :title="'Подписчики'" :link="'/subscribers'"/>
+                </div> 
+            </div>            
+        </div>        
+    </div>
+    
+    <div class="profile-body" v-else>
+        <ProfileView class ="profile-top" :user="this.anotherUser" :posts="this.posts"/>
+        <div class="profile-bottom">
+            <div class="posts-form">
+                    <div class="post" v-for='post in posts' v-bind:key="post.id">
+                    <PostView :post="post"/>
+                    </div>
+            </div>
+            <div class="sub-sub">
+                <div class="subscriptions">
+                    <SubcrList :usersList="anotherUser.subscriptions" :title="'Подписки'" :link="'/subscriptions'"/>
+                </div>
+                <div class="subscribers">
+                    <SubcrList :usersList="anotherUser.subscribers" :title="'Подписчики'" :link="'/subscribers'"/>
                 </div> 
             </div>            
         </div>        
@@ -40,7 +59,9 @@ export default {
     data(){
         return {
             posts:[],
-            user:{}
+            user:{},
+            anotherUser:{},
+            postText:''
         }
     },
     components:{
@@ -50,19 +71,43 @@ export default {
         PostView,
         MyButton,
     },
+    methods:{
+        createPost(e) {
+            if(this.postText){
+                const post = {text: this.postText, tag:'пердода'}
+                PostService.createPost(post).then((response) => {
+                if (response.status == 200) {
+                    let newPost = response.data
+                    newPost.comments = []
+                    this.posts.push(newPost)
+                    this.postText = ''
+                }
+            })
+            }
+            e.preventDefault() 
+        },
+        getLoginByRoute(){
+            return this.$route.path.toString().substring(1)
+        }
+    },
     mounted(){
-        PostService.getPostByUser().then((response)=> {
-          if(response.status == 200) {            
-            this.posts = response.data
-            console.log(this.posts)
-          }          
+        UserService.me().then((response) => {
+            if (response.status == 200) {
+                this.user = response.data
+            }
         })
-        UserService.me().then((response)=> {
-          if(response.status == 200) {            
-            this.user = response.data
-            console.log(this.user)
-          }          
-        })        
+        UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
+            if (response.status == 200) {
+                this.anotherUser = response.data
+                console.log(this.anotherUser)
+            }
+        })
+        UserService.getUserPosts(this.getLoginByRoute()).then((response) => {
+            if (response.status == 200) {
+                this.posts = response.data
+                console.log(this.posts)
+            }
+        })
     }
 }
 </script>

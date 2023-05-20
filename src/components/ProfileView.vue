@@ -34,42 +34,64 @@
                 <img class="icon" src="../assets/news.png" width="20" height="20">
                 <label>Количество постов: {{ posts.length }}</label>
             </div>
-            <MyButton :onclick="goTo">Редактировать профиль</MyButton> 
+            <div v-if="this.user.login==this.me.login">
+                <MyButton  @click="goTo">Редактировать профиль</MyButton>
+            </div>
+            <div v-else>
+                <MyButton v-if="checkSub()" @click="subscribe($event)">Подписаться</MyButton> 
+                <MyButton v-else @click="subscribe($event)">Отписаться</MyButton> 
+            </div>
+            
         </div>
     </div>
 </template>
 
 <script>
+import UserService from "@/services/UserService";
+
 import MyButton from './MyButton.vue';
 export default {
     components:{
         MyButton
     },
+    data(){
+        return{
+            me:{},
+        }
+    },
     methods:{
         goTo(){
             this.$router.push("/edit-profile")
-            console.log('edit')
+        },
+        checkSub(){
+           
+            return (this.me.login!=this.user.login && 
+                !this.user.subscribers.map(x => x.login)
+                .includes(this.me.login))
+        },
+        subscribe(e){
+            UserService.subscribe(this.posts[0].user.id).then((response)=>{
+                if(response.status == 200){
+                    let but = document.querySelector("#app > div.profile-body > div.profile-container.profile-top > div.user-info > div:nth-child(6) > button")
+                    if(response.data==true) but.innerHTML = "Отписаться"
+                    else but.innerHTML = "Подписаться"
+                }
+            })
+
+            e.preventDefault()
         }
     },
     props:{
-        user:{
-            login:"",
-            name:"",
-            surname:"",
-            photo:"",
-            city:"",
-            borthdate: "",
-            subscribers:[],
-            subscriptions:[]
-        },
+        user:{},
         posts:{}
     },
-    // computed: {
-    //     itemImage() {
-    //         const fileName = this.user.photo;
-    //         return require(`F:/3 курс/blog course/realtalk/img/${fileName}`);
-    //     }
-    // }
+    mounted(){
+        UserService.me().then((response) => {
+            if (response.status == 200) {
+                this.me = response.data
+            }
+        })
+    }
 }
 </script>
 

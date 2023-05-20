@@ -35,7 +35,7 @@ class UserService{
         return axios.get(URL, query)
     }
     getUserProfile(login){
-        let URL = USER_API_BASE_URL+'/'+login
+        let URL = USER_API_BASE_URL+login
         return axios.get(URL)
     }
     getUserPosts(login){
