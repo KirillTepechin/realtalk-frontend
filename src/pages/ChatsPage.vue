@@ -51,8 +51,7 @@ export default {
                     this.chat = response.data
                 }
             })
-            localStorage.setItem('chatId', chatId)
-            this.$router.push('/chat')            
+            this.$router.push('/chat'+'/'+chatId)            
             e.preventDefault()
         }
     }

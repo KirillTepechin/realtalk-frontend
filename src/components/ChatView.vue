@@ -1,32 +1,12 @@
 <template>
     <PageHeader/>
-    <div class="page-chat">
-        <CompanionView />
-        <div class="sms-list">
-            <!-- <div v-for='msg in chat.messages' v-bind:key="msg.id">
-                <MessageView :message="msg"/>               
-            </div>             -->
-            <div class="sms">
-                <label>sms</label>
-            </div>
-            <div class="sms">
-                <label>sms</label>
-            </div>
-            <div class="sms">
-                <label>sms</label>
-            </div>
-            <div class="sms">
-                <label>sms</label>
-            </div>
-            <div class="sms">
-                <label>sms</label>
-            </div>
-            <div class="sms">
-                <label>sms</label>
-            </div>            
-        </div>
-        <MessageSend/>
-    </div>
+    <div class="page-chat"> 
+        <CompanionView /> 
+        <div class="sms-list" v-for='msg in this.chat.messages' v-bind:key="msg.id">
+            <MessageView :message="msg"/>                     
+        </div> 
+       <MessageSend @sendMessage="onSendMessage"/>
+    </div> 
 </template>
 
 <script>
@@ -35,29 +15,68 @@ import ChatService from "@/services/ChatService";
 import PageHeader from "@/components/PageHeader";
 import CompanionView from "@/components/CompanionView";
 import MessageSend from "@/components/MessageSend";
-//import MessageView from "@/components/MessageView";
+import MessageView from "@/components/MessageView";
+
+import SockJS from 'sockjs-client'
+import { Stomp } from '@stomp/stompjs'
+import UserService from "@/services/UserService";
+
+let stompClient = null
 
 export default{
         data(){
             return {
-                chat:{}
+            chat: {},
+            me:{}
+        }
+    },
+    components: {
+        PageHeader,
+        MessageView,
+        CompanionView,
+        MessageSend
+    },
+    mounted() {
+        this.connect()
+        ChatService.getChatById(this.$route.params.id).then((response) => {
+            if (response.status == 200) {
+                this.chat = response.data
             }
+        })
+        UserService.me().then((response)=> {
+            if(response.status == 200) {            
+                this.me = response.data
+            }          
+        })
+    },
+    methods: {
+        showMessage(data) {
+            let message = {user:{photo: this.me.photo, name: this.me.name, surname: this.me.surname}, text: data.text, date: new Date()}
+            this.chat.messages.push(message)
         },
-        components:{
-            PageHeader,
-            //MessageView,
-            CompanionView,
-            MessageSend
+        onSendMessage(data){
+            var url = document.location.pathname;
+            const message = {
+                userDto: {id:this.me.id},
+                text: data.text,
+            };
+            console.log(data)
+            stompClient.send("/app/" + url, {id: this.chat.id}, JSON.stringify(message));
         },
-        mounted(){
-            ChatService.getChatById(localStorage.getItem('chatId')).then((response)=> {
-                if(response.status == 200) {            
-                    this.chat = response.data
-                    console.log(response.data)
-                }
-            })       
+        connect() {
+            const url = 'http://localhost:9000/chat-websocket'
+            stompClient = Stomp.over(() => new SockJS(url));
+            stompClient.debug = () => { }
+            stompClient.connect({}, (frame) => {
+                console.log("Connected -" + frame)
+                stompClient.subscribe('/chat/'+this.chat.id, message => {
+                    this.showMessage(JSON.parse(message.body))
+                })
+            })
         },
     }
+
+}
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
     <PageHeader/>
-    <div class="profile-body" v-if="this.user.login == this.getLoginByRoute()">
+    <div class="profile-body" v-if="this.user.login === this.getLoginByRoute()">
         <ProfileView class ="profile-top" :user="this.user" :posts="this.posts"/>
         <div class="profile-bottom">
             <div class="posts-form">
@@ -79,7 +79,7 @@ export default {
                 if (response.status == 200) {
                     let newPost = response.data
                     newPost.comments = []
-                    this.posts.push(newPost)
+                    this.posts.unshift(newPost)
                     this.postText = ''
                 }
             })

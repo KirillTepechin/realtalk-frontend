@@ -1,7 +1,7 @@
 <template>
     <div class="sms-create">
-        <textarea type="text" placeholder="Напишите сообщение..."></textarea>
-        <img src="../assets/send.png" width="35" height="35" >
+        <textarea v-model="text" type="text" placeholder="Напишите сообщение..."></textarea>
+        <img @click="send" src="../assets/send.png" width="35" height="35" >
     </div>
 </template>
 
@@ -9,6 +9,18 @@
 
 export default {
     components:{
+    },
+    date(){
+        return{
+            text:''
+        }
+    },
+    methods:{
+        send() {
+            this.$emit('sendMessage', {
+                text: this.text,
+            })
+        }
     }
   
 }

@@ -1,5 +1,5 @@
 <template>
-    <router-view :user="user" @updateUser="onUpdateUser" @registerUser="onRegister"/>
+    <router-view :key="$route.path" :user="user" @updateUser="onUpdateUser" @registerUser="onRegister"/>
 </template>
   
   <script>
@@ -22,6 +22,7 @@
   },
     methods: {
       onUpdateUser(data) {
+        console.log(data)
         if(data.name!=null)this.user.name=data.name
         if(data.surname!=null)this.user.surname=data.surname
         if(data.login!=null)this.user.login=data.login

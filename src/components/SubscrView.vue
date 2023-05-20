@@ -20,7 +20,7 @@
                     <label class="login">@{{ user.login }}</label>
             </div>
             <div class="btn-bar">
-                <MyButton>Сообщение</MyButton>
+                <MyButton @click="createChat($event)">Сообщение</MyButton>
                 <MyButton>Отписаться</MyButton>
             </div>            
         </div>
@@ -28,15 +28,54 @@
 </template>
 
 <script>
+import ChatService from "@/services/ChatService";
+import UserService from "@/services/UserService";
+
+
 import MyButton from './MyButton.vue';
 export default {
     components:{
         MyButton,
     },
+    data(){
+        return{
+            me:{},
+            createdId: null,
+        }
+    },
     props:{
         user:{}
+    },
+    methods:{
+        createChat(e){
+            if(this.createdId!=null){
+                this.$router.push('chat/'+this.createdId)
+            }
+            else{
+                let chat = {name: '', isPrivate: true, userIds: [this.user.id]}
+                ChatService.createChat(chat).then((response)=>{
+                    this.$router.push('chat/'+response.data.id)
+                })
+                
+            }
+            e.preventDefault()
+        },
+        checkPrivateChat(chats){
+            this.createdId = chats.find(chat=> chat.isPrivate==true &&chat.users.map(user=>user.id).includes(this.user.id)).id
+        }
+    },
+    mounted() {
+        UserService.me().then((response) => {
+            if (response.status == 200) {
+                this.me = response.data
+            }
+        })
+        ChatService.getChatsByUser().then((response)=>{
+            if (response.status == 200) {
+                this.checkPrivateChat(response.data)
+            }
+        })
     }
-  
 }
 </script>
 

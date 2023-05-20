@@ -1,6 +1,6 @@
 <template>
     <div class="message-container" @click="$emit('click')">
-        <div class="user">
+        <div v-if="chat!=null" class="user">
             <div class="user-profile">
                 <img class="user-photo"
                  v-if="this.chat.image"
@@ -24,11 +24,36 @@
                     <label class="username" 
                     v-if="this.chat.users.length == 2">{{ this.chat.users[0].name }} {{ this.chat.users[0].surname }}</label>
                     <label class="username" v-else>{{ this.chat.name }}</label>
-                    <label class="message-text">Привет</label>
+                    <label class="message-text">{{ this.getLastMessage() }}</label>
                 </div>
             </div>
             <div class="date">
-                <label style="font-size: 11pt;">12 мая в 21:44</label>
+                <label style="font-size: 11pt;">{{this.getLastMessageDate()}}</label>
+            </div>            
+        </div>
+
+        <div v-else class="user">
+            <div class="user-profile">
+                <img class="user-photo"
+                 v-if="this.message.user.photo"
+                 v-bind:src= "'/photos/'+ this.message.user.photo"
+                 width="50" 
+                 height="50"
+                 >
+                <img class="user-photo"
+                 v-else
+                 src= "../assets/profile-photo.png"
+                 width="50" 
+                 height="50"
+                 >
+                <div class="user-info">
+                    
+                    <label class="username">{{ this.message.user.name + this.message.user.surname }}</label>
+                    <label class="message-text">{{ this.message.text }}</label>
+                </div>
+            </div>
+            <div class="date">
+                <label style="font-size: 11pt;">{{this.message.date}}</label>
             </div>            
         </div>
     </div>
@@ -37,13 +62,26 @@
 <script>
     export default{
         props:{
-            chat:{
-                id:"",
-                name:"",
-                image:"",
-                user:[]
-            }
+            chat: null,
+            message:{}
         },
+        methods:{
+            getLastMessage(){
+                console.log(this.chat)
+                if(this.chat.messages.length!=0){
+                    let text = this.chat.messages[this.chat.messages.length].text
+                    return text
+                }
+                return ""
+            },
+            getLastMessageDate(){
+                if(this.chat.messages.length!=0){
+                    let text = this.chat.messages[this.chat.messages.length].date
+                    return text
+                }
+                return ""
+            }
+        }
         
     }
 </script>

@@ -52,7 +52,7 @@ const routes = [
        
     ] },
     { path: '/chats', component: ChatsPage },
-    { path: '/chat', component: ChatView },
+    { path: '/chat/:id', component: ChatView },
     { path: '/subscribers', component: SubscribersPage },
     { path: '/subscriptions', component: SubscriptionsPage },
     { path: '/search', component: SearchPage },
