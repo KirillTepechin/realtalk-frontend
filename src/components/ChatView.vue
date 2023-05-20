@@ -37,7 +37,7 @@ export default{
         MessageSend
     },
     mounted() {
-        this.connect()
+       
         ChatService.getChatById(this.$route.params.id).then((response) => {
             if (response.status == 200) {
                 this.chat = response.data
@@ -48,6 +48,7 @@ export default{
                 this.me = response.data
             }          
         })
+        this.connect()
     },
     methods: {
         showMessage(data) {
@@ -57,22 +58,22 @@ export default{
         onSendMessage(data){
             var url = document.location.pathname;
             const message = {
-                userDto: {id:this.me.id},
+                id: 0,
+                userDto: {login: this.me.login},
                 text: data.text,
             };
             console.log(data)
-            stompClient.send("/app/" + url, {id: this.chat.id}, JSON.stringify(message));
+            stompClient.send("/app" + url, {}, JSON.stringify(message));
         },
         connect() {
-            const url = 'http://localhost:9000/chat-websocket'
-            stompClient = Stomp.over(() => new SockJS(url));
-            stompClient.debug = () => { }
-            stompClient.connect({}, (frame) => {
-                console.log("Connected -" + frame)
-                stompClient.subscribe('/chat/'+this.chat.id, message => {
-                    this.showMessage(JSON.parse(message.body))
-                })
-            })
+            var socket = new SockJS('http://localhost:9000/gs-guide-websocket');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/1', function (greeting) {
+                    this.showMessage(JSON.parse(greeting.body));
+                });
+            });
         },
     }
 
