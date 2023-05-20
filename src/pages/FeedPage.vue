@@ -5,29 +5,75 @@
             <div class="post" v-for='post in posts' v-bind:key="post.id">
             <PostView :post="post"/>
             </div>
-        </div>     
-        <FilterNews class="feed-filters" @chooseNews="onChooseNews"/>
+        </div>
+        <div class="filter">
+            <div class="feed-filters">
+                <FilterNews @chooseNews="onChooseNews"/>
+            </div>
+            <div id="preferences-checkboxes">
+                <label class="choose">Выберите категории, которые Вам интересны:</label>
+                <div class="category" v-for="cat in categories" v-bind:key="cat">
+                    <!-- <div v-for="userTag in user.tags" v-bind:key="userTag"> -->
+                        <!-- <input v-if="userTag == cat.tag"
+                        type="checkbox" 
+                        :value="cat.tag"
+                        v-model="checked"
+                        >
+                        <input v-else
+                        type="checkbox" 
+                        :value="cat.tag" 
+                        v-model="unchecked"
+                        > -->
+                        <input
+                        type="checkbox" 
+                        :value="cat.tag" 
+                        v-model="choosen"
+                        >
+                        <label>{{cat.tag}}</label>
+                    <!-- </div>                     -->
+                </div>
+                <div>
+                    <MyButton @click="editPreferences($event)">Сохранить выбор</MyButton>
+                </div>
+            </div>
+        </div>        
     </div>
 </template>
 
 <script>
 import FeedService from "@/services/FeedService";
+import UserService from "@/services/UserService";
 
 import PageHeader from "@/components/PageHeader";
 import PostView from "@/components/PostView";
 import FilterNews from "@/components/FilterNews";
+import MyButton from "@/components/MyButton";
 
 export default {
     data(){
         return {
             posts:[],
-            recommendations:[]
+            recommendations:[],
+            choosen:[],
+            user:{},
+            categories:[
+                {tag:"Природа"},
+                {tag:"Животные"},
+                {tag:"Люди"},
+                {tag:"Спорт"},
+                {tag:"Еда"},
+                {tag:"Семья"},
+                {tag:"Мода"},
+            ],
+            checked: true,
+            unchecked: false
         }
     },
     components:{
         PageHeader,
         PostView,
-        FilterNews
+        FilterNews,
+        MyButton
     },
     methods:{
         onChooseNews(data){
@@ -54,36 +100,127 @@ export default {
         getFeedType(){
             if(localStorage.getItem('feedType') == 'recommend') return true
             else return false
-        }
+        },
+        editPreferences(e) {
+            if(this.choosen.length != 0){
+                const tags = {tags: this.choosen}
+                console.log(tags)
+                UserService.editPreferences(tags).then((response) => {
+                    if (response.status == 200) {
+                        console.log(response.data)
+                    }
+                })
+            }
+            e.preventDefault() 
+        },
     },
     mounted(){
         FeedService.getFeed().then((response)=> {
             if(response.status == 200) {            
                 this.posts = response.data
-                console.log('feed' + this.posts)
+                console.log(this.posts)
             }          
+        }),
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.user = response.data
+            console.log(this.user)
+          }
         })
+    },
+    updated(){
+        console.log(this.choosen)
+        console.log(this.user.tags)
     }
 }
 </script>
 
-<style>
+<style scoped>
 .feed-body {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
     margin: 15px 300px 20px 300px;
     padding: 0px 0px 20px 0px;
-
 }
 
-.feed-filters, .feed-posts {
-   margin-inline: 20px;
+.feed-filters {
    min-width: 300px;
 }
 
-.feed-posts{
-    flex: auto;
+.feed-posts {
+   margin-inline: 20px;
+   min-width: 300px;
+   flex: auto;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+}
+
+#preferences-checkboxes{
+    max-width: 300px;
+    font-family: Georgia, serif;
+    font-size: 12pt;
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid;
+    border-color: #D276FD;
+    margin-top: 20px;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#preferences-checkboxes input, label{
+    margin-right: 10px;
+}
+
+.category{
+    align-self: flex-start;
+    margin: 5px;
+}
+
+.choose{
+    font-size: 13pt;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.btn{
+    padding: 10px 70px;
+    margin-top: 15px;
 }
 
 </style>
+
+
+<!-- <div class="category">
+    <input type="checkbox" id="nature" value="Природа" v-model="checked" />
+    <label for="nature">Природа</label>
+</div>
+<div class="category">
+    <input type="checkbox" id="animals" value="Животные" v-model="checked" />
+    <label for="animals">Животные</label>
+</div>
+<div class="category">
+    <input type="checkbox" id="people" value="Люди" v-model="checked" />
+    <label for="people">Люди</label>
+</div>
+<div class="category">
+    <input type="checkbox" id="sport" value="Спорт" v-model="checked" />
+    <label for="sport">Спорт</label>
+</div>
+<div class="category">
+    <input type="checkbox" id="food" value="Еда" v-model="checked" />
+    <label for="food">Еда</label>
+</div>
+<div class="category">
+    <input type="checkbox" id="family" value="Семья" v-model="checked" />
+    <label for="family">Семья</label>
+</div>
+<div class="category">
+    <input type="checkbox" id="fashion" value="Мода" v-model="checked" />
+    <label for="fashion">Мода</label>
+</div> -->

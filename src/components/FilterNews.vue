@@ -31,7 +31,6 @@ export default {
 #btn-bar{
     display: flex;
     flex-direction: column;
-    width: 25%;
     background-color: white;
     border-radius: 10px;
     border: 1px solid;
@@ -44,6 +43,6 @@ button{
     background-color: white;
     border-color: #D276FD;    
     font-family: Georgia, serif;
-    font-size: 10pt;  
+    font-size: 12pt;  
 }
 </style>

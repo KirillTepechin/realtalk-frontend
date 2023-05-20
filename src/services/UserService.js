@@ -10,12 +10,12 @@ class UserService{
     
     }
     editProfile(user){
-        let URL = USER_API_BASE_URL+'edit-profile/'
+        let URL = USER_API_BASE_URL+'edit-profile'
         return axios.putForm(URL, user)
     }
-    editPreferences(user){
-        let URL = USER_API_BASE_URL+'edit-preferences/'
-        return axios.putForm(URL, user)
+    editPreferences(tags){
+        let URL = USER_API_BASE_URL+'edit-preferences'
+        return axios.put(URL, tags)
     }
 
     //POST
