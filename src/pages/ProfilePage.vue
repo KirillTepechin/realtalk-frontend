@@ -5,10 +5,30 @@
         <div class="profile-bottom">
             <div class="posts-form">
                     <div class="post-create">
-                        <textarea v-model="this.postText" type="text" placeholder="Что у Вас нового?"></textarea>
-                        <MyButton @click="createPost($event)">
-                            Создать пост
-                        </MyButton>
+                        <div class="post-create-form">
+                            <textarea v-model="this.postText" type="text" placeholder="Что у Вас нового?"></textarea>
+                            <div id="tags-radio">
+                                <input type="radio" id="nature" value="Природа" v-model="picked" />
+                                <label for="nature">Природа</label>
+                                <input type="radio" id="animals" value="Животные" v-model="picked" />
+                                <label for="animals">Животные</label>
+                                <input type="radio" id="people" value="Люди" v-model="picked" />
+                                <label for="people">Люди</label>
+                                <input type="radio" id="sport" value="Спорт" v-model="picked" />
+                                <label for="sport">Спорт</label>
+                                <input type="radio" id="food" value="Еда" v-model="picked" />
+                                <label for="food">Еда</label>
+                                <input type="radio" id="family" value="Семья" v-model="picked" />
+                                <label for="family">Семья</label>
+                                <input type="radio" id="fashion" value="Мода" v-model="picked" />
+                                <label for="fashion">Мода</label>                             
+                            </div>
+                        </div>
+                        <div>
+                            <MyButton @click="createPost($event)">
+                                Создать пост
+                            </MyButton>
+                        </div>
                     </div>
                     <div class="post" v-for='post in posts' v-bind:key="post.id">
                     <PostView :post="post"/>
@@ -61,7 +81,8 @@ export default {
             posts:[],
             user:{},
             anotherUser:{},
-            postText:''
+            postText:'',
+            picked: ''
         }
     },
     components:{
@@ -73,8 +94,8 @@ export default {
     },
     methods:{
         createPost(e) {
-            if(this.postText){
-                const post = {text: this.postText, tag:'пердода'}
+            if(this.postText && this.picked){
+                const post = {text: this.postText, tag: this.picked}
                 PostService.createPost(post).then((response) => {
                 if (response.status == 200) {
                     let newPost = response.data
@@ -107,7 +128,10 @@ export default {
                 this.posts = response.data
                 console.log(this.posts)
             }
-        })
+        })        
+    },
+    updated(){
+        console.log(this.picked)
     }
 }
 </script>
@@ -143,18 +167,17 @@ export default {
 .post-create textarea{
     outline: none;
     padding: 10px;
-    width: 100%;
+    /* width: 100%; */
     background-color: #ffffff;
     border: 1px solid;
     border-radius: 10px;
     border-color: #D276FD;
-    margin-right: 20px;
     font-family: Georgia, serif;
 
 }
 .post-create{
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: flex-start;
     margin-block-end: 10px;
     padding-inline: 10px;
@@ -170,5 +193,26 @@ export default {
     min-width: 150px;
     font-family: Georgia, serif;
     align-self: center;
+}
+
+.post-create-form{
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    margin-right: 10px;
+}
+
+#tags-radio{
+    font-family: Georgia, serif;
+    font-size: 11pt;
+    align-self: flex-start;
+    margin-top: 10px;
+    display: flex;
+    flex-flow: wrap;
+}
+
+#tags-radio label{
+    margin-left: 3px;
+    margin-top: 3px;
 }
 </style>

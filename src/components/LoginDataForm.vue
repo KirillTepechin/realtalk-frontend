@@ -2,7 +2,7 @@
     <form @submit.prevent>
         <h4>Данные входа</h4>
         <InputIcon
-        v-bind:modelValue = "user.login"
+        v-model = "user.login"
         :type = "'text'"
         :placeholder = "'Логин'"
         :src = "'email.png'"
@@ -10,6 +10,7 @@
         :height = "'14'"
         />
         <InputIcon
+        v-model="user.password"
         :type = "'password'"
         :placeholder = "'Пароль'"
         :src = "'password.png'"
@@ -23,7 +24,7 @@
         :width = "'18'"
         :height = "'19'"
         />
-        <MyButton>Изменить</MyButton>
+        <MyButton @click="editLoginData($event)">Изменить</MyButton>
     </form>
 </template>
 
@@ -35,17 +36,19 @@ import InputIcon from './InputIcon.vue';
 export default {
     data(){
         return {
-            user:{
-            login:"",
-            name:"",
-            surname:"",
-            photo:"",
-            city:"",
-            borthdate: "",
-            subscribers:[],
-            subscriptions:[]
-            }
+            user:{}
         }
+    },
+    methods:{
+        // editLoginData(e){
+        //     UserService.editProfile(this.user).then((response)=> {
+        //     if(response.status == 200) {            
+        //         this.user = response.data
+        //         console.log(this.user)
+        //     }          
+        //     }) 
+        //     e.preventDefault();
+        // }
     },
     components:{
         MyButton,
