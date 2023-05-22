@@ -11,7 +11,7 @@
             :height = "'18'"
             />
             <div v-for='chat in chats' v-bind:key="chat.id">
-                <MessageView :chat="chat" @click="click(chat.id)"/>               
+                <MessageView :chat="chat" @click="click(chat.id)" class="chat"/>               
             </div>            
         </div>        
     </div>
@@ -40,7 +40,6 @@ export default {
         ChatService.getChatsByUser().then((response)=> {
             if(response.status == 200) {            
                 this.chats = response.data
-                console.log(response.data)
             }          
         })
     },
@@ -76,6 +75,9 @@ export default {
     .input-icon{
         margin: 3px !important;
         border: 0px !important;
+    }
+    .chat{
+        cursor: pointer;
     }
     
 </style>

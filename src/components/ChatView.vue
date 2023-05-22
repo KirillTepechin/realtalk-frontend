@@ -1,7 +1,7 @@
 <template>
     <PageHeader/>
     <div class="page-chat"> 
-        <CompanionView /> 
+        <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
         <div class="sms-list" v-for='msg in this.chat.messages' v-bind:key="msg.id">
             <MessageView :message="msg"/>                     
         </div> 
@@ -27,7 +27,7 @@ export default{
         data(){
             return {
             chat: {},
-            me:{}
+            me:{},
         }
     },
     components: {
@@ -36,46 +36,62 @@ export default{
         CompanionView,
         MessageSend
     },
-    mounted() {
-       
-        ChatService.getChatById(this.$route.params.id).then((response) => {
-            if (response.status == 200) {
-                this.chat = response.data
-            }
-        })
-        UserService.me().then((response)=> {
-            if(response.status == 200) {            
-                this.me = response.data
-            }          
-        })
-        this.connect()
-    },
     methods: {
-        showMessage(data) {
-            let message = {user:{photo: this.me.photo, name: this.me.name, surname: this.me.surname}, text: data.text, date: new Date()}
-            this.chat.messages.push(message)
-        },
+       
         onSendMessage(data){
-            var url = document.location.pathname;
+            //var url = document.location.pathname;
             const message = {
-                id: 0,
-                userDto: {login: this.me.login},
+                user: {login: this.me.login},
                 text: data.text,
             };
             console.log(data)
-            stompClient.send("/app" + url, {}, JSON.stringify(message));
+            stompClient.send("/app/create-message/" +this.$route.params.id , {}, JSON.stringify(message));
         },
-        connect() {
+        connect(chatId, vm) {
             var socket = new SockJS('http://localhost:9000/gs-guide-websocket');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/1', function (greeting) {
-                    this.showMessage(JSON.parse(greeting.body));
+                stompClient.subscribe('/topic/'+chatId, function (message) {
+                    console.log(JSON.parse(message.body))
+                    vm.showMessage(JSON.parse(message.body));
                 });
             });
         },
-    }
+        showMessage(data) {
+            let message = { user: { photo: this.me.photo, name: this.me.name, surname: this.me.surname }, text: data.text, date: data.date }
+            this.chat.messages.push(message)
+        },
+        getChatUsers(){
+            console.log(this.chat.users)
+            return this.chat.users
+        },
+        withUser() {
+            if (this.chat.users[0].login == this.me.login) {
+                return this.chat.users[1]
+            }
+            else {
+                return this.chat.users[0]
+            }
+        },
+
+    },
+    mounted() {
+        const vm = this; // сохраняем ссылку на объект Vue
+
+        let chatId = this.$route.params.id
+        ChatService.getChatById(chatId).then((response) => {
+            if (response.status == 200) {
+                this.chat = response.data
+            }
+        })
+        UserService.me().then((response) => {
+            if (response.status == 200) {
+                this.me = response.data
+            }
+        })
+        this.connect(chatId, vm)
+    },
 
 }
 </script>
@@ -98,5 +114,6 @@ export default{
         border: 1px solid;
         border-color: #D276FD;
     }
+   
 
 </style>

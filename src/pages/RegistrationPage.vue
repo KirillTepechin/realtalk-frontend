@@ -1,5 +1,5 @@
 <template>
-    <router-view :key="$route.path" :user="user" @updateUser="onUpdateUser" @registerUser="onRegister"/>
+    <router-view :key="1" :user="user" @updateUser="onUpdateUser" @registerUser="onRegister"/>
 </template>
   
   <script>
