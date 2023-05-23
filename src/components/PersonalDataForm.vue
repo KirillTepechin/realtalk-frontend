@@ -51,12 +51,13 @@
         :width = "'18'"
         :height = "'18'"
         />
-        <MyButton>Изменить</MyButton>
+        <MyButton @click="editPersonalData($event)">Изменить</MyButton>
     </form>
 </template>
 
 <script>
 import UserService from "@/services/UserService";
+//import dayjs from 'dayjs';
 
 import MyButton from './MyButton.vue';
 import InputIcon from './InputIcon.vue';
@@ -71,8 +72,9 @@ export default {
                 city:"",
                 borthdate: "",
                 subscribers:[],
-                subscriptions:[]
-            },
+                subscriptions:[],
+                file: null
+            },            
         }
     },
     components: {
@@ -98,9 +100,19 @@ export default {
                 preview.src = e.target.result;
             };
             reader.readAsDataURL(file);
-            //this.actor.photo = file;
+            this.file = file
         },
-        
+        // Не отправляется фотка
+        editPersonalData(e){
+            console.log(this.user)
+            UserService.editProfile(this.user).then((response)=> {
+            if(response.status == 200) {
+                this.user = response.data
+                console.log(this.user)
+            }          
+            }) 
+            e.preventDefault();
+        }
     },
     mounted(){
         UserService.me().then((response)=> {
@@ -108,11 +120,12 @@ export default {
             this.user = response.data
             if(this.user.borthdate!=null){
                 this.user.borthdate = new Date(this.user.borthdate).toISOString().split('T')[0]
+                //let date = dayjs(this.user.borthdate);
+                //date = date.format('MM.DD.YYYY')
+                // console.log(date | dayjs('add', 1, 'day'))
             }
           }          
         })
-        
-        
     },
     
 }

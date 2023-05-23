@@ -116,7 +116,7 @@ export default {
                     if(this.file != null){
                         PostService.uploadPostPhoto(response.data.id, {file: this.file}).then((response1) => {
                             if (response1.status == 200) {
-                                let newPost = response.data
+                                let newPost = response1.data
                                 newPost.comments = []
                                 this.posts.unshift(newPost)
                                 this.postText = ''
@@ -164,6 +164,7 @@ export default {
         UserService.me().then((response) => {
             if (response.status == 200) {
                 this.user = response.data
+                console.log(response.data)
             }
         })
         UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
