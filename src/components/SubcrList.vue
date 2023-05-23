@@ -1,10 +1,10 @@
 <template>
-    <div id="users-list" >
+    <div id="users-list" v-if="this.usersList" >
         <div class="title">
             <router-link :to="link">{{ title }}</router-link>
-            <label class="subscr-count">{{ count }}</label>
+            <label class="subscr-count">{{ usersList.length }}</label>
         </div>
-        <div class="user" v-for='user in newUsersList.slice(0,3)' v-bind:key="user.id">
+        <div class="user" v-for='user in usersList.slice(0,3)' v-bind:key="user.id">
             <img class="user-photo"
             v-if="user.photo"
             v-bind:src= "'/photos/'+ user.photo"
@@ -18,7 +18,7 @@
             height="50"
             >
             <div class="user-info">
-                <a href="#">{{ user.name }} {{ user.surname }}</a>
+                <router-link :to="user.login">{{ user.name }} {{ user.surname }}</router-link>
                 <label>@{{user.login}}</label>
             </div>            
         </div>
@@ -38,11 +38,12 @@
             title: String,
             link: String
         },
-        updated(){
-            this.count = this.usersList.length
-            this.newUsersList = this.usersList
+        
+        mounted(){
+            
         }
     }
+    
 </script>
 
 <style scoped>

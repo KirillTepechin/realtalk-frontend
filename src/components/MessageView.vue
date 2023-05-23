@@ -9,8 +9,8 @@
                  height="50"
                  >
                 <img class="user-photo"
-                v-else-if="this.chat.users.length == 2 && this.chat.users[0].photo"
-                v-bind:src= "'/photos/'+ this.chat.users[0].photo"
+                v-else-if="this.chat.users.length == 2 && this.withUser().photo"
+                v-bind:src= "'/photos/'+ this.withUser().photo"
                 width="50" 
                 height="50"
                 >
@@ -22,7 +22,7 @@
                  >
                 <div class="user-info">
                     <label class="username" 
-                    v-if="this.chat.users.length == 2">{{ this.chat.users[0].name }} {{ this.chat.users[0].surname }}</label>
+                    v-if="this.chat.users.length == 2">{{ this.withUser().name }} {{ this.withUser().surname }}</label>
                     <label class="username" v-else>{{ this.chat.name }}</label>
                     <label class="message-text">{{ this.getLastMessage() }}</label>
                 </div>
@@ -48,7 +48,7 @@
                  >
                 <div class="user-info">
                     
-                    <label class="username">{{ this.message.user.name + this.message.user.surname }}</label>
+                    <label class="username">{{ this.message.user.name + ' '+ this.message.user.surname }}</label>
                     <label class="message-text">{{ this.message.text }}</label>
                 </div>
             </div>
@@ -60,27 +60,49 @@
 </template>
 
 <script>
+    import UserService from "@/services/UserService";
+
     export default{
+        data(){
+            return{
+                me:{},
+            }
+        },
         props:{
             chat: null,
-            message:{}
+            message:{},
         },
         methods:{
             getLastMessage(){
                 console.log(this.chat)
                 if(this.chat.messages.length!=0){
-                    let text = this.chat.messages[this.chat.messages.length].text
+                    let text = this.chat.messages[this.chat.messages.length-1].text
                     return text
                 }
                 return ""
             },
             getLastMessageDate(){
                 if(this.chat.messages.length!=0){
-                    let text = this.chat.messages[this.chat.messages.length].date
+                    let text = this.chat.messages[this.chat.messages.length-1].date
                     return text
                 }
                 return ""
-            }
+            },
+            withUser(){
+                if(this.chat.users[0].login == this.me.login){
+                    return this.chat.users[1]
+                }
+                else{
+                    return this.chat.users[0]
+                }
+            },
+        },
+        mounted(){
+            UserService.me().then((response) => {
+                if (response.status == 200) {
+                this.me = response.data
+                }
+            })
         }
         
     }

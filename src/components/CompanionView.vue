@@ -7,28 +7,38 @@
             </div>
             <div class="user-info">
 
-                    <label class="username" >Кирилл Тепечин</label>
-                    <label class="login">@KirTep</label>
+                    <label class="username" >{{this.with.name + this.with.surname}}</label>
+                    <label class="login">@{{ this.with.login }}</label>
                 </div>
-            <div class="user-profile">
+            <div class="user-profile" v-if="!this.with.photo">
                 <img class="user-photo" src="../assets/profile.png" width="50" height="50">
-            </div>                       
+            </div>
+            <div class="user-profile" v-else>
+                <img class="user-photo" v-bind:src= "'/photos/'+ this.with.photo" width="50" height="50">
+            </div>                        
         </div>
     </div>
 </template>
 
 <script>
+
     export default{
+        data(){
+            return{
+                me:{}
+            }
+        },
         props:{
-            length: Number,
-            users:[]
+            users:[],
+            with:{}
         },
         methods:{
             back(e){
                 this.$router.push("/chats")
                 e.preventDefault()
-            }
-        }        
+            },
+            
+        }
     }
 </script>
     

@@ -20,6 +20,7 @@ export default {
             this.$emit('sendMessage', {
                 text: this.text,
             })
+            this.text=''
         }
     }
   
@@ -53,6 +54,7 @@ export default {
 
 .sms-create img{
     align-self: center;
+    cursor: pointer;
 }
 
 </style>

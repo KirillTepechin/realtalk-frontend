@@ -1,6 +1,6 @@
 <template>
     <PageHeader/>
-    <div class="profile-body" v-if="this.user.login === this.getLoginByRoute()">
+    <div class="profile-body" v-if="this.user.login === this.anotherUser.login && this.anotherUser && this.user">
         <ProfileView class ="profile-top" :user="this.user" :posts="this.posts"/>
         <div class="profile-bottom">
             <div class="posts-form">
@@ -34,7 +34,7 @@
                     <PostView :post="post"/>
                     </div>
             </div>
-            <div class="sub-sub">
+            <div class="sub-sub" v-if="this.user.subscribers && this.user.subscriptions">
                 <div class="subscriptions">
                     <SubcrList :usersList="user.subscriptions" :title="'Подписки'" :link="'/subscriptions'"/>
                 </div>
@@ -45,7 +45,7 @@
         </div>        
     </div>
     
-    <div class="profile-body" v-else>
+    <div class="profile-body" v-else-if="this.anotherUser">
         <ProfileView class ="profile-top" :user="this.anotherUser" :posts="this.posts"/>
         <div class="profile-bottom">
             <div class="posts-form">
@@ -112,6 +112,7 @@ export default {
         }
     },
     mounted(){
+        
         UserService.me().then((response) => {
             if (response.status == 200) {
                 this.user = response.data
@@ -120,19 +121,15 @@ export default {
         UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
             if (response.status == 200) {
                 this.anotherUser = response.data
-                console.log(this.anotherUser)
             }
         })
         UserService.getUserPosts(this.getLoginByRoute()).then((response) => {
             if (response.status == 200) {
                 this.posts = response.data
-                console.log(this.posts)
             }
         })        
     },
-    updated(){
-        console.log(this.picked)
-    }
+
 }
 </script>
 

@@ -64,13 +64,14 @@ export default {
             this.$router.push("/edit-profile")
         },
         checkSub(){
-           
             return (this.me.login!=this.user.login && 
                 !this.user.subscribers.map(x => x.login)
                 .includes(this.me.login))
         },
         subscribe(e){
-            UserService.subscribe(this.posts[0].user.id).then((response)=>{
+            console.log('user')
+           console.log(this.user)
+            UserService.subscribe(this.user.id).then((response)=>{
                 if(response.status == 200){
                     let but = document.querySelector("#app > div.profile-body > div.profile-container.profile-top > div.user-info > div:nth-child(6) > button")
                     if(response.data==true) but.innerHTML = "Отписаться"
