@@ -15,7 +15,7 @@
                  height="50"
                  >
                 <div class="user-info">
-                    <router-link :to="'/'+post.user.login">{{ post.user.login }}</router-link>
+                    <router-link :to="'/'+post.user.login">@{{ post.user.login }}</router-link>
                     <label style="font-size: 10pt;">{{post.date}}</label>
                 </div>
             </div>
@@ -24,8 +24,13 @@
                 <img class="icon" src="../assets/delete.png" width="20" height="20">
             </div>
         </div>
-        <div class="post-text">
+        <div class="post-text" v-if="post.text != ''">
             <label>{{ post.text }}</label>
+        </div>
+        <div class="post-photo" >
+            <div class="image-area" v-if="post.photo != null">
+                <img v-bind:src= "'/photos/'+ post.photo">
+            </div>
         </div>
         <div class="likes-comms">
             <div class="likes">                
@@ -55,7 +60,7 @@ import UserService from "@/services/UserService";
                 tag:"",
                 user:{},
                 comments:[],
-                likesCount: 0
+                likesCount: 0,
             }
         },
         mounted(){
@@ -64,7 +69,7 @@ import UserService from "@/services/UserService";
                     this.me = response.data
                 }                
             })
-        }
+        },
     }
 </script>
 
@@ -87,6 +92,7 @@ import UserService from "@/services/UserService";
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .user-profile{
@@ -122,7 +128,7 @@ a:hover {
 }
 
 .post-text{    
-    margin: 30px 0px;
+    margin: 10px 0px 10px 0px;
     text-align: left;
     text-align: justify;
 }
@@ -167,4 +173,22 @@ img{
 .icon{
     margin-right: 10px;
 }
+
+.image-area{
+    overflow: hidden;
+    width: 500px;
+    height: 500px;
+}
+
+.image-area img{
+    width: auto;
+    height: 100%;
+    margin: 0 auto;    
+}
+
+.post-photo{
+    /* align-self: center; */
+    margin: 5px 0px 20px 0px;
+}
+
 </style>

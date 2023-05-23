@@ -7,11 +7,15 @@ class PostService{
     //PUT
     editPost(id, post){
         let URL = POST_API_BASE_URL+id
-        return axios.put(URL, post)
+        return axios.putForm(URL, post)
     }
     likePost(id){
         let URL = POST_API_BASE_URL+"like/"+id
         return axios.put(URL)
+    }
+    uploadPostPhoto(id, file){
+        let URL = POST_API_BASE_URL + '/' + id + '/upload'
+        return axios.putForm(URL, file)
     }
 
     //POST

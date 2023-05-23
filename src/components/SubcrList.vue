@@ -37,10 +37,6 @@
             usersList: [],
             title: String,
             link: String
-        },
-        
-        mounted(){
-            
         }
     }
     

@@ -12,20 +12,32 @@
             </div>
             <div id="preferences-checkboxes">
                 <label class="choose">Выберите категории, которые Вам интересны:</label>
-                <div class="category" v-for="cat in categories" v-bind:key="cat">
-                    <div v-for="userTag in user.tags" v-bind:key="userTag">
-                        <input v-if="userTag == cat.tag"
-                        type="checkbox" 
-                        :value="cat.tag"
-                        v-model="choosen"
-                        >
-                        <input v-else
+                <div class="list" v-if="user.tags != null" >
+                    <div class="category" v-for="cat in categories" v-bind:key="cat">
+                        <div v-for="userTag in user.tags" v-bind:key="userTag">
+                            <input v-if="userTag == cat.tag"
+                            type="checkbox" 
+                            :value="cat.tag"
+                            v-model="choosen"
+                            >
+                            <input v-else
+                            type="checkbox" 
+                            :value="cat.tag" 
+                            v-model="choosen"
+                            >
+                            <label>{{cat.tag}}</label>
+                        </div> 
+                    </div>
+                </div>
+                <div class="list" v-else>
+                    <div class="category" v-for="cat in categories" v-bind:key="cat">
+                        <input
                         type="checkbox" 
                         :value="cat.tag" 
                         v-model="choosen"
                         >
                         <label>{{cat.tag}}</label>
-                    </div>                    
+                    </div>
                 </div>
                 <div>
                     <MyButton @click="editPreferences($event)">Сохранить выбор</MyButton>
@@ -172,8 +184,13 @@ export default {
 }
 
 .category{
-    align-self: flex-start;
     margin: 5px;
+}
+
+.list{
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
 }
 
 .choose{
