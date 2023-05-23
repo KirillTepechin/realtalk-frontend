@@ -16,7 +16,7 @@ export default {
     font-size: 12pt;
     color: white;
     border-radius: 50px;
-    background-color: #D276FD;
+    background-color: #c445ff;
     border-color: #D276FD;
     text-align: center;
     cursor: pointer;

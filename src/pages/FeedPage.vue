@@ -13,24 +13,19 @@
             <div id="preferences-checkboxes">
                 <label class="choose">Выберите категории, которые Вам интересны:</label>
                 <div class="category" v-for="cat in categories" v-bind:key="cat">
-                    <!-- <div v-for="userTag in user.tags" v-bind:key="userTag"> -->
-                        <!-- <input v-if="userTag == cat.tag"
+                    <div v-for="userTag in user.tags" v-bind:key="userTag">
+                        <input v-if="userTag == cat.tag"
                         type="checkbox" 
                         :value="cat.tag"
-                        v-model="checked"
+                        v-model="choosen"
                         >
                         <input v-else
-                        type="checkbox" 
-                        :value="cat.tag" 
-                        v-model="unchecked"
-                        > -->
-                        <input
                         type="checkbox" 
                         :value="cat.tag" 
                         v-model="choosen"
                         >
                         <label>{{cat.tag}}</label>
-                    <!-- </div>                     -->
+                    </div>                    
                 </div>
                 <div>
                     <MyButton @click="editPreferences($event)">Сохранить выбор</MyButton>
@@ -130,7 +125,6 @@ export default {
     },
     updated(){
         console.log(this.choosen)
-        console.log(this.user.tags)
     }
 }
 </script>
