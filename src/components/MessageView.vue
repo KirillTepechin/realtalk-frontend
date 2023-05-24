@@ -27,6 +27,7 @@
                     <label class="message-text">{{ this.getLastMessage() }}</label>
                 </div>
             </div>
+            
             <div class="date">
                 <label style="font-size: 11pt;">{{this.getLastMessageDate()}}</label>
             </div>            
@@ -52,9 +53,17 @@
                     <label class="message-text">{{ this.message.text }}</label>
                 </div>
             </div>
-            <div class="date">
-                <label style="font-size: 11pt;">{{this.message.date}}</label>
-            </div>            
+            <div>
+               
+                <div class="date">
+                    <label style="font-size: 11pt;">{{this.message.date}}</label>
+                </div> 
+                <div class="btns-bar" v-if="message.user.login == this.me.login">
+                    <img class="icon" src="../assets/edit.png" width="20" height="20" @click="this.$emit('editMessageEvent', message)">
+                    <img class="icon" src="../assets/delete.png" width="20" height="20" @click="this.$emit('deleteMessage', message.id)">   
+                </div>
+            </div>
+                 
         </div>
     </div>
 </template>
@@ -100,7 +109,7 @@
         mounted(){
             UserService.me().then((response) => {
                 if (response.status == 200) {
-                this.me = response.data
+                    this.me = response.data
                 }
             })
         }
@@ -159,4 +168,9 @@ label{
 img{
     align-self: center;
 }
+
+.icon{
+    cursor: pointer;
+}
+
 </style>

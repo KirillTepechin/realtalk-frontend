@@ -7,7 +7,7 @@
             </div>
             <div class="user-info">
 
-                    <label class="username" >{{this.with.name + this.with.surname}}</label>
+                    <label class="username" >{{this.with.name + ' ' +this.with.surname}}</label>
                     <label class="login">@{{ this.with.login }}</label>
                 </div>
             <div class="user-profile" v-if="!this.with.photo">

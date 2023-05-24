@@ -34,8 +34,9 @@
         </div>
         <div class="likes-comms">
             <div class="likes">                
-                <img src="../assets/unlike.png" width="20" height="22">
-                <label class="likes-count">{{post.likesCount}}</label>
+                <img v-if="!likedByMe" src="../assets/unlike.png" width="20" height="22" @click="this.like" :class="{'animated': animated}">
+                <img v-else src="../assets/like.png" width="20" height="22" @click="this.like" :class="{'animated': animated}">
+                <label class="likes-count">{{this.likesCount+likedByMe}}</label>
             </div>
             <div class="comms">
                 <img src="../assets/comment.png" width="16" height="16">
@@ -47,30 +48,53 @@
 
 <script>
 import UserService from "@/services/UserService";
+import PostService from "@/services/PostService";
+
+
     export default{
         data(){
             return {
-                me:{}
+                me:{},
+                likedByMe: false,
+                animated: false,
+                likesCount: Number
             }
         },
-        props:{
-            post:{
-                text:"",
-                date:"",
-                tag:"",
-                user:{},
-                comments:[],
-                likesCount: 0,
+    props: {
+        post: {
+            id: Number,
+            text: "",
+            date: "",
+            tag: "",
+            user: {},
+            comments: [],
+            likes: {},
+        }
+    },
+    methods: {
+        like() {
+            PostService.likePost(this.post.id).then((response)=>this.likedByMe=response.data)
+            this.animated = true;
+            setTimeout(() => {
+                this.animated = false;
+            }, 500); // 1 second animation duration
+        }
+    },
+    mounted() {
+        UserService.me().then((response) => {
+            if (response.status == 200) {
+                this.me = response.data
+                if (this.post.likes.map(user => user.login).includes(this.me.login)) {
+                    this.likedByMe = true
+                    this.likesCount = this.post.likes.length-1
+                }
+                else{
+                    this.likesCount = this.post.likes.length
+                }
             }
-        },
-        mounted(){
-            UserService.me().then((response)=> {
-                if(response.status == 200) {            
-                    this.me = response.data
-                }                
-            })
-        },
-    }
+        })
+    },
+}
 </script>
 
 <style scoped>
@@ -191,4 +215,12 @@ img{
     margin: 5px 0px 20px 0px;
 }
 
+.likes, .comms{
+    cursor: pointer;
+    transition: all 1s ease-out;
+}
+
+.animated {
+  transform: rotate(360deg) scale(1.5);
+}
 </style>

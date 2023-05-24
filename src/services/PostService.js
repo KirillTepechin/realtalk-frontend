@@ -10,7 +10,7 @@ class PostService{
         return axios.putForm(URL, post)
     }
     likePost(id){
-        let URL = POST_API_BASE_URL+"like/"+id
+        let URL = POST_API_BASE_URL+"/like/"+id
         return axios.put(URL)
     }
     uploadPostPhoto(id, file){

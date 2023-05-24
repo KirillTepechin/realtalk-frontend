@@ -3,9 +3,9 @@
     <div class="page-chat"> 
         <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
         <div class="sms-list" v-for='msg in this.chat.messages' v-bind:key="msg.id">
-            <MessageView :message="msg"/>                     
+            <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>                     
         </div> 
-       <MessageSend @sendMessage="onSendMessage"/>
+       <MessageSend @createMessage="onCreateMessage" @editMessage ="onEditMessage" :messageEdit="messageEdit"/>
     </div> 
 </template>
 
@@ -24,10 +24,12 @@ import UserService from "@/services/UserService";
 let stompClient = null
 
 export default{
-        data(){
-            return {
+    
+    data() {
+        return {
             chat: {},
-            me:{},
+            me: {},
+            messageEdit: {}
         }
     },
     components: {
@@ -37,15 +39,27 @@ export default{
         MessageSend
     },
     methods: {
-       
-        onSendMessage(data){
-            //var url = document.location.pathname;
+        onCreateMessage(data){
             const message = {
                 user: {login: this.me.login},
                 text: data.text,
             };
-            console.log(data)
-            stompClient.send("/app/create-message/" +this.$route.params.id , {}, JSON.stringify(message));
+            stompClient.send("/app/create-message/"  +this.$route.params.id , {}, JSON.stringify(message));
+        },
+        onDeleteMessage(id){
+            stompClient.send("/app/delete-message/" + id , {}, {});            
+        },
+        onEditMessageEvent(data){
+            data.key = Math.random()
+            this.messageEdit = data
+        },
+        onEditMessage(data){
+            const message = {
+                id: data.id,
+                text: data.text,
+            };
+            console.log(message)
+            stompClient.send("/app/update-message/"  + message.id , {}, JSON.stringify(message));
         },
         connect(chatId, vm) {
             var socket = new SockJS('http://localhost:9000/gs-guide-websocket');
@@ -53,17 +67,38 @@ export default{
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
                 stompClient.subscribe('/topic/'+chatId, function (message) {
-                    console.log(JSON.parse(message.body))
-                    vm.showMessage(JSON.parse(message.body));
+                    let messageData = JSON.parse(message.body)
+                    if(messageData.action === 'ON_CREATE'){
+                        vm.addMessage(messageData);
+                    }
+                    else if(messageData.action === 'ON_DELETE'){
+                        vm.deleteMessage(messageData.id)
+                    }
+                    else if(messageData.action === 'ON_UPDATE'){
+                        vm.updateMessage(messageData)
+                    }
                 });
             });
         },
-        showMessage(data) {
-            let message = { user: { photo: this.me.photo, name: this.me.name, surname: this.me.surname }, text: data.text, date: data.date }
-            this.chat.messages.push(message)
+        addMessage(data) {
+            this.chat.messages.push(data)
+        },
+        deleteMessage(id) {
+            this.chat.messages.splice(this.getIndex(this.chat.messages, id), 1)
+        },
+        updateMessage(data){
+            let index = this.getIndex(this.chat.messages, data.id);
+            this.chat.messages.splice(index, 1, data);
+        },
+        getIndex(list, id) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].id === id) {
+                    return i;
+                }
+            }
+            return -1;
         },
         getChatUsers(){
-            console.log(this.chat.users)
             return this.chat.users
         },
         withUser() {

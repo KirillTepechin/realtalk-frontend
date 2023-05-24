@@ -1,28 +1,57 @@
 <template>
     <div class="sms-create">
         <textarea v-model="text" type="text" placeholder="Напишите сообщение..."></textarea>
-        <img @click="send" src="../assets/send.png" width="35" height="35" >
+        <div>
+            <img @click="createOrEdit" src="../assets/send.png" width="35" height="35" >
+            <MyButton v-if="this.internalMessage" @click="cancel" >Отменить</MyButton>
+        </div>
     </div>
 </template>
 
 <script>
+import MyButton from './MyButton.vue'
+
 
 export default {
     components:{
-    },
-    date(){
+    MyButton
+},
+    data(){
         return{
-            text:''
+            text: '',
+            internalMessage: null
         }
+    },
+    props:{
+        messageEdit: null
     },
     methods:{
-        send() {
-            this.$emit('sendMessage', {
-                text: this.text,
-            })
+        createOrEdit() {
+            if (!this.internalMessage) {
+                this.$emit('createMessage', {
+                    text: this.text,
+                })
+            }
+            else {
+                this.$emit('editMessage', {
+                    id : this.internalMessage.id,
+                    text: this.text,
+                })
+            }
+            this.cancel()
+        },
+        cancel(){
             this.text=''
+            this.internalMessage = null;
+        }
+    },
+    watch:{
+        'messageEdit.key'() {
+            this.internalMessage = this.messageEdit
+            this.text = this.internalMessage.text
         }
     }
+    
   
 }
 </script>

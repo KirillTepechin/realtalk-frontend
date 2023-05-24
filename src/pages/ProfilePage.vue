@@ -157,26 +157,33 @@ export default {
             };
             reader.readAsDataURL(file);
             this.file = file;
+        },
+        loadData() {
+            UserService.me().then((response) => {
+                if (response.status == 200) {
+                    this.user = response.data
+                    console.log(response.data)
+                }
+            })
+            UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
+                if (response.status == 200) {
+                    this.anotherUser = response.data
+                }
+            })
+            UserService.getUserPosts(this.getLoginByRoute()).then((response) => {
+                if (response.status == 200) {
+                    this.posts = response.data
+                }
+            })
         }
     },
-    mounted(){
-        
-        UserService.me().then((response) => {
-            if (response.status == 200) {
-                this.user = response.data
-                console.log(response.data)
-            }
-        })
-        UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
-            if (response.status == 200) {
-                this.anotherUser = response.data
-            }
-        })
-        UserService.getUserPosts(this.getLoginByRoute()).then((response) => {
-            if (response.status == 200) {
-                this.posts = response.data
-            }
-        })        
+    mounted() {
+        this.loadData()
+    },
+    watch: {
+        '$route'() {
+            this.loadData()
+        }
     }
 }
 </script>
