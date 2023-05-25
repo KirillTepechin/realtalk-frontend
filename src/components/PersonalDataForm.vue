@@ -101,7 +101,6 @@ export default {
             reader.readAsDataURL(file);
             this.user.photo = file
         },
-        // Не отправляется фотка
         editPersonalData(e){
             console.log(this.user)
             UserService.editProfile(this.user).then((response)=> {

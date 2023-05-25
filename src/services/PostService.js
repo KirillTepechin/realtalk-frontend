@@ -32,7 +32,7 @@ class PostService{
 
     //DELETE
     deletePost(id){
-        let URL = POST_API_BASE_URL+id
+        let URL = POST_API_BASE_URL+ '/' + id
         return axios.delete(URL) 
     }
 }

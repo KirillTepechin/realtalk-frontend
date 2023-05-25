@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="post" v-for='post in posts' v-bind:key="post.id">
-                        <PostView :post="post"/>
+                        <PostView :post="post" @deletePost ="onDeletePost" @editPost ="onEditPost" @editPostMode ="onEditPostMode"/>
                     </div>
             </div>
             <div class="sub-sub" v-if="this.user.subscribers && this.user.subscriptions">
@@ -175,6 +175,22 @@ export default {
                     this.posts = response.data
                 }
             })
+        },
+        onDeletePost(id){
+            PostService.deletePost(id).then((response) => {
+                if (response.status == 200) {
+                    console.log(response.data)
+                    this.posts.splice(id, 1)
+                }
+            })
+        },
+        onEditPost(){
+            // PostService.editPost(id, post).then((response) => {
+            //     if (response.status == 200) {
+            //         console.log(response.data)
+            //     }
+            // })
+
         }
     },
     mounted() {
