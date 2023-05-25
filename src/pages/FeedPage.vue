@@ -13,31 +13,14 @@
             <div id="preferences-checkboxes">
                 <label class="choose">Выберите категории, которые Вам интересны:</label>
                 <div class="list" v-if="user.tags != null" >
-                    <div class="category" v-for="cat in categories" v-bind:key="cat">
-                        <div v-for="userTag in user.tags" v-bind:key="userTag">
-                            <input v-if="userTag == cat.tag"
+                    <div class="category" v-for="cat in categories" v-bind:key="cat.tag">
+                        <input
                             type="checkbox" 
                             :value="cat.tag"
                             v-model="choosen"
-                            checked
+                            :checked="choosen.includes(cat)"
                             >
-                            <input v-else
-                            type="checkbox" 
-                            :value="cat.tag" 
-                            v-model="choosen"
-                            >
-                            <label>{{cat.tag}}</label>
-                        </div> 
-                    </div>
-                </div>
-                <div class="list" v-else>
-                    <div class="category" v-for="cat in categories" v-bind:key="cat">
-                        <input
-                        type="checkbox" 
-                        :value="cat.tag" 
-                        v-model="choosen"
-                        >
-                        <label>{{cat.tag}}</label>
+                            <label>{{ cat.tag }}</label>
                     </div>
                 </div>
                 <div>
@@ -127,19 +110,15 @@ export default {
         FeedService.getFeed().then((response)=> {
             if(response.status == 200) {            
                 this.posts = response.data
-                console.log(this.posts)
             }          
         }),
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user = response.data
-            console.log(this.user)
+            this.choosen = this.user.tags
           }
         })
     },
-    updated(){
-        console.log(this.choosen)
-    }
 }
 </script>
 
