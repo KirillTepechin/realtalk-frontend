@@ -68,12 +68,11 @@ export default {
                 login:"",
                 name:"",
                 surname:"",
-                photo:"",
                 city:"",
                 borthdate: "",
                 subscribers:[],
                 subscriptions:[],
-                file: null
+                photo: null
             },            
         }
     },
@@ -100,7 +99,7 @@ export default {
                 preview.src = e.target.result;
             };
             reader.readAsDataURL(file);
-            this.file = file
+            this.user.photo = file
         },
         // Не отправляется фотка
         editPersonalData(e){
