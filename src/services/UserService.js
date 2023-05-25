@@ -32,11 +32,14 @@ class UserService{
     me(){
         let URL = USER_API_BASE_URL+'me'
         return axios.get(URL)
-    }
-    
+    }    
     findUsers(query){
         let URL = USER_API_BASE_URL+'find'
         return axios.get(URL, query)
+    }
+    findAllUsers(){
+        let URL = USER_API_BASE_URL+'users'
+        return axios.get(URL)
     }
     getUserProfile(login){
         let URL = USER_API_BASE_URL+login
