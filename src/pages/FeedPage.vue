@@ -19,6 +19,7 @@
                             type="checkbox" 
                             :value="cat.tag"
                             v-model="choosen"
+                            checked
                             >
                             <input v-else
                             type="checkbox" 
@@ -71,9 +72,10 @@ export default {
                 {tag:"Еда"},
                 {tag:"Семья"},
                 {tag:"Мода"},
+                {tag:"Машина"}
             ],
-            checked: true,
-            unchecked: false
+            checkedd: true,
+            uncheckedd: false
         }
     },
     components:{

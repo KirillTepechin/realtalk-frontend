@@ -6,8 +6,8 @@ class PostService{
 
     //PUT
     editPost(id, post){
-        let URL = POST_API_BASE_URL+id
-        return axios.putForm(URL, post)
+        let URL = POST_API_BASE_URL + '/' + id 
+        return axios.put(URL, post)
     }
     likePost(id){
         let URL = POST_API_BASE_URL+"/like/"+id

@@ -19,7 +19,7 @@
                             </div>
                             <div class="postPhoto" v-if="this.file !=null">
                                 <div class="image-area">
-                                    <img>
+                                    <img @dblclick="removePhoto($event)">
                                 </div>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="post" v-for='post in posts' v-bind:key="post.id">
-                        <PostView :post="post" @deletePost ="onDeletePost" @editPost ="onEditPost" @editPostMode ="onEditPostMode"/>
+                        <PostView :post="post" @deletePost ="onDeletePost($event)" @editPost ="onEditPost($event)"/>
                     </div>
             </div>
             <div class="sub-sub" v-if="this.user.subscribers && this.user.subscriptions">
@@ -97,6 +97,7 @@ export default {
                 {tag:"Еда"},
                 {tag:"Семья"},
                 {tag:"Мода"},
+                {tag:"Машины"},
             ],
             file: null
         }
@@ -139,7 +140,7 @@ export default {
             return this.$route.path.toString().substring(1)
         },
         onFileChange(e) {
-            console.log(e)
+            //console.log(e)
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length)
                 return;
@@ -176,21 +177,44 @@ export default {
                 }
             })
         },
-        onDeletePost(id){
+        getIndex(list, id) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].id === id) {
+                    return i;
+                }
+            }
+            return -1;
+        },
+        onDeletePost(id, e){
             PostService.deletePost(id).then((response) => {
                 if (response.status == 200) {
-                    console.log(response.data)
-                    this.posts.splice(id, 1)
+                    this.posts.splice(this.getIndex(this.posts, id), 1)
                 }
             })
+            e.preventDefault()
         },
-        onEditPost(){
-            // PostService.editPost(id, post).then((response) => {
-            //     if (response.status == 200) {
-            //         console.log(response.data)
-            //     }
-            // })
-
+        onEditPost(data, e){
+            console.log(data)
+            if(((data.post.text != null && data.post.text != "") || (data.file!=null)) && data.post.tags.length != 0){
+                    data.post.tags = data.tags
+                    PostService.editPost(data.post.id, data.post).then((response) => {
+                    if(data.file != null || data.deletePhoto == true){
+                        PostService.uploadPostPhoto(response.data.id, {file: data.file}).then((response1) => {
+                            if (response1.status == 200) {
+                                console.log(response1.data)
+                            }
+                        })
+                    }
+                    if (response.status == 200 && data.file == null) {
+                        console.log(response.data)
+                    }
+                })
+            }            
+            e.preventDefault()
+        },
+        removePhoto(e){
+            this.file=null
+            e.preventDefault()
         }
     },
     mounted() {
@@ -343,6 +367,7 @@ span{
     width: auto;
     height: 100%;
     margin: 0 auto;
+    cursor: pointer;
 }
 
 </style>

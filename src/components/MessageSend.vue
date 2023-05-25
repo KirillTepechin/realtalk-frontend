@@ -50,9 +50,7 @@ export default {
             this.internalMessage = this.messageEdit
             this.text = this.internalMessage.text
         }
-    }
-    
-  
+    } 
 }
 </script>
 

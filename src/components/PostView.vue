@@ -20,10 +20,11 @@
                 </div>
             </div>
             <div class="btns-bar" v-if="post.user.login == this.me.login">
-                <img class="icon" src="../assets/edit.png" width="20" height="20" @click="this.$emit('editPostMode', post)">
+                <img class="icon" src="../assets/edit.png" width="20" height="20" @click="onEditPostMode()">
                 <img class="icon" src="../assets/delete.png" width="20" height="20" @click="this.$emit('deletePost', post.id)">
             </div>
         </div>
+
         <div v-if="!editMode">
             <div class="post-text" v-if="post.text != ''">
                 <label>{{ post.text }}</label>
@@ -33,6 +34,11 @@
                     <img v-bind:src= "'/photos/'+ post.photo">
                 </div>
             </div>
+            <div class="post-tags">
+                <div v-for="tag in post.tags" v-bind:key="tag">
+                    <label>#{{tag}}</label>
+                </div>
+            </div>            
         </div>
 
         <div class="post-create" v-else>
@@ -48,21 +54,26 @@
                         <label>{{cat.tag}}</label>                
                     </div>                            
                 </div>
-                <div class="postPhoto" v-if="this.post.photo !=null">
-                    <div class="image-area">
-                        <img v-bind:src= "'/photos/'+ post.photo">
+                <div class="postPhoto" v-if="this.post.photo !=null & this.file!=null">
+                    <div class="image-area-edit">
+                        <img v-bind:src= "'/photos/'+ this.file" @dblclick="removePhoto($event)">
+                    </div>
+                </div>
+                <div class="postPhoto" v-else-if="this.file !=null">
+                    <div class="image-area-edit">
+                        <img @dblclick="removePhoto($event)">
                     </div>
                 </div>
             </div>
             <div class="btn-bar">
-                <input @change="onFileChange" id="file" type="file" accept="image/*">
-                <label for="file" class="input-file-btn">
+                <input @change="onFileChange($event)" id="photo" type="file" accept="image/*">
+                <label for="photo" class="input-file-btn">
                     <div class="label-photo">
                         <img src="../assets/photo.png" width="20" height="16">
                         <span>Фото</span>
                     </div>                                
                 </label>                          
-                <MyButton @click="this.$emit('editPost', post)">
+                <MyButton @click="doEditPost($event)" >
                     Изменить
                 </MyButton>
             </div>
@@ -96,7 +107,20 @@ import MyButton from "@/components/MyButton";
             likedByMe: false,
             animated: false,
             likesCount: Number,
-            editMode: true
+            editMode: false,
+            deletePhoto: false,
+            categories:[
+                {tag:"Природа"},
+                {tag:"Животные"},
+                {tag:"Люди"},
+                {tag:"Спорт"},
+                {tag:"Еда"},
+                {tag:"Семья"},
+                {tag:"Мода"},
+                {tag:"Машины"},
+            ],
+            file: null,
+            choosen: [],
         }
     },
     components:{
@@ -107,13 +131,14 @@ import MyButton from "@/components/MyButton";
             id: Number,
             text: "",
             date: "",
-            tag: "",
+            tags: {},
             user: {},
             comments: [],
             likes: {},
+            photo: null
         }
     },
-    methods: {
+    methods: {        
         like() {
             PostService.likePost(this.post.id).then((response)=>this.likedByMe=response.data)
             this.animated = true;
@@ -121,7 +146,43 @@ import MyButton from "@/components/MyButton";
                 this.animated = false;
             }, 500); // 1 second animation duration
         },
-
+        onEditPostMode(){
+            if(this.editMode == false)
+                this.editMode = true
+            else
+                this.editMode = false
+        },        
+        createImage(file) {
+            
+            var reader = new FileReader();
+            var vm = this;
+            
+            reader.onload = (e) => {
+                var preview = document.querySelector("#app > div.profile-body > div.profile-bottom > div.posts-form > div:nth-child(2) > div > div.post-create > div.post-create-form > div.postPhoto > div > img")
+                vm.image = e.target.result;
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            this.file = file;
+        },
+        onFileChange(e) {
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+                return;
+            this.createImage(files[0]);
+        },
+        doEditPost(e){
+            if(((this.post.text != null && this.post.text != "") || (this.file!=null)) && this.choosen.length != 0){
+                this.editMode = false
+                this.$emit('editPost', {post: this.post, file: this.file, tags: this.choosen, deletePhoto: this.deletePhoto})
+            }            
+            e.preventDefault()
+        },
+        removePhoto(e){
+            this.file=null
+            this.deletePhoto = true
+            e.preventDefault()
+        }   
     },
     mounted() {
         UserService.me().then((response) => {
@@ -135,8 +196,9 @@ import MyButton from "@/components/MyButton";
                     this.likesCount = this.post.likes.length
                 }
             }
-        })
-    },
+        }),
+        this.file = this.post.photo
+    }
 }
 </script>
 
@@ -174,6 +236,7 @@ import MyButton from "@/components/MyButton";
     align-items: flex-start;
     margin-left: 15px;
 }
+
 .user-photo{
     border: 2px solid;
     border-color: #D276FD;
@@ -328,10 +391,23 @@ img{
     margin-bottom: 5px;
 }
 
-#file{
+#photo{
     display: none;
 }
 
+#tags-checkbox{
+    font-family: Georgia, serif;
+    font-size: 11pt;
+    align-self: flex-start;
+    margin-top: 10px;
+    display: flex;
+    flex-flow: wrap;
+}
+
+#tags-checkbox label{
+    margin-left: 3px;
+    margin-top: 3px;
+}
 
 .btn-bar{
     display: flex;
@@ -348,7 +424,7 @@ img{
     align-items: center;
 }
 
-.image-area{
+.image-area, .image-area-edit{
     border: 2px solid;
     align-self: center;
     border-color: #D276FD;
@@ -359,13 +435,30 @@ img{
     height: 50px;
 }
 
-.image-area img{
+.image-area, .image-area-edit img{
     width: auto;
     height: 100%;
     margin: 0 auto;
 }
 
+.image-area-edit{
+    cursor: pointer;
+}
+
 span{
     align-self: center;
+}
+
+.post-tags{
+    display: flex;
+    margin-bottom: 15px;    
+}
+
+.post-tags label{
+    margin-right: 5px;
+    border: 1px solid;
+    border-color: #D276FD;
+    border-radius: 50px;
+    padding: 5px 15px;
 }
 </style>
