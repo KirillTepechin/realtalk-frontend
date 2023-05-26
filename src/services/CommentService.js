@@ -6,7 +6,7 @@ class CommentService{
 
     //PUT
     editComment(id, comment){
-        let URL = COMMENT_API_BASE_URL+id
+        let URL = COMMENT_API_BASE_URL+"/"+id
         return axios.put(URL, comment)
     }
     likeComment(id){
@@ -22,7 +22,7 @@ class CommentService{
 
     //DELETE
     deleteComment(id){
-        let URL = COMMENT_API_BASE_URL+id
+        let URL = COMMENT_API_BASE_URL+"/"+id
         return axios.delete(URL) 
     }
 }

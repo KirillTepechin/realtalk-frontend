@@ -124,7 +124,8 @@
     background-color: white;
     font-family: Georgia, serif;
     font-size: 12pt;
-    border: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
     padding: 15px 20px;
     border-color: #D276FD;
 }

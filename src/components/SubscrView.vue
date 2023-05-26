@@ -21,7 +21,8 @@
             </div>
             <div class="btn-bar">
                 <MyButton @click="createChat($event)">Сообщение</MyButton>
-                <MyButton>Отписаться</MyButton>
+                <MyButton v-if="isSubscription">Отписаться</MyButton>
+                <MyButton v-else>Подписаться</MyButton>                
             </div>            
         </div>
     </div>
@@ -41,10 +42,12 @@ export default {
         return{
             me:{},
             createdId: null,
+            isSubscription: false
         }
     },
     props:{
-        user:{}
+        user:{},
+        me2:{}
     },
     methods:{
         createChat(e){
@@ -62,6 +65,12 @@ export default {
         },
         checkPrivateChat(chats){
             this.createdId = chats.find(chat=> chat.isPrivate==true &&chat.users.map(user=>user.id).includes(this.user.id)).id
+        },
+        checkIsSubscription(){            
+            this.me2.subscriptions.forEach(sub => {
+                if(sub.login == this.user.login)
+                    this.isSubscription = true
+            })
         }
     },
     mounted() {
@@ -69,12 +78,13 @@ export default {
             if (response.status == 200) {
                 this.me = response.data
             }
-        })
+        }),
         ChatService.getChatsByUser().then((response)=>{
             if (response.status == 200) {
                 this.checkPrivateChat(response.data)
             }
-        })
+        }),
+        this.checkIsSubscription()
     }
 }
 </script>

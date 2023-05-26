@@ -69,8 +69,6 @@ export default {
                 .includes(this.me.login))
         },
         subscribe(e){
-            console.log('user')
-            console.log(this.user)
             UserService.subscribe(this.user.id).then((response)=>{
                 if(response.status == 200){
                     let but = document.querySelector("#app > div.profile-body > div.profile-container.profile-top > div.user-info > div:nth-child(6) > button")
@@ -78,7 +76,6 @@ export default {
                     else but.innerHTML = "Подписаться"
                 }
             })
-
             e.preventDefault()
         }
     },

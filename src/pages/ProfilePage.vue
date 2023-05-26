@@ -98,6 +98,7 @@ export default {
                 {tag:"Семья"},
                 {tag:"Мода"},
                 {tag:"Машины"},
+                {tag:"Мемы"},
             ],
             file: null
         }
@@ -193,8 +194,7 @@ export default {
             })
             e.preventDefault()
         },
-        onEditPost(data, e){
-            console.log(data)
+        onEditPost(data, e){        
             if(((data.post.text != null && data.post.text != "") || (data.file!=null)) && data.post.tags.length != 0){
                     data.post.tags = data.tags
                     PostService.editPost(data.post.id, data.post).then((response) => {

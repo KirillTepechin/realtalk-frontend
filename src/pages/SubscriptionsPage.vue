@@ -11,7 +11,7 @@
             :height = "'18'"
             />
             <div class="subscr" v-for='sub in user.subscriptions' v-bind:key="sub.id">
-                <SubscrView :user="sub"/>
+                <SubscrView :user="sub" :me2="this.user"/>
             </div>            
         </div>        
     </div>
@@ -46,7 +46,7 @@ export default {
 }
 </script>
   
-<style>
+<style scoped>
     .page-subscribtions{
         display: flex;
         flex-direction: column;

@@ -1,96 +1,116 @@
 <template>
     <div class="post-container">
-        <div class="user">
-            <div class="user-profile">
-                <img class="user-photo"
-                 v-if="this.post.user.photo"
-                 v-bind:src= "'/photos/'+ this.post.user.photo"
-                 width="50" 
-                 height="50"
-                 >
-                 <img class="user-photo"
-                 v-else
-                 src= "../assets/profile-photo.png" 
-                 width="50" 
-                 height="50"
-                 >
-                <div class="user-info">
-                    <router-link :to="'/'+post.user.login">@{{ post.user.login }}</router-link>
-                    <label style="font-size: 10pt;">{{post.date}}</label>
-                </div>
-            </div>
-            <div class="btns-bar" v-if="post.user.login == this.me.login">
-                <img class="icon" src="../assets/edit.png" width="20" height="20" @click="onEditPostMode()">
-                <img class="icon" src="../assets/delete.png" width="20" height="20" @click="this.$emit('deletePost', post.id)">
-            </div>
-        </div>
-
-        <div v-if="!editMode">
-            <div class="post-text" v-if="post.text != ''">
-                <label>{{ post.text }}</label>
-            </div>
-            <div class="post-photo" >
-                <div class="image-area-post-photo" v-if="post.photo != null">
-                    <img v-bind:src= "'/photos/'+ post.photo">
-                </div>
-            </div>
-            <div class="post-tags">
-                <div v-for="tag in post.tags" v-bind:key="tag">
-                    <label>#{{tag}}</label>
-                </div>
-            </div>            
-        </div>
-
-        <div class="post-create" v-else>
-            <div class="post-create-form">
-                <textarea v-model="this.$props.post.text" type="text"></textarea>
-                <div id="tags-checkbox">
-                    <div class="category" v-for="cat in categories" v-bind:key="cat">                                    
-                        <input
-                        type="checkbox" 
-                        :value="cat.tag"
-                        v-model="choosen"
-                        >
-                        <label>{{cat.tag}}</label>                
-                    </div>                            
-                </div>
-                <div class="postPhoto" v-if="this.post.photo !=null & this.file!=null">
-                    <div class="image-area-edit">
-                        <img v-bind:src= "'/photos/'+ this.file" @dblclick="removePhoto($event)">
+        <div class="post-area">
+            <div class="user">
+                <div class="user-profile">
+                    <img class="user-photo"
+                    v-if="this.post.user.photo"
+                    v-bind:src= "'/photos/'+ this.post.user.photo"
+                    width="50" 
+                    height="50"
+                    >
+                    <img class="user-photo"
+                    v-else
+                    src= "../assets/profile-photo.png" 
+                    width="50" 
+                    height="50"
+                    >
+                    <div class="user-info">
+                        <router-link :to="'/'+post.user.login">@{{ post.user.login }}</router-link>
+                        <label style="font-size: 10pt;">{{post.date}}</label>
                     </div>
                 </div>
-                <div class="postPhoto" v-else-if="this.file !=null">
-                    <div class="image-area-edit">
-                        <img @dblclick="removePhoto($event)">
-                    </div>
+                <div class="btns-bar" v-if="post.user.login == this.me.login">
+                    <img class="icon" src="../assets/edit.png" width="20" height="20" @click="onEditPostMode()">
+                    <img class="icon" src="../assets/delete.png" width="20" height="20" @click="this.$emit('deletePost', post.id)">
                 </div>
             </div>
-            <div class="btn-bar">
-                <input @change="onFileChange($event)" id="photo" type="file" accept="image/*">
-                <label for="photo" class="input-file-btn">
-                    <div class="label-photo">
-                        <img src="../assets/photo.png" width="20" height="16">
-                        <span>Фото</span>
-                    </div>                                
-                </label>                          
-                <MyButton @click="doEditPost($event)" >
-                    Изменить
-                </MyButton>
-            </div>
-        </div>
 
-        <div class="likes-comms">
-            <div class="likes">                
-                <img v-if="!likedByMe" src="../assets/unlike.png" width="20" height="22" @click="this.like" :class="{'animated': animated}">
-                <img v-else src="../assets/like.png" width="20" height="22" @click="this.like" :class="{'animated': animated}">
-                <label class="likes-count">{{this.likesCount+likedByMe}}</label>
+            <div v-if="!editMode">
+                <div class="post-text" v-if="post.text != ''">
+                    <label>{{ post.text }}</label>
+                </div>
+                <div class="post-photo" >
+                    <div class="image-area-post-photo" v-if="post.photo != null">
+                        <img v-bind:src= "'/photos/'+ post.photo">
+                    </div>
+                </div>
+                <div class="post-tags">
+                    <div v-for="tag in post.tags" v-bind:key="tag">
+                        <label>#{{tag}}</label>
+                    </div>
+                </div>            
             </div>
-            <div class="comms">
-                <img src="../assets/comment.png" width="16" height="16">
-                <label class="comms-count">{{post.comments.length}}</label>
+
+            <div class="post-create" v-else>
+                <div class="post-create-form">
+                    <textarea v-model="this.$props.post.text" type="text"></textarea>
+                    <div id="tags-checkbox">
+                        <div class="category" v-for="cat in categories" v-bind:key="cat.tag">
+                            <input
+                                type="checkbox" 
+                                :value="cat.tag"
+                                v-model="choosen"
+                                :checked="choosen.includes(cat)"
+                                >
+                            <label>{{ cat.tag }}</label>
+                        </div>                           
+                    </div>
+                    <div class="postPhoto" v-if="this.post.photo !=null & this.file!=null">
+                        <div class="image-area-edit">
+                            <img v-bind:src= "'/photos/'+ this.file" @dblclick="removePhoto($event)">
+                        </div>
+                    </div>
+                    <div class="postPhoto" v-else-if="this.file !=null">
+                        <div class="image-area-edit">
+                            <img @dblclick="removePhoto($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-bar">
+                    <input @change="onFileChange($event)" id="photo" type="file" accept="image/*">
+                    <label for="photo" class="input-file-btn">
+                        <div class="label-photo">
+                            <img src="../assets/photo.png" width="20" height="16">
+                            <span>Фото</span>
+                        </div>                                
+                    </label>                          
+                    <MyButton @click="doEditPost($event)" >
+                        Изменить
+                    </MyButton>
+                </div>
             </div>
+
+            <div class="likes-comms">
+                <div class="likes">                
+                    <img v-if="!likedByMe" src="../assets/unlike.png" width="20" height="22" @click="this.like" :class="{'animated': animated}">
+                    <img v-else src="../assets/like.png" width="20" height="22" @click="this.like" :class="{'animated': animated}">
+                    <label class="likes-count">{{this.likesCount+likedByMe}}</label>
+                </div>
+                <div class="comms" @click="showComments($event)">
+                    <img src="../assets/comment.png" width="16" height="16">
+                    <label class="comms-count">{{post.comments.length}}</label>
+                </div>
+            </div>
+
         </div>
+        <div class="comments" v-if="showComms">
+            <div class="comment" v-for="comment in post.comments" v-bind:key="comment.id">
+                <CommentView :comment="comment" :post="post" @editComment="onEditCommentMode($event)" 
+                @deleteComment="onDeleteComment($event)"></CommentView>
+            </div>
+            <div class="comment-create">
+                <textarea v-model="this.newComment.text" type="text" placeholder="Оставьте комментарий..."></textarea>
+                <div>
+                    <div v-if="editModeComment">
+                        <img @click="cancelEditComment($event)" src="../assets/cancel.png" width="35" height="35">
+                    </div>                    
+                    <img @click="createOrEditComment($event)" src="../assets/send.png" width="35" height="35">
+                </div>
+            </div>
+        </div>      
     </div>
+    
 </template>
 
 <script>
@@ -98,7 +118,8 @@ import UserService from "@/services/UserService";
 import PostService from "@/services/PostService";
 
 import MyButton from "@/components/MyButton";
-
+import CommentView from "@/components/CommentView";
+import CommentService from "@/services/CommentService";
 
     export default{
     data(){
@@ -108,6 +129,8 @@ import MyButton from "@/components/MyButton";
             animated: false,
             likesCount: Number,
             editMode: false,
+            editModeComment: false,
+            showComms: false,
             deletePhoto: false,
             categories:[
                 {tag:"Природа"},
@@ -118,13 +141,20 @@ import MyButton from "@/components/MyButton";
                 {tag:"Семья"},
                 {tag:"Мода"},
                 {tag:"Машины"},
+                {tag:"Мемы"}
             ],
             file: null,
             choosen: [],
+            newComment:{
+                id: null,
+                text:""
+            },
+            comments:[]
         }
     },
     components:{
-        MyButton
+        MyButton,
+        CommentView
     },
     props: {
         post: {
@@ -138,7 +168,47 @@ import MyButton from "@/components/MyButton";
             photo: null
         }
     },
-    methods: {        
+    methods: {
+        showComments(e){
+            this.showComms = !this.showComms
+            e.preventDefault()
+        },
+        createOrEditComment(e){
+            const comment = {postId: this.post.id, text: this.newComment.text}
+            if(this.newComment.id == null){
+                CommentService.createComment(comment).then((response)=>{
+                    this.comments.push(response.data)                
+                })
+            }
+            else{
+                CommentService.editComment(this.newComment.id, comment).then((response)=>{
+                    this.comments.splice(this.getIndex(this.comments, this.newComment.id), 1, response.data)
+                })
+            }
+            this.editModeComment = false
+            this.newComment.text = ''
+            e.preventDefault()
+        },
+        cancelEditComment(e){
+            this.editModeComment = !this.editModeComment
+            this.newComment.id = null
+            this.newComment.text = ''
+            e.preventDefault()
+        },
+        onDeleteComment(id, e){
+            CommentService.deleteComment(id).then((response) => {
+                if (response.status == 200) {
+                    this.comments.splice(this.getIndex(this.comments, id), 1)
+                }
+            })
+            e.preventDefault()
+        },
+        onEditCommentMode(data, e){
+            this.editModeComment = true
+            this.newComment.id = data.id
+            this.newComment.text = data.text
+            e.preventDefault()
+        },
         like() {
             PostService.likePost(this.post.id).then((response)=>this.likedByMe=response.data)
             this.animated = true;
@@ -162,6 +232,7 @@ import MyButton from "@/components/MyButton";
                 vm.image = e.target.result;
                 preview.src = e.target.result;
             };
+            console.log(file)
             reader.readAsDataURL(file);
             this.file = file;
         },
@@ -172,17 +243,30 @@ import MyButton from "@/components/MyButton";
             this.createImage(files[0]);
         },
         doEditPost(e){
+            //когда фотка уже есть, она удаляется, если заново не добавлять, т.к. this.file это строка, а не файл
+            //надо вызывать createImage(this.file)
+            //если записать в эмит "file: createImage(this.file)" то будет работать
+            //но тогда при добавлении фотки заново, будет вызываться createImage() второй раз и все ломается
+            //почини короче.....................
             if(((this.post.text != null && this.post.text != "") || (this.file!=null)) && this.choosen.length != 0){
                 this.editMode = false
                 this.$emit('editPost', {post: this.post, file: this.file, tags: this.choosen, deletePhoto: this.deletePhoto})
-            }            
+            }
             e.preventDefault()
         },
         removePhoto(e){
             this.file=null
             this.deletePhoto = true
             e.preventDefault()
-        }   
+        },
+        getIndex(list, id) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].id === id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
     },
     mounted() {
         UserService.me().then((response) => {
@@ -198,6 +282,8 @@ import MyButton from "@/components/MyButton";
             }
         }),
         this.file = this.post.photo
+        this.choosen = this.post.tags
+        this.comments = this.post.comments        
     }
 }
 </script>
@@ -205,16 +291,19 @@ import MyButton from "@/components/MyButton";
 <style scoped>
 .post-container{
     display: flex;
-    flex-direction: column;
-    background-color: white;
+    flex-direction: column;    
     min-height: 150px;
     font-family: Georgia, serif;
     font-size: 12pt;
     margin-bottom: 10px;
+    background-color: white;
     border-radius: 10px;
     border: 1px solid;
-    padding: 25px 30px;
     border-color: #D276FD;
+}
+
+.post-area{
+    padding: 25px 30px 5px 30px;
 }
 
 .user{
@@ -269,6 +358,7 @@ label{
 
 .likes-comms{
     display: flex;
+    margin-bottom: 15px;
 }
 
 .likes{
@@ -288,11 +378,7 @@ label{
     padding: 5px 15px;
 }
 
-.likes-count{
-    margin-left: 6px;
-}
-
-.comms-count{
+.likes-count, .comms-count{
     margin-left: 6px;
 }
 
@@ -460,5 +546,31 @@ span{
     border-color: #D276FD;
     border-radius: 50px;
     padding: 5px 15px;
+}
+
+.comment-create textarea{
+    resize: none;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: #D276FD;
+    margin-right: 10px;
+    font-family: Georgia, serif;
+    min-height: 50px;
+}
+.comment-create{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 30px;
+    padding-block: 20px;
+}
+
+.comment-create img{
+    align-self: center;
+    cursor: pointer;
 }
 </style>

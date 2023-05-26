@@ -1,8 +1,14 @@
 <template>
     <PageHeader/>
     <div class="page-edit">
-        <router-view class="route"/>
-        <FilterProfileEdit class="filter"/>
+        <div class="page-edit-container">
+            <div class="route">
+                <router-view/>
+            </div>            
+            <div class="filter">
+                <FilterProfileEdit />
+            </div>
+        </div>     
     </div>
 </template>
   
@@ -23,16 +29,20 @@ export default {
 </script>
   
 <style scoped>
-    .page-edit{
+    .page-edit-container{
         display: flex;
-        justify-content: center;
         align-items: flex-start;
-        margin-block: 20px;
-        margin-inline-start: 200px;
-        margin-inline-end: 20px;
-        
+        margin: 15px 300px 20px 500px;
+        padding: 0px 0px 20px 0px;
+        justify-content: space-evenly;
     }
-    .filter, .route {
-        margin-inline-start: 300px;
-    }    
+
+    .filter{
+        min-width: 300px;
+    }
+
+    .route{
+        width: 100%;
+        margin-right: 20px;
+    }
 </style>

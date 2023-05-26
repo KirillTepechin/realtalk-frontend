@@ -12,7 +12,7 @@
             </div>
             <div id="preferences-checkboxes">
                 <label class="choose">Выберите категории, которые Вам интересны:</label>
-                <div class="list" v-if="user.tags != null" >
+                <div class="list">
                     <div class="category" v-for="cat in categories" v-bind:key="cat.tag">
                         <input
                             type="checkbox" 
@@ -20,7 +20,7 @@
                             v-model="choosen"
                             :checked="choosen.includes(cat)"
                             >
-                            <label>{{ cat.tag }}</label>
+                        <label>{{ cat.tag }}</label>
                     </div>
                 </div>
                 <div>
@@ -44,8 +44,8 @@ export default {
     data(){
         return {
             posts:[],
-            recommendations:[],
             choosen:[],
+            preferences:[],
             user:{},
             categories:[
                 {tag:"Природа"},
@@ -55,10 +55,9 @@ export default {
                 {tag:"Еда"},
                 {tag:"Семья"},
                 {tag:"Мода"},
-                {tag:"Машина"}
-            ],
-            checkedd: true,
-            uncheckedd: false
+                {tag:"Машина"},
+                {tag:"Мемы"},
+            ]
         }
     },
     components:{
@@ -76,15 +75,13 @@ export default {
             FeedService.getFeed().then((response)=> {
                 if(response.status == 200) {            
                     this.posts = response.data
-                    console.log('feed' + this.posts)
                 }          
             })
             }
             if(data.feedType == 'recommend'){
                 FeedService.getFeedRec().then((response)=> {
                     if(response.status == 200) {        
-                    this.posts = response.data
-                    console.log('rec' + this.posts)
+                        this.posts = response.data
                     }          
                 })
             }
@@ -94,31 +91,36 @@ export default {
             else return false
         },
         editPreferences(e) {
-            if(this.choosen.length != 0){
-                const tags = {tags: this.choosen}
-                console.log(tags)
-                UserService.editPreferences(tags).then((response) => {
-                    if (response.status == 200) {
-                        console.log(response.data)
-                    }
-                })
-            }
+            const tags = {tags: this.choosen}
+            UserService.editPreferences(tags).then((response) => {
+                if (response.status == 200) {
+                    this.preferences = response.data.tags
+                }
+            })
             e.preventDefault() 
         },
+        findRecommends(){
+            FeedService.getFeed().then((response)=> {
+                if(response.status == 200) {            
+                    this.posts = response.data
+                }          
+            })
+        }
     },
     mounted(){
-        FeedService.getFeed().then((response)=> {
-            if(response.status == 200) {            
-                this.posts = response.data
-            }          
-        }),
+        this.findRecommends(),
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user = response.data
             this.choosen = this.user.tags
           }
-        })
+        })        
     },
+    watch: {
+        'preferences'() {
+            this.onChooseNews({feedType: "recommend"})
+        }
+    }
 }
 </script>
 

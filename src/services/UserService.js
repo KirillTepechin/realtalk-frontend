@@ -34,8 +34,9 @@ class UserService{
         return axios.get(URL)
     }    
     findUsers(query){
-        let URL = USER_API_BASE_URL+'find'
-        return axios.get(URL, query)
+        let URL = USER_API_BASE_URL+'find?query='+query
+        //return axios.get(URL, query)
+        return axios.get(URL)
     }
     findAllUsers(){
         let URL = USER_API_BASE_URL+'users'

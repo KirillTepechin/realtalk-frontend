@@ -70,7 +70,6 @@ export default {
 form{
     display: flex;
     flex-direction: column;
-    width: 35%;
     background-color: white;
     border: 1px solid;
     border-radius: 10px;

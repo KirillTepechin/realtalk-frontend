@@ -28,7 +28,6 @@ export default {
 #btn-bar{
     display: flex;
     flex-direction: column;
-    width: 25%;
     background-color: white;
     border-radius: 10px;
     border: 1px solid;

@@ -2,8 +2,10 @@
     <PageHeader/>
     <div class="page-chat"> 
         <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
-        <div class="sms-list" v-for='msg in this.chat.messages' v-bind:key="msg.id">
-            <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>                     
+        <div class="sms-list">
+            <div class="sms" v-for='msg in this.chat.messages' v-bind:key="msg.id">
+                <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>  
+            </div>                               
         </div> 
        <MessageSend @createMessage="onCreateMessage" @editMessage ="onEditMessage" :messageEdit="messageEdit"/>
     </div> 
@@ -125,7 +127,7 @@ export default{
                 this.me = response.data
             }
         })
-        this.connect(chatId, vm)
+        this.connect(chatId, vm);
     },
 
 }
@@ -142,13 +144,6 @@ export default{
         border-radius: 10px;
         border: 1px solid;
         border-color: #D276FD;
-    }
-
-    .sms{
-        background-color: white;
-        border: 1px solid;
-        border-color: #D276FD;
-    }
-   
+    }   
 
 </style>
