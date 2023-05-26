@@ -15,7 +15,7 @@
           file: null,
           password: '',
           login: '',
-          borthdate: Date,
+          borthdate: '',
           city: ''
         },
     }

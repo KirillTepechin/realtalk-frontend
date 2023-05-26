@@ -87,7 +87,9 @@ export default {
                 if(response.status == 200) {
                     console.log(response.data)
                     this.users = response.data
-                    this.users.splice(this.getIndex(this.users, this.me.id), 1)
+                    if(this.users.map(user=>user.login).includes(this.me.login)){
+                        this.users.splice(this.getIndex(this.users, this.me.id), 1)
+                    }
                 }
             }) 
         }

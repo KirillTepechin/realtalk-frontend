@@ -10,7 +10,7 @@ class CommentService{
         return axios.put(URL, comment)
     }
     likeComment(id){
-        let URL = COMMENT_API_BASE_URL+"like/"+id
+        let URL = COMMENT_API_BASE_URL+"/like/"+id
         return axios.put(URL)
     }
 

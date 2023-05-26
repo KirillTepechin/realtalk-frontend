@@ -33,12 +33,12 @@
             with:{}
         },
         methods:{
-            back(e){
+            back(e) {
                 this.$router.push("/chats")
                 e.preventDefault()
             },
-            
-        }
+        },
+       
     }
 </script>
     

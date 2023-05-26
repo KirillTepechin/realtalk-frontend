@@ -113,8 +113,7 @@ export default{
                 return this.chat.users[0]
             }
         },
-
-    },
+    },   
     mounted() {
         const vm = this; // сохраняем ссылку на объект Vue
 
@@ -150,5 +149,6 @@ export default{
         border: 1px solid;
         border-color: #D276FD;
     }
+    
 
 </style>
