@@ -457,7 +457,6 @@ img{
 }
 
 .input-file-btn {
-	position: relative;
 	display: inline-block;
 	cursor: pointer;
 	outline: none;

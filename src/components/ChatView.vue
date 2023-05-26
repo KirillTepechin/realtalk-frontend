@@ -140,9 +140,10 @@ export default{
         display: flex;
         flex-direction: column;
         margin: 0px 300px 20px 300px;
-        padding: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 0px;        
     }
-    .page-chat-container{
+
+    .page-chat-container{    
         margin-top: 90px;
         background-color: white;
         border-radius: 10px;

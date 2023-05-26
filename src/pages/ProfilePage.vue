@@ -310,8 +310,7 @@ export default {
     margin-top: 3px;
 }
 
-.input-file-btn {
-	position: relative;
+.input-file-btn {	
 	display: inline-block;
 	cursor: pointer;
 	outline: none;
