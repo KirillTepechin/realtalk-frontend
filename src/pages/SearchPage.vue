@@ -122,6 +122,7 @@ export default {
 .container{
     display: flex;
     flex-direction: row;
+    margin-top: 90px;
 }
 
 .users-list {
@@ -132,7 +133,6 @@ export default {
     border: 1px solid;
     border-color: #D276FD;
     margin-right: 20px;
-    margin-top: 15px;
     padding-bottom: 20px;
 }
 
@@ -153,7 +153,6 @@ export default {
     border-radius: 10px;
     border: 1px solid;
     border-color: #D276FD;
-    margin-top: 15px;
     flex-direction: column;
     padding: 10px;
 }

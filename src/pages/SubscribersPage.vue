@@ -59,6 +59,7 @@ export default {
         border-radius: 20px;
         border: 1px solid;
         border-color: #D276FD;
+        margin-top: 90px;
     }
 
     .input-icon{

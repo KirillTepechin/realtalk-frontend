@@ -64,12 +64,13 @@ export default {
     }
     
     .chats-list{
-        margin: 15px 300px 20px 300px;
+        margin: 0px 300px 20px 300px;
         padding: 0px 0px 20px 0px;
         background-color: white;
         border-radius: 10px;
         border: 1px solid;
         border-color: #D276FD;
+        margin-top: 90px;
     }
 
     .input-icon{

@@ -137,7 +137,7 @@ export default {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
-    margin: 15px 300px 20px 300px;
+    margin: 0px 300px 20px 300px;
     padding: 0px 0px 20px 0px;
 }
 
@@ -149,6 +149,7 @@ export default {
    margin-inline: 20px;
    min-width: 300px;
    flex: auto;
+   margin-top: 90px;
 }
 
 .noNews{
@@ -163,11 +164,13 @@ export default {
     height: 550px;
     font-size: 14pt;
     padding: 0px 10px;
+    margin-top: 90px;
 }
 
 .filter {
     display: flex;
     flex-direction: column;
+    margin-top: 90px;
 }
 
 #preferences-checkboxes{

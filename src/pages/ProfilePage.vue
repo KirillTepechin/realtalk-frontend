@@ -238,6 +238,7 @@ export default {
 }
 .profile-top{
     margin-block: 15px;
+    margin-top: 90px;
 }
 
 .profile-bottom{

@@ -1,6 +1,5 @@
 <template>
-    <div id="navbar">
-        
+    <div id="navbar">        
         <ul class="navbar-list">
             <li>
                 <router-link :to="'/feed'">
@@ -67,13 +66,12 @@ export default {
 </script>
 
 <style scoped>
-.sticky {
+/* .sticky {
   width: 100%;
-}
+} */
 
 #navbar{
-  
-
+    position: fixed;
     display: flex;
     flex-direction: row;
     width: 100%;

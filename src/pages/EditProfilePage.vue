@@ -29,12 +29,20 @@ export default {
 </script>
   
 <style scoped>
+
+    .page-edit{
+        display: flex;
+        margin: 0px 300px 20px 500px;
+        padding: 0px 0px 20px 0px;
+        
+    }
+
     .page-edit-container{
         display: flex;
+        flex-direction: row;
         align-items: flex-start;
-        margin: 15px 300px 20px 500px;
-        padding: 0px 0px 20px 0px;
         justify-content: space-evenly;
+        margin-top: 90px;
     }
 
     .filter{
@@ -42,7 +50,7 @@ export default {
     }
 
     .route{
-        width: 100%;
+        width: 500px;
         margin-right: 20px;
     }
 </style>

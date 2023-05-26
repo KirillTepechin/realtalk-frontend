@@ -1,13 +1,15 @@
 <template>
     <PageHeader/>
-    <div class="page-chat"> 
-        <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
-        <div class="sms-list">
-            <div class="sms" v-for='msg in this.chat.messages' v-bind:key="msg.id">
-                <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>  
-            </div>                               
-        </div> 
-       <MessageSend @createMessage="onCreateMessage" @editMessage ="onEditMessage" :messageEdit="messageEdit"/>
+    <div class="page-chat">
+        <div class="page-chat-container">        
+            <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
+            <div class="sms-list">
+                <div class="sms" v-for='msg in this.chat.messages' v-bind:key="msg.id">
+                    <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>  
+                </div>                               
+            </div> 
+            <MessageSend @createMessage="onCreateMessage" @editMessage ="onEditMessage" :messageEdit="messageEdit"/>
+        </div>
     </div> 
 </template>
 
@@ -137,13 +139,15 @@ export default{
     .page-chat{
         display: flex;
         flex-direction: column;
-        margin: 15px 300px 20px 300px;
+        margin: 0px 300px 20px 300px;
         padding: 0px 0px 0px 0px;
-        
+    }
+    .page-chat-container{
+        margin-top: 90px;
         background-color: white;
         border-radius: 10px;
         border: 1px solid;
         border-color: #D276FD;
-    }   
+    }
 
 </style>
