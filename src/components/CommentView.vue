@@ -104,7 +104,6 @@ export default{
     font-size: 12pt;
     padding: 15px 30px;
     border-top: 1px solid;
-    border-bottom: 1px solid;
     border-color: #D276FD;
 }
 

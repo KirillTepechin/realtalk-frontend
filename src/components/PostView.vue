@@ -567,6 +567,8 @@ span{
     align-items: center;
     padding-inline: 30px;
     padding-block: 20px;
+    border-top: 1px solid;
+    border-color: #D276FD;
 }
 
 .comment-create img{

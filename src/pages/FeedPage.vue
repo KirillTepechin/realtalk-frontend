@@ -1,13 +1,17 @@
 <template>
     <PageHeader />
     <div class="feed-body">
-        <div class="feed-posts">
+        <div class="feed-posts" v-if="this.posts.length > 0">
             <div class="post" v-for='post in posts' v-bind:key="post.id">
             <PostView :post="post"/>
             </div>
         </div>
+        <div class="noNews" v-else>            
+            <label v-if="recsMode"> У Вас пока нет рекомендаций :(<br> Чтобы увидеть рекомендации, выберите категории в списке справа!</label>
+            <label v-else> У Вас пока нет новостей :(<br> Чтобы увидеть новости, подпишитесь на кого-нибудь! </label>
+        </div>
         <div class="filter">
-            <div class="feed-filters">
+            <div class="feed-filters" >
                 <FilterNews @chooseNews="onChooseNews"/>
             </div>
             <div id="preferences-checkboxes">
@@ -57,7 +61,8 @@ export default {
                 {tag:"Мода"},
                 {tag:"Машина"},
                 {tag:"Мемы"},
-            ]
+            ],
+            recsMode: false
         }
     },
     components:{
@@ -70,21 +75,24 @@ export default {
         onChooseNews(data){
             // localStorage.setItem('feedType', data.feedType)
             // console.log(localStorage.getItem('feedType'))
-
+            
             if(data.feedType == 'feed'){
-            FeedService.getFeed().then((response)=> {
-                if(response.status == 200) {            
-                    this.posts = response.data
-                }          
-            })
+                this.recsMode = false
+                FeedService.getFeed().then((response)=> {
+                    if(response.status == 200) {            
+                        this.posts = response.data
+                    }          
+                })
             }
             if(data.feedType == 'recommend'){
+                this.recsMode = true
                 FeedService.getFeedRec().then((response)=> {
                     if(response.status == 200) {        
                         this.posts = response.data
                     }          
                 })
             }
+            console.log(this.posts)
         },
         getFeedType(){
             if(localStorage.getItem('feedType') == 'recommend') return true
@@ -141,6 +149,20 @@ export default {
    margin-inline: 20px;
    min-width: 300px;
    flex: auto;
+}
+
+.noNews{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid;
+    border-color: #D276FD;
+    width: 600px;
+    height: 550px;
+    font-size: 14pt;
+    padding: 0px 10px;
 }
 
 .filter {
