@@ -100,7 +100,8 @@ export default {
                 {tag:"Машины"},
                 {tag:"Мемы"},
             ],
-            file: null
+            file: null,
+            me:{}
         }
     },
     components:{
@@ -164,6 +165,7 @@ export default {
             UserService.me().then((response) => {
                 if (response.status == 200) {
                     this.user = response.data
+                    this.me = response.data
                     console.log(response.data)
                 }
             })

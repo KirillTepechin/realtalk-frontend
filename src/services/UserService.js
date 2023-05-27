@@ -50,6 +50,10 @@ class UserService{
         let URL = USER_API_BASE_URL+login
         return axios.get(URL)
     }
+    findUserByLogin(login){
+        let URL = USER_API_BASE_URL+'find-by-login?login='+login
+        return axios.get(URL)
+    }
     getUserPosts(login){
         let URL = USER_API_BASE_URL+'user-posts/'+login
         return axios.get(URL)
