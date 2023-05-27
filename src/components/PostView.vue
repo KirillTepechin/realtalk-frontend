@@ -238,7 +238,6 @@ import CommentService from "@/services/CommentService";
             };
             reader.readAsDataURL(file);
             this.file = file;
-            console.log(this.file)
 
         },
         onFileChange(e) {
@@ -248,14 +247,15 @@ import CommentService from "@/services/CommentService";
             this.createImage(files[0]);
         },
         doEditPost(e){
-            //когда фотка уже есть, она удаляется, если заново не добавлять, т.к. this.file это строка, а не файл
-            //надо вызывать createImage(this.file)
-            //если записать в эмит "file: createImage(this.file)" то будет работать
-            //но тогда при добавлении фотки заново, будет вызываться createImage() второй раз и все ломается
-            //почини короче.....................
             if(((this.post.text != null && this.post.text != "") || (this.file!=null)) && this.choosen.length != 0){
                 this.editMode = false
-                this.$emit('editPost', {post: this.post, file: this.file, tags: this.choosen, deletePhoto: this.deletePhoto})
+                if(this.post.photo != null && !this.deletePhoto && this.post.photo == this.file){
+                    console.log(this.post.photo)
+                    this.$emit('editPost', {post: this.post, file: this.createImage(this.post.photo), tags: this.choosen, deletePhoto: this.deletePhoto})
+                }
+                else{
+                    this.$emit('editPost', {post: this.post, file: this.file, tags: this.choosen, deletePhoto: this.deletePhoto})
+                }                
             }
             e.preventDefault()
         },

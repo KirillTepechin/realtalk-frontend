@@ -202,19 +202,24 @@ export default {
         onEditPost(data, e){        
             if(((data.post.text != null && data.post.text != "") || (data.file!=null)) && data.post.tags.length != 0){
                     data.post.tags = data.tags
+                    console.log(data)
                     PostService.editPost(data.post.id, data.post).then((response) => {
-                    if(data.file != null || data.deletePhoto == true){
-                        PostService.uploadPostPhoto(response.data.id, {file: data.file}).then((response1) => {
-                            if (response1.status == 200) {
-                                console.log(response1.data)
-                            }
-                        })
-                    }
+                        if(data.file != null || data.deletePhoto == true){
+                            PostService.uploadPostPhoto(response.data.id, {file: data.file}).then((response1) => {
+                                if (response1.status == 200) {
+                                    console.log(response1.data)
+                                    this.posts.splice(this.getIndex(this.posts, data.post.id), 1, response1.data)
+                                    console.log('1')                                    
+                                }
+                            })
+                        }
                     if (response.status == 200 && data.file == null) {
+                        console.log('2')
                         console.log(response.data)
+                        this.posts.splice(this.getIndex(this.posts, data.post.id), 1, response.data)
                     }
                 })
-            }            
+            }    
             e.preventDefault()
         },
         removePhoto(e){
