@@ -21,7 +21,7 @@
             <div class="search-filters" >
                 <FilterSearchUsers @chooseSearch="onChooseSearch"/>
             </div>
-            <div id="preferences-checkboxes">
+            <div v-if="choosen" id="preferences-checkboxes">
                 <label class="choose">Выберите категории, <br> которые Вам интересны,<br> чтобы увидеть рекомендованных пользователей:</label>
                 <div class="list">
                     <div class="category" v-for="cat in categories" v-bind:key="cat.tag">
