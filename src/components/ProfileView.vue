@@ -40,7 +40,7 @@
             <div v-else>
                 <MyButton v-if="isSubscription" @click="createChat($event)">Сообщение</MyButton> 
                 <MyButton v-if="!isSubscription" @click="subscribe($event)">Подписаться</MyButton> 
-                <MyButton v-else @click="subscribe($event)">Отписаться</MyButton>                
+                <MyButton v-if="isSubscription" @click="subscribe($event)">Отписаться</MyButton>                
             </div>
             
         </div>
@@ -112,6 +112,7 @@ export default {
             })
         },
         changeButtonName(){
+            //this.checkIsSubscription()
             if(this.isSubscription)
                 this.textButton = "Отписаться"
             else
@@ -126,14 +127,16 @@ export default {
         UserService.me().then((response) => {
             if (response.status == 200) {
                 this.me = response.data
+                if(this.me.login != this.user.login){
+                    this.checkIsSubscription()
+                }
             }
         }),
         ChatService.getChatsByUser().then((response)=>{
             if (response.status == 200) {
                 this.checkPrivateChat(response.data)
             }
-        }),
-        this.changeButtonName()
+        })
     },
     watch:{
         'isSubscription'(){

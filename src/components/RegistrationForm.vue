@@ -1,14 +1,15 @@
 <template>    
         <form novalidate="true">
         <h4>Регистрация</h4>
-        <div class="errors">
+
+        <!-- <div class="errors">
             <p v-if="errors.length">
-            <b>Пожалуйста исправьте указанные ошибки:</b>
+            <b>Пожалуйста, исправьте указанные ошибки:</b>
             <ul>
               <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
             </ul>
           </p>
-        </div>
+        </div> -->
         
         <InputIcon
         v-model="name"
@@ -18,6 +19,9 @@
         :width = "'18'"
         :height = "'18'"
         />
+        <div class="error">
+            <label>Поле "Имя" должно быть заполнено</label>
+        </div>        
         <InputIcon
         v-model="surname"
         :type = "'text'"
@@ -26,6 +30,9 @@
         :width = "'18'"
         :height = "'18'"
         />
+        <div class="error">
+            <label>Поле "Имя" должно быть заполнено</label>
+        </div> 
         <InputIcon
         v-model="login"
         :type = "'text'"
@@ -34,6 +41,9 @@
         :width = "'18'"
         :height = "'14'"
         />
+        <div class="error">
+            <label>Поле "Имя" должно быть заполнено</label>
+        </div> 
         <InputIcon
         v-model="password"
         :type = "'password'"
@@ -42,6 +52,9 @@
         :width = "'18'"
         :height = "'19'"
         />
+        <div class="error">
+            <label>Поле "Имя" должно быть заполнено</label>
+        </div> 
         <InputIcon
         v-model="passwordR"
         :type = "'password'"
@@ -50,6 +63,9 @@
         :width = "'18'"
         :height = "'19'"
         />
+        <div class="error">
+            <label>Поле "Имя" должно быть заполнено</label>
+        </div> 
 
         <MyButton @click="goToStep2">Зарегистрироваться</MyButton>
     </form>
@@ -101,9 +117,10 @@ export default {
 form{
     display: flex;
     flex-direction: column;
-    width: 35%;
+    max-width: 30%;  
     margin: auto;
-    margin-top: 7%;
+    /* margin-top: 7%; */
+    margin-top: 60px;
     background-color: #ffffff50;
     border-radius: 30px; 
     border: 1px solid;
@@ -113,11 +130,18 @@ form{
     margin: 30px 50px;
     padding: 10px 70px;
 }
-.errors{
-    font-size: 8pt;
+.error{
+    padding: 2px;
+    background-color: #ffb6b6;
+    margin: 0px 50px;
+    
+    border-radius: 2px;
+    border-color: #ed5656;
+    display: flex;
 }
-.errors ul{
-    padding-inline-start:0px;
-    color:red;
+
+label{
+  font-size: 11.5pt;
+  color: #b10000;
 }
 </style>
