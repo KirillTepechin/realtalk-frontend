@@ -16,7 +16,7 @@
         </div>
         <div class="user-profile">
             <div class="user-info">
-                    <router-link :to="user.login" class="username">{{ user.name }} {{ user.surname }}</router-link>
+                    <router-link :to="'/' +user.login" class="username">{{ user.name }} {{ user.surname }}</router-link>
                     <label class="login">@{{ user.login }}</label>
             </div>
             <div class="btn-bar">

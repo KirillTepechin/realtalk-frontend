@@ -144,7 +144,7 @@ export default {
             if (response.status == 200) {
                 this.me = response.data
                 UserService.findAllUsers().then((response) => {
-                    if (response.status == 200) {
+                    if (response.status == 200) {                        
                         this.users = response.data
                         this.choosen = this.me.tags
                         this.users.splice(this.getIndex(this.users, this.me.id), 1)
@@ -161,7 +161,9 @@ export default {
             this.findUsersByQuery(this.query)
         },
         'preferences'() {
-            this.onChooseSearch({searchType: "recommend"})
+            if(this.preferences.length != 0){
+                this.onChooseSearch({searchType: "recommend"})
+            }            
         }
     }
 }

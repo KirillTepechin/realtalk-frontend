@@ -231,7 +231,7 @@ import CommentService from "@/services/CommentService";
             var vm = this;
             
             reader.onload = (e) => {
-                var preview = document.querySelector("#app > div.profile-body > div.profile-bottom > div.posts-form > div:nth-child(2) > div > div.post-create > div.post-create-form > div.postPhoto > div > img")
+                var preview = document.querySelector("#app > div.profile-body > div.profile-bottom > div.posts-form > div.post > div > div > div.post-create > div.post-create-form > div.postPhoto > div > img")
                 vm.image = e.target.result;
                 preview.src = e.target.result;
                 
