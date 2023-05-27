@@ -117,7 +117,8 @@ export default {
           if(response.status == 200) {            
             this.user = response.data
             if(this.user.borthdate!=null){
-                this.user.borthdate = new Date(this.user.borthdate).toISOString().split('T')[0]
+                this.user.borthdate = new Date(this.user.borthdate)
+                console.log(this.user.borthdate)
                 //let date = dayjs(this.user.borthdate);
                 //date = date.format('MM.DD.YYYY')
                 // console.log(date | dayjs('add', 1, 'day'))
