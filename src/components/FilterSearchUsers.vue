@@ -1,22 +1,28 @@
 <template>
     <div id="btn-bar">
-        <button>
-        Все чаты
+        <button @click="all()">
+        Все пользователи
         </button>
-        <button>
-        Непрочитанные чаты
-        </button>
-        <button>
-        Избранное
+        <button @click="rec()">
+        Рекомендации
         </button>
     </div>
 </template>
 
 <script>
 export default {
-    components:{
-    }
-  
+    methods:{
+        all(){
+            this.$emit('chooseSearch', {
+                searchType: 'all'
+            })
+        },
+        rec(){
+            this.$emit('chooseSearch', {
+                searchType: 'recommend'
+            })
+        }
+    }  
 }
 </script>
 
@@ -24,7 +30,6 @@ export default {
 #btn-bar{
     display: flex;
     flex-direction: column;
-    width: 25%;
     background-color: white;
     border-radius: 10px;
     border: 1px solid;
@@ -37,6 +42,6 @@ button{
     background-color: white;
     border-color: #D276FD;    
     font-family: Georgia, serif;
-    font-size: 10pt;  
+    font-size: 12pt;  
 }
 </style>

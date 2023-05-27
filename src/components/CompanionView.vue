@@ -6,8 +6,7 @@
                 <label>Назад</label>
             </div>
             <div class="user-info">
-
-                    <label class="username" >{{this.with.name + ' ' +this.with.surname}}</label>
+                    <router-link :to="'/'+this.with.login" class="username">{{this.with.name + ' ' +this.with.surname}}</router-link>
                     <label class="login">@{{ this.with.login }}</label>
                 </div>
             <div class="user-profile" v-if="!this.with.photo">
@@ -90,10 +89,12 @@
 .back{
     display: flex;
     align-self: center;
+    cursor: pointer;
 }
 
 .back label{
     margin-left: 5px;
+    cursor: pointer;
 }
 
 label{

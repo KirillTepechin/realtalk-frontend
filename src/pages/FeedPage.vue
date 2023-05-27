@@ -137,7 +137,7 @@ export default {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
-    margin: 0px 300px 20px 300px;
+    margin: 0px 280px 20px 300px;
     padding: 0px 0px 20px 0px;
 }
 

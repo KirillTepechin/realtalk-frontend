@@ -65,7 +65,7 @@ export default {
     border-color: #D276FD;
     margin-right: 10px;
     font-family: Georgia, serif;
-
+    resize: none;
 }
 .sms-create{
     display: flex;

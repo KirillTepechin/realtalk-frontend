@@ -38,6 +38,10 @@ class UserService{
         //return axios.get(URL, query)
         return axios.get(URL)
     }
+    findUsersByPreferences(){
+        let URL = USER_API_BASE_URL+'preferences-find'
+        return axios.get(URL)
+    }
     findAllUsers(){
         let URL = USER_API_BASE_URL+'users'
         return axios.get(URL)

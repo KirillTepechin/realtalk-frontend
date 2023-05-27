@@ -14,9 +14,12 @@
                 <label>По запросу "{{this.query}}" ничего не найдено</label>
             </div>
         </div>
-        <div>        
+        <div class="filter">
+            <div class="search-filters" >
+                <FilterSearchUsers @chooseNews="onChooseNews"/>
+            </div>
             <div id="preferences-checkboxes">
-                <label class="choose">Выберите категории, которые Вам интересны:</label>
+                <label class="choose">Выберите категории, <br> которые Вам интересны,<br> чтобы увидеть рекомендованных пользователей:</label>
                 <div class="list">
                     <div class="category" v-for="cat in categories" v-bind:key="cat.tag">
                         <input
@@ -29,7 +32,7 @@
                     </div>
                 </div>
                 <div>
-                    <MyButton @click="editPreferences($event)">Сохранить выбор</MyButton>
+                    <MyButton @click="editPreferences($event)">Показать</MyButton>
                 </div>
             </div>
         </div>
@@ -44,6 +47,7 @@ import InputIcon from "@/components/InputIcon";
 import UserService from "@/services/UserService";
 
 import MyButton from "@/components/MyButton";
+import FilterSearchUsers from "@/components/FilterSearchUsers.vue";
 
 export default {
     data() {
@@ -64,16 +68,37 @@ export default {
                 { tag: "Машина" },
                 { tag: "Мемы" }
             ],
-            query: ""
+            query: "",
+            recsMode: false
         }
     },
     components: {
         PageHeader,
         SubscrView,
         InputIcon, 
-        MyButton
+        MyButton,
+        FilterSearchUsers
     },
     methods: {
+        onChooseSearch(data){
+            // localStorage.setItem('feedType', data.feedType)
+            // console.log(localStorage.getItem('feedType'))
+            
+            if(data.searchType == 'all'){
+                this.recsMode = false
+                UserService.findAllUsers().then((response)=> {
+                    if (response.status == 200) {
+                        this.users = response.data
+                        this.choosen = this.me.tags
+                        this.users.splice(this.getIndex(this.users, this.me.id), 1)
+                    }        
+                })
+            }
+            if(data.searchType == 'recommend'){
+                this.recsMode = true
+                this.findUsersByPreferences()
+            }
+        },
         getIndex(list, id) {
             for (let i = 0; i < list.length; i++) {
                 if (list[i].id === id) {
@@ -92,6 +117,27 @@ export default {
                     }
                 }
             }) 
+        },
+        editPreferences(e) {
+            const tags = {tags: this.choosen}
+            UserService.editPreferences(tags).then((response) => {
+                if (response.status == 200) {
+                    this.preferences = response.data.tags
+                    this.findUsersByPreferences()
+                }
+            })
+            e.preventDefault() 
+        },
+        findUsersByPreferences(e){
+            UserService.findUsersByPreferences().then((response)=> {
+                if(response.status == 200) {
+                    this.users = response.data
+                    if(this.users.map(user=>user.login).includes(this.me.login)){
+                        this.users.splice(this.getIndex(this.users, this.me.id), 1)
+                    }
+                }
+            })
+            e.preventDefault()
         }
     },
     mounted() {
@@ -101,6 +147,7 @@ export default {
                 UserService.findAllUsers().then((response) => {
                     if (response.status == 200) {
                         this.users = response.data
+                        this.choosen = this.me.tags
                         this.users.splice(this.getIndex(this.users, this.me.id), 1)
                     }
                 })
@@ -110,6 +157,9 @@ export default {
     watch:{
         'query'(){
             this.findUsersByQuery(this.query)
+        },
+        'preferences'() {
+            this.onChooseSearch({searchType: "recommend"})
         }
     }
 }
@@ -117,8 +167,10 @@ export default {
   
 <style scoped>
 .page-search {
-    margin: 0px 300px 20px 300px;
+    margin: 0px 290px 20px 300px;
     padding: 0px 0px 20px 0px;
+    display: flex;
+    flex-direction: row;
 }
 
 .container{
@@ -180,12 +232,14 @@ export default {
 }
 
 .btn{
-    padding: 10px 70px;
+    padding: 10px 100px;
     margin-top: 15px;
 }
 
-.page-search{
-    display: flex;
-    flex-direction: row;
+.search-filters {
+   min-width: 300px;
+   margin-bottom: 20px;
 }
+
+
 </style>

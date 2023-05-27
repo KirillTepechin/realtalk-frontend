@@ -45,4 +45,13 @@ h4{
   -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: #D276FD;
 }
+a{
+    text-decoration: none;
+    color: black;
+    align-self: start;
+}
+
+a:hover {
+  color: #D276FD;
+}
 </style>

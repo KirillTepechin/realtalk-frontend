@@ -16,13 +16,13 @@
         </div>
         <div class="user-profile">
             <div class="user-info">
-                    <label class="username">{{ user.name }} {{ user.surname }}</label>
+                    <router-link :to="user.login" class="username">{{ user.name }} {{ user.surname }}</router-link>
                     <label class="login">@{{ user.login }}</label>
             </div>
             <div class="btn-bar">
-                <MyButton @click="createChat($event)">Сообщение</MyButton>
-                <MyButton v-if="isSubscription">Отписаться</MyButton>
-                <MyButton v-else>Подписаться</MyButton>                
+                <MyButton v-if="isSubscription" @click="createChat($event)">Сообщение</MyButton>
+                <MyButton @click="subscribe($event)">{{ textButton }}</MyButton>
+                <!-- <MyButton v-else @click="subscribe($event)">Подписаться</MyButton> -->
             </div>            
         </div>
     </div>
@@ -42,7 +42,8 @@ export default {
         return{
             me:{},
             createdId: null,
-            isSubscription: false
+            isSubscription: false,
+            textButton: ""
         }
     },
     props:{
@@ -71,6 +72,29 @@ export default {
                 if(sub.login == this.user.login)
                     this.isSubscription = true
             })
+        },
+        subscribe(e){
+            UserService.subscribe(this.user.id).then((response)=>{
+                if(response.status == 200){
+                    //let but = document.querySelector("#app > div.page-subscribtions > div > div:nth-child(2) > div > div.user-profile > div.btn-bar > button:nth-child(2)")
+                    if(response.data==true){
+                        //but.innerHTML = "Отписаться"
+                        this.isSubscription = true
+                    } 
+                    else {
+                        //but.innerHTML = "Подписаться"
+                        this.isSubscription = false
+                    }
+                    
+                }
+            })
+            e.preventDefault()
+        },
+        changeButtonName(){
+            if(this.isSubscription)
+                this.textButton = "Отписаться"
+            else
+                this.textButton = "Подписаться"
         }
     },
     mounted() {
@@ -85,6 +109,12 @@ export default {
             }
         }),
         this.checkIsSubscription()
+        this.changeButtonName()
+    },
+    watch:{
+        'isSubscription'(){
+            this.changeButtonName()
+        }
     }
 }
 </script>
@@ -147,5 +177,4 @@ img{
     display: flex;
     justify-content: space-evenly;
 }
-
 </style>

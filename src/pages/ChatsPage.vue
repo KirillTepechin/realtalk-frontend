@@ -70,7 +70,7 @@ export default {
         border-radius: 10px;
         border: 1px solid;
         border-color: #D276FD;
-        margin-top: 70px;
+        margin-top: 90px;
     }
 
     .input-icon{

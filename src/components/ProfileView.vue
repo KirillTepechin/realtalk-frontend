@@ -38,8 +38,9 @@
                 <MyButton  @click="goTo">Редактировать профиль</MyButton>
             </div>
             <div v-else>
-                <MyButton v-if="checkSub()" @click="subscribe($event)">Подписаться</MyButton> 
-                <MyButton v-else @click="subscribe($event)">Отписаться</MyButton> 
+                <MyButton v-if="isSubscription" @click="createChat($event)">Сообщение</MyButton> 
+                <MyButton v-if="!isSubscription" @click="subscribe($event)">Подписаться</MyButton> 
+                <MyButton v-else @click="subscribe($event)">Отписаться</MyButton>                
             </div>
             
         </div>
@@ -48,6 +49,7 @@
 
 <script>
 import UserService from "@/services/UserService";
+import ChatService from "@/services/ChatService";
 
 import MyButton from './MyButton.vue';
 export default {
@@ -57,26 +59,63 @@ export default {
     data(){
         return{
             me:{},
+            createdId: null,
+            isSubscription: false,
+            textButton: ""
         }
     },
     methods:{
         goTo(){
             this.$router.push("/edit-profile")
         },
-        checkSub(){
-            return (this.me.login!=this.user.login && 
-                !this.user.subscribers.map(x => x.login)
-                .includes(this.me.login))
-        },
+        // checkSub(){
+        //     return (this.me.login!=this.user.login && 
+        //         !this.user.subscribers.map(x => x.login)
+        //         .includes(this.me.login))
+        // },
         subscribe(e){
             UserService.subscribe(this.user.id).then((response)=>{
                 if(response.status == 200){
-                    let but = document.querySelector("#app > div.profile-body > div.profile-container.profile-top > div.user-info > div:nth-child(6) > button")
-                    if(response.data==true) but.innerHTML = "Отписаться"
-                    else but.innerHTML = "Подписаться"
+                    //let but = document.querySelector("#app > div.profile-body > div.profile-container.profile-top > div.user-info > div:nth-child(6) > button")
+                    if(response.data==true) {
+                        //but.innerHTML = "Отписаться"
+                        this.isSubscription = true
+                    }
+                    else {
+                        //but.innerHTML = "Подписаться"
+                        this.isSubscription = false
+                    }
                 }
             })
             e.preventDefault()
+        },
+        createChat(e){
+            if(this.createdId!=null){
+                this.$router.push('chat/'+this.createdId)
+            }
+            else{
+                let chat = {name: '', isPrivate: true, userIds: [this.user.id]}
+                ChatService.createChat(chat).then((response)=>{
+                    this.$router.push('chat/'+response.data.id)
+                })
+                
+            }
+            e.preventDefault()
+        },
+        checkPrivateChat(chats){
+            this.createdId = chats.find(chat=> chat.isPrivate==true &&chat.users.map(user=>user.id).includes(this.user.id)).id
+        },
+        checkIsSubscription(){            
+            this.me.subscriptions.forEach(sub => {
+                if(sub.login == this.user.login)
+                    this.isSubscription = true
+            })
+        },
+        changeButtonName(){
+            if(this.isSubscription)
+                this.textButton = "Отписаться"
+            else
+                this.textButton = "Подписаться"
         }
     },
     props:{
@@ -88,7 +127,18 @@ export default {
             if (response.status == 200) {
                 this.me = response.data
             }
-        })
+        }),
+        ChatService.getChatsByUser().then((response)=>{
+            if (response.status == 200) {
+                this.checkPrivateChat(response.data)
+            }
+        }),
+        this.changeButtonName()
+    },
+    watch:{
+        'isSubscription'(){
+            this.changeButtonName()
+        }
     }
 }
 </script>
@@ -171,7 +221,8 @@ img{
 }
 
 .btn{
-    padding: 10px 70px;
+    padding: 10px 65px;
+    margin-right: 10px;
 }
 
 .icon{
