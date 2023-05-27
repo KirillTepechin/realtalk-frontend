@@ -28,7 +28,7 @@
         :height = "'18'"
         />
         <InputIcon
-        v-bind:modelValue = "user.surname"
+        v-model = "user.surname"
         :type = "'text'"
         :placeholder = "'Фамилия'"
         :src = "'name.png'"
@@ -44,7 +44,7 @@
         :height = "'18'"
         />
         <InputIcon
-        v-bind:modelValue = "user.city"
+        v-model = "user.city"
         :type = "'text'"
         :placeholder = "'Город'"
         :src = "'city.png'"
@@ -65,13 +65,10 @@ export default {
     data(){
         return {
             user:{
-                login:"",
                 name:"",
                 surname:"",
                 city:"",
                 borthdate: "",
-                subscribers:[],
-                subscriptions:[],
                 photo: null
             },            
         }
@@ -104,7 +101,7 @@ export default {
         editPersonalData(e){
             console.log(this.user)
             UserService.editProfile(this.user).then((response)=> {
-            if(response.status == 200) {
+            if(response.status == 202) {
                 this.user = response.data
                 console.log(this.user)
             }          
@@ -118,7 +115,6 @@ export default {
             this.user = response.data
             if(this.user.borthdate!=null){
                 this.user.borthdate = new Date(this.user.borthdate)
-                console.log(this.user.borthdate)
                 //let date = dayjs(this.user.borthdate);
                 //date = date.format('MM.DD.YYYY')
                 // console.log(date | dayjs('add', 1, 'day'))

@@ -36,19 +36,21 @@ import InputIcon from './InputIcon.vue';
 export default {
     data(){
         return {
-            user:{}
+            user:{login:''}
         }
     },
     methods:{
-        // editLoginData(e){
-        //     UserService.editProfile(this.user).then((response)=> {
-        //     if(response.status == 200) {            
-        //         this.user = response.data
-        //         console.log(this.user)
-        //     }          
-        //     }) 
-        //     e.preventDefault();
-        // }
+        editLoginData(e){
+            UserService.editProfile(this.user).then((response)=> {
+                console.log(response.data)
+                if (response.status == 200) {
+                        this.user = response.data
+                        localStorage.setItem('jwt','')
+                        window.location.href = '/auth'
+                    }
+                })
+                e.preventDefault();
+        }
     },
     components:{
         MyButton,
@@ -57,8 +59,7 @@ export default {
     mounted(){
         UserService.me().then((response)=> {
           if(response.status == 200) {            
-            this.user = response.data
-            console.log(this.user)
+            this.user.login = response.data.login
           }          
         })        
     }
