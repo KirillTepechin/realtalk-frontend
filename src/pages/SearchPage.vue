@@ -10,13 +10,16 @@
                     <SubscrView :user="user" :me2="this.me"/>
                 </div>
             </div>
-            <div v-else>
+            <div v-else-if="this.users.length == 0 & this.query != ''">
                 <label>По запросу "{{this.query}}" ничего не найдено</label>
+            </div>
+            <div v-else-if="this.users.length == 0 & this.query == ''">
+                <label>По выбранным категориями нет пользователей :(</label>
             </div>
         </div>
         <div class="filter">
             <div class="search-filters" >
-                <FilterSearchUsers @chooseNews="onChooseNews"/>
+                <FilterSearchUsers @chooseSearch="onChooseSearch"/>
             </div>
             <div id="preferences-checkboxes">
                 <label class="choose">Выберите категории, <br> которые Вам интересны,<br> чтобы увидеть рекомендованных пользователей:</label>
@@ -47,7 +50,7 @@ import InputIcon from "@/components/InputIcon";
 import UserService from "@/services/UserService";
 
 import MyButton from "@/components/MyButton";
-import FilterSearchUsers from "@/components/FilterSearchUsers.vue";
+import FilterSearchUsers from "@/components/FilterSearchUsers";
 
 export default {
     data() {
@@ -80,16 +83,12 @@ export default {
         FilterSearchUsers
     },
     methods: {
-        onChooseSearch(data){
-            // localStorage.setItem('feedType', data.feedType)
-            // console.log(localStorage.getItem('feedType'))
-            
+        onChooseSearch(data){            
             if(data.searchType == 'all'){
                 this.recsMode = false
                 UserService.findAllUsers().then((response)=> {
                     if (response.status == 200) {
                         this.users = response.data
-                        this.choosen = this.me.tags
                         this.users.splice(this.getIndex(this.users, this.me.id), 1)
                     }        
                 })
@@ -153,6 +152,9 @@ export default {
                 })
             }
         })
+    },
+    updated() {
+        console.log(this.users)
     },
     watch:{
         'query'(){

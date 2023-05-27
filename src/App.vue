@@ -44,6 +44,7 @@ body{
 h4{    
   -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: #D276FD;
+  margin: 40px 0px 30px 0px;
 }
 a{
     text-decoration: none;
