@@ -91,7 +91,8 @@ export default {
             var vm = this;
             
             reader.onload = (e) => {
-                var preview = document.querySelector("#app > div.page-edit > form > div.image-area > img")
+                
+                var preview = document.querySelector("#app > div.page-edit > div > div.route > form > div.image-area > img")
                 vm.image = e.target.result;
                 preview.src = e.target.result;
             };
