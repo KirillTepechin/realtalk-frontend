@@ -60,7 +60,8 @@ export default {
                     this.$emit('updateUser', {
                     file: this.file,
                     })
-                }                
+                    this.$emit('registerUser')
+                }
             }
             else{
                 this.$emit('registerUser')
@@ -78,14 +79,7 @@ export default {
         this.$emit('updateUser', {
             file: this.file,
         })
-    },
-    watch:{
-        'file'(){
-            if(this.file != null)
-                this.skip = true
-        }
-    }
-  
+    }  
 }
 </script>
 
