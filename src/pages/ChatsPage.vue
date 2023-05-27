@@ -3,6 +3,7 @@
     <div class="page-chats">        
         <div class="chats-list">
             <InputIcon
+            v-model="search"
             class="input-icon"
             :type = "'text'"
             :placeholder = "'Поиск'"
@@ -10,7 +11,7 @@
             :width = "'18'"
             :height = "'18'"
             />
-            <div v-for='chat in chats' v-bind:key="chat.id">
+            <div v-for='chat in filter' v-bind:key="chat.id">
                 <MessageView :chat="chat" @click="click(chat.id)" class="chat"/>               
             </div>
             <div v-if="!bot">
@@ -35,7 +36,9 @@ export default {
         return {
             chats:[],
             chat:{},
-            bot:null
+            bot:null,
+            search:'',
+            me:{}
         }
     },
     components: {
@@ -48,7 +51,6 @@ export default {
         ChatService.getChatsByUser().then((response)=> {
             if(response.status == 200) {            
                 this.chats = response.data
-                console.log(this.chats)
                 let usersInChat = this.chats.map(chat => chat.users)
                 usersInChat.forEach(userInChat => {
                     userInChat.forEach(user => {
@@ -59,6 +61,13 @@ export default {
                 });
             }
         })
+
+        UserService.me().then((response)=> {
+          if(response.status == 200) {            
+            this.user = response.data
+            this.choosen = this.user.tags
+          }
+        })  
     },
     methods:{
         click(chatId, e){
@@ -80,7 +89,25 @@ export default {
             })
             e.preventDefault()
         }
-    }
+    },
+    computed: {
+    filter() {
+
+            let usersInChat = this.chats.map(chat => chat.users)
+            usersInChat.forEach(userInChat => {
+                if (userInChat[0].login == this.me.login) {
+                    userInChat.withName = userInChat[1].name
+                    userInChat.withSurname = userInChat[1].surname
+                }
+                else {
+                    userInChat.withName = userInChat[0].name
+                    userInChat.withSurname = userInChat[0].surname
+                }
+            });
+
+            return this.chats.filter(chat => (chat.users.withName.toLowerCase()).indexOf(this.search.toLowerCase()) !== -1 || (chat.users.withSurname.toLowerCase()).indexOf(this.search.toLowerCase()) !== -1)
+        },
+    },
 }
 </script>
   
