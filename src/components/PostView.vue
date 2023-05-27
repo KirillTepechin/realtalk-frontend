@@ -58,7 +58,7 @@
                     </div>
                     <div class="postPhoto" v-if="this.post.photo !=null & this.file!=null">
                         <div class="image-area-edit">
-                            <img v-bind:src= "'/photos/'+ this.file" @dblclick="removePhoto($event)">
+                            <img v-bind:src= "'/photos/'+ this.file" @dblclick="removePhoto($event)" >
                         </div>
                     </div>
                     <div class="postPhoto" v-else-if="this.file !=null">
@@ -231,10 +231,12 @@ import CommentService from "@/services/CommentService";
                 var preview = document.querySelector("#app > div.profile-body > div.profile-bottom > div.posts-form > div:nth-child(2) > div > div.post-create > div.post-create-form > div.postPhoto > div > img")
                 vm.image = e.target.result;
                 preview.src = e.target.result;
+                
             };
-            console.log(file)
             reader.readAsDataURL(file);
             this.file = file;
+            console.log(this.file)
+
         },
         onFileChange(e) {
             var files = e.target.files || e.dataTransfer.files;
