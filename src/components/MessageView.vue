@@ -83,7 +83,6 @@
         },
         methods:{
             getLastMessage(){
-                console.log(this.chat)
                 if(this.chat.messages.length!=0){
                     let text = this.chat.messages[this.chat.messages.length-1].text
                     return text

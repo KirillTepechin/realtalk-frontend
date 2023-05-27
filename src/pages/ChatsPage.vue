@@ -12,6 +12,10 @@
             />
             <div v-for='chat in chats' v-bind:key="chat.id">
                 <MessageView :chat="chat" @click="click(chat.id)" class="chat"/>               
+            </div>
+            <div v-if="!bot">
+                <p>Не с кем пообщаться? </p>
+                <MyButton @click="createChatWithBot($event)">Поговорите с Чаттером!</MyButton>
             </div>            
         </div>        
     </div>
@@ -23,24 +27,37 @@ import ChatService from "@/services/ChatService";
 import PageHeader from "@/components/PageHeader";
 import MessageView from "@/components/MessageView";
 import InputIcon from "@/components/InputIcon";
+import MyButton from "@/components/MyButton";
+import UserService from "@/services/UserService";
 
 export default {
     data(){
         return {
             chats:[],
-            chat:{}
+            chat:{},
+            bot:null
         }
     },
     components: {
         PageHeader,
         MessageView,
-        InputIcon
+        InputIcon,
+        MyButton
     },
     mounted(){
         ChatService.getChatsByUser().then((response)=> {
             if(response.status == 200) {            
                 this.chats = response.data
-            }          
+                console.log(this.chats)
+                let usersInChat = this.chats.map(chat => chat.users)
+                usersInChat.forEach(userInChat => {
+                    userInChat.forEach(user => {
+                        if(user.login==="bot"){
+                            this.bot = user
+                        }
+                    });
+                });
+            }
         })
     },
     methods:{
@@ -51,6 +68,16 @@ export default {
                 }
             })
             this.$router.push('/chat'+'/'+chatId)            
+            e.preventDefault()
+        },
+       
+        createChatWithBot(e) {
+            UserService.getUserProfile("bot").then((response) => {
+                let chat = { name: '', isPrivate: true, userIds: [response.data.id] }
+                ChatService.createChat(chat).then((response) => {
+                    this.$router.push('/chat/' + response.data.id)
+                })
+            })
             e.preventDefault()
         }
     }
@@ -80,5 +107,7 @@ export default {
     .chat{
         cursor: pointer;
     }
-    
+    .btn{
+    padding: 10px 70px;
+    }
 </style>

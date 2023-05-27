@@ -85,7 +85,15 @@ export default{
             });
         },
         addMessage(data) {
-            this.chat.messages.push(data)
+            if(data.user.login==='bot'){
+                console.log(data.user.login)
+                setTimeout(() => {
+                    this.chat.messages.push(data)
+                }, 2000);
+            }
+            else{
+                this.chat.messages.push(data)
+            }
         },
         deleteMessage(id) {
             this.chat.messages.splice(this.getIndex(this.chat.messages, id), 1)
