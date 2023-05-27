@@ -56,6 +56,9 @@
                             <label>{{ cat.tag }}</label>
                         </div>                           
                     </div>
+                    <div class="error" v-if="this.choosen.length == 0 & (this.file != null || this.postText != '')">
+                                <label>*Выберите хотя бы один тег к посту</label>
+                            </div>
                     <div class="postPhoto" v-if="this.post.photo !=null & this.file!=null">
                         <div class="image-area-edit">
                             <img v-bind:src= "'/photos/'+ this.file" @dblclick="removePhoto($event)" >
@@ -575,5 +578,18 @@ span{
 .comment-create img{
     align-self: center;
     cursor: pointer;
+}
+
+.error{
+    padding: 2px;
+    margin: 4px 0px 0px 2px;
+    border-radius: 2px;
+    border-color: #ed5656;
+    display: flex;
+}
+
+.error label{
+  font-size: 11.5pt;
+  color: #b10000;
 }
 </style>

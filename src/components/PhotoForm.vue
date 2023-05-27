@@ -1,13 +1,16 @@
 <template>
     <form @submit.prevent>
-        <h4>Установите фото профиля</h4>
-        <input @change="onFileChange" id="file" type="file" accept="image/*">
+        <h4>Установите фото профиля</h4>        
+        <input @change="onFileChange" id="file" type="file" accept="image/*">        
         <label for="file">
             <span class="input-file-btn">Выберите файл</span>
-        </label>
+        </label>            
         <div class="image-area">
             <img src="../assets/profile-photo.png">
-        </div>        
+        </div>
+        <div class="error" v-if="file==null && !skip">
+            <label>Необходимо выбрать фото</label>
+        </div>     
         <div class="btn-bar">
             <!-- "Успешная регистрация" попа окно -->
             <MyButton @click="goToLogin(false, $event)">Пропустить</MyButton>            
@@ -26,6 +29,7 @@ export default {
     data() {
         return {
             file: null,
+            skip: true,
         }
     },
     methods:{
@@ -49,14 +53,19 @@ export default {
             reader.readAsDataURL(file);
             this.file = file;
         },
-        goToLogin(flag, e){            
-            console.log("go to login")
+        goToLogin(flag, e){
             if (flag) {
-                this.$emit('updateUser', {
+                this.skip = false
+                if(this.file != null){
+                    this.$emit('updateUser', {
                     file: this.file,
-                })                
+                    })
+                    this.$emit('registerUser')
+                }
             }
-            this.$emit('registerUser')
+            else{
+                this.$emit('registerUser')
+            }            
             e.preventDefault()
         }
     },
@@ -70,8 +79,7 @@ export default {
         this.$emit('updateUser', {
             file: this.file,
         })
-    }
-  
+    }  
 }
 </script>
 
@@ -144,6 +152,20 @@ img{
     width: auto;
     height: 100%;
     margin: 0 auto;
+}
+.error{
+    padding: 2px;
+    background-color: #ffb6b6;
+    margin: 10px 50px 0px 50px;
+    align-self: center;
+    border-radius: 2px;
+    border-color: #ed5656;
+    display: flex;    
+}
+
+label{
+  font-size: 11.5pt;
+  color: #b10000;
 }
 
 /*::-webkit-file-upload-button {

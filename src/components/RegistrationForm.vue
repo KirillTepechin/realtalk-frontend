@@ -44,8 +44,8 @@
         <div class="error" v-if="wrongData.includes('login')">
             <label>Поле "Логин" должно быть заполнено</label>
         </div>
-        <div class="error" v-if="!userNotExist & userFind != null">
-            <label>Логин {{ login }} уже занят</label>
+        <div class="error" v-if="!userNotExist & userFind!=null">
+            <label>Логин "{{login}}" уже занят</label>
         </div>
         <InputIcon
         v-model="password"
@@ -96,7 +96,7 @@ export default {
         passwordR:'',
         wrongData:[],
         userNotExist: false,
-        userFind:null
+        userFind: null
       }
     },
     methods: {
@@ -119,7 +119,6 @@ export default {
             }else{
                 if(this.wrongData.includes('login')) this.wrongData.splice(this.getIndex(this.wrongData, 'login'), 1)
             }
-            this.checkExistLogin()
             //Пароль
             if(this.password == '' || this.password.length < 6 || this.password.length > 30){
                 this.wrongData.push('password')
@@ -136,7 +135,7 @@ export default {
                 })
                 this.$router.push("/registration/step-2")
             }
-
+            
             e.preventDefault()
         },
         getIndex(list, str) {
@@ -149,15 +148,15 @@ export default {
         },
         checkExistLogin(){
             UserService.findUserByLogin(this.login).then(response =>{
-                    if(response.status == 200 && response.data != ''){
-                        this.userNotExist = false                     
-                        this.userFind = response.data
-                    }
-                    else{
-                        this.userNotExist = true
-                        this.userFind = null
-                    }
-                })
+                if(response.status == 200 && response.data != ''){
+                    this.userNotExist = false                     
+                    this.userFind = response.data
+                }
+                else{
+                    this.userNotExist = true
+                    this.userFind = null
+                }
+            })
         }
     },
     created() {
@@ -167,6 +166,11 @@ export default {
         this.password = this.$props.user.password
         this.passwordR = this.$props.user.password
     },
+    watch:{
+        'login'(){
+            this.checkExistLogin()
+        }
+    }
   
 }
 </script>
