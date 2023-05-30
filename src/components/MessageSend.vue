@@ -32,7 +32,7 @@ export default {
                     text: this.text,
                 })
             }
-            else if(!this.text!==''){
+            else if(this.text!==''){
                 this.$emit('editMessage', {
                     id : this.internalMessage.id,
                     text: this.text,

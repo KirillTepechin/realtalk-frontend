@@ -109,7 +109,6 @@ export default {
         findUsersByQuery(query){
             UserService.findUsers(query).then((response)=> {
                 if(response.status == 200) {
-                    console.log(response.data)
                     this.users = response.data
                     if(this.users.map(user=>user.login).includes(this.me.login)){
                         this.users.splice(this.getIndex(this.users, this.me.id), 1)
@@ -152,9 +151,6 @@ export default {
                 })
             }
         })
-    },
-    updated() {
-        console.log(this.users)
     },
     watch:{
         'query'(){

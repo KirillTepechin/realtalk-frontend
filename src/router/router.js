@@ -9,6 +9,9 @@ import ChatsPage from "@/pages/ChatsPage";
 import SubscriptionsPage from "@/pages/SubscriptionsPage";
 import SubscribersPage from "@/pages/SubscribersPage";
 import SearchPage from "@/pages/SearchPage";
+import ChatCreatePage from "@/pages/ChatCreatePage";
+import ChatEditPage from "@/pages/ChatEditPage";
+import AddMembersPage from "@/pages/AddMembersPage";
 
 import RegistrationForm from "@/components/RegistrationForm";
 import BirthdateCityForm from "@/components/BirthdateCityForm";
@@ -52,6 +55,9 @@ const routes = [
        
     ] },
     { path: '/chats', component: ChatsPage },
+    { path: '/chat-create', component: ChatCreatePage },
+    { path: '/chat/:id/edit', component: ChatEditPage },
+    { path: '/chat/:id/add-members', component: AddMembersPage },
     { path: '/chat/:id', component: ChatView },
     { path: '/subscribers', component: SubscribersPage },
     { path: '/subscriptions', component: SubscriptionsPage },

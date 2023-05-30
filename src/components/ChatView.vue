@@ -3,6 +3,7 @@
     <div class="page-chat">
         <div class="page-chat-container">        
             <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
+            <CompanionView v-else-if="this.getChatUsers()" :users="this.getChatUsers()" :chat="this.chat" /> 
             <div class="sms-list">
                 <div class="sms" v-for='msg in this.chat.messages' v-bind:key="msg.id">
                     <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>  
@@ -114,12 +115,15 @@ export default{
             return this.chat.users
         },
         withUser() {
-            if (this.chat.users[0].login == this.me.login) {
-                return this.chat.users[1]
+            if (this.chat.isPrivate) {
+                if (this.chat.users[0].login == this.me.login) {
+                    return this.chat.users[1]
+                }
+                else {
+                    return this.chat.users[0]
+                }
             }
-            else {
-                return this.chat.users[0]
-            }
+            return null
         },
     },   
     mounted() {

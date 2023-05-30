@@ -73,9 +73,6 @@ export default {
     },
     methods:{
         onChooseNews(data){
-            // localStorage.setItem('feedType', data.feedType)
-            // console.log(localStorage.getItem('feedType'))
-            
             if(data.feedType == 'feed'){
                 this.recsMode = false
                 FeedService.getFeed().then((response)=> {
@@ -92,7 +89,6 @@ export default {
                     }          
                 })
             }
-            console.log(this.posts)
         },
         getFeedType(){
             if(localStorage.getItem('feedType') == 'recommend') return true

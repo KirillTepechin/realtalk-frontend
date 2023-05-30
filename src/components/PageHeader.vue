@@ -80,6 +80,7 @@ export default {
     border-color: #D276FD;
     font-family: Georgia, serif;
     font-size: 12pt;
+    z-index: 1;
 }
 .navbar-list{
     display: flex;

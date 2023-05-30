@@ -2,15 +2,19 @@
     <PageHeader/>
     <div class="page-chats">        
         <div class="chats-list">
-            <InputIcon
-            v-model="search"
-            class="input-icon"
-            :type = "'text'"
-            :placeholder = "'Поиск'"
-            :src = "'search.png'"
-            :width = "'18'"
-            :height = "'18'"
-            />
+            <div class="input-block">
+                <InputIcon
+                v-model="search"
+                class="input-icon"
+                :type = "'text'"
+                :placeholder = "'Поиск'"
+                :src = "'search.png'"
+                :width = "'18'"
+                :height = "'18'"
+                />
+                <MyButton @click="createChat">Создать чат</MyButton>
+            </div>
+           
             <div v-for='chat in filter' v-bind:key="chat.id">
                 <MessageView :chat="chat" @click="click(chat.id)" class="chat"/>               
             </div>
@@ -88,30 +92,40 @@ export default {
                 })
             })
             e.preventDefault()
+        },
+        createChat(){
+            this.$router.push('/chat-create')
         }
     },
     computed: {
-    filter() {
+        filter() {
 
             let usersInChat = this.chats.map(chat => chat.users)
             usersInChat.forEach(userInChat => {
                 if (userInChat[0].login == this.me.login) {
                     userInChat.withName = userInChat[1].name
                     userInChat.withSurname = userInChat[1].surname
+                    userInChat.withLogin = userInChat[1].login
                 }
                 else {
                     userInChat.withName = userInChat[0].name
                     userInChat.withSurname = userInChat[0].surname
+                    userInChat.withLogin = userInChat[0].login
                 }
             });
-
-            return this.chats.filter(chat => (chat.users.withName.toLowerCase()).indexOf(this.search.toLowerCase()) !== -1 || (chat.users.withSurname.toLowerCase()).indexOf(this.search.toLowerCase()) !== -1)
+            
+            return this.chats.filter(chat => 
+            (chat.users.withName.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1 && chat.isPrivate == true
+            || (chat.users.withSurname.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1 && chat.isPrivate == true
+            || (chat.users.withName.toLowerCase() +' '+chat.users.withSurname.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1 && chat.isPrivate == true
+            || (chat.users.withLogin.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1 && chat.isPrivate == true
+            || (chat.name.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1)
         },
     },
 }
 </script>
   
-<style>
+<style scoped>
     .page-chats{
         display: flex;
         flex-direction: column;
@@ -130,11 +144,18 @@ export default {
     .input-icon{
         margin: 3px !important;
         border: 0px !important;
+        width: 100%;
     }
     .chat{
         cursor: pointer;
     }
     .btn{
-    padding: 10px 70px;
+        padding: 10px;
+        min-width: 150px;
+        font-family: Georgia, serif;
+        align-self: center;
+    }
+    .input-block{
+        display: flex;
     }
 </style>

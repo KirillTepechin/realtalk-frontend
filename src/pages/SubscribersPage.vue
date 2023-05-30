@@ -1,8 +1,9 @@
 <template>
     <PageHeader/>
     <div class="page-subscribers">        
-        <div class="users-list">
+        <div v-if="this.user.subscribers" class="users-list">
             <InputIcon
+            v-model="search"
             class="input-icon"
             :type = "'text'"
             :placeholder = "'Поиск'"
@@ -10,7 +11,7 @@
             :width = "'18'"
             :height = "'18'"
             />
-            <div class="subscr" v-for='sub in user.subscribers' v-bind:key="sub.id">
+            <div class="subscr" v-for='sub in filter' v-bind:key="sub.id">
                 <SubscrView :user="sub" :me2="this.user"/>
             </div>            
         </div>        
@@ -27,7 +28,8 @@ import InputIcon from "@/components/InputIcon";
 export default {
     data(){
         return {
-            user:{}
+            user:{},
+            search:''
         }
     },
     components: {
@@ -39,9 +41,17 @@ export default {
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user = response.data
-            console.log(this.user)
           }          
         })        
+    },
+    computed: {
+        filter(){
+            return this.user.subscribers.filter(sub => 
+            (sub.name.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1 
+            || (sub.surname.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1
+            || (sub.name.toLowerCase() +' '+sub.surname.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1
+            || (sub.login.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1)
+        }
     }
 }
 </script>

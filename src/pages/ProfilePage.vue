@@ -169,7 +169,6 @@ export default {
                 if (response.status == 200) {
                     this.user = response.data
                     this.me = response.data
-                    console.log(response.data)
                 }
             })
             UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
@@ -202,7 +201,6 @@ export default {
         onEditPost(data, e){        
             if(((data.post.text != null && data.post.text != "") || (data.file!=null)) && data.post.tags.length != 0){
                     data.post.tags = data.tags
-                    console.log(data)
                     PostService.editPost(data.post.id, data.post).then((response) => {
                         if(data.file != null || data.deletePhoto == true){
                             PostService.uploadPostPhoto(response.data.id, {file: data.file}).then((response1) => {
@@ -214,8 +212,6 @@ export default {
                             })
                         }
                     if (response.status == 200 && data.file == null) {
-                        console.log('2')
-                        console.log(response.data)
                         this.posts.splice(this.getIndex(this.posts, data.post.id), 1, response.data)
                     }
                 })

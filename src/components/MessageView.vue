@@ -9,7 +9,7 @@
                  height="50"
                  >
                 <img class="user-photo"
-                v-else-if="this.chat.users.length == 2 && this.withUser().photo"
+                v-else-if="this.chat.isPrivate && this.withUser().photo"
                 v-bind:src= "'/photos/'+ this.withUser().photo"
                 width="50" 
                 height="50"
@@ -22,7 +22,7 @@
                  >
                 <div class="user-info">
                     <label class="username" 
-                    v-if="this.chat.users.length == 2">{{ this.withUser().name }} {{ this.withUser().surname }}</label>
+                    v-if="this.chat.isPrivate">{{ this.withUser().name }} {{ this.withUser().surname }}</label>
                     <label class="username" v-else>{{ this.chat.name }}</label>
                     <label class="message-text">{{ this.getLastMessage() }}</label>
                 </div>
@@ -84,15 +84,17 @@
         methods:{
             getLastMessage(){
                 if(this.chat.messages.length!=0){
-                    let text = this.chat.messages[this.chat.messages.length-1].text
-                    return text
+                    let lastMessage = this.chat.messages[this.chat.messages.length-1]
+                    let text = lastMessage.text
+                    let owner = lastMessage.user.name+ ' '+ lastMessage.user.surname
+                    return owner + ': '+ text
                 }
                 return ""
             },
             getLastMessageDate(){
                 if(this.chat.messages.length!=0){
-                    let text = this.chat.messages[this.chat.messages.length-1].date
-                    return text
+                    let date = this.chat.messages[this.chat.messages.length-1].date
+                    return date
                 }
                 return ""
             },
