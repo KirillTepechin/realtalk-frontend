@@ -1,13 +1,7 @@
 <template>
     <PageHeader />
-    <div class="page-chat-create">
-
-        <div v-if="this.user.subscribers" class="page-chat-edit-body">
-            <div>
-                <h4>Введите название чата</h4>
-                <InputIcon v-model="chatName" :type="'text'" :placeholder="'Чат'" :src="'name.png'" :width="'18'"
-                    :height="'18'" />
-            </div>
+    <div class="page-delete-members">
+        <div v-if="this.user.subscribers" class="page-delete-members-body">
             <h4>Выберите пользователей</h4>
             <InputIcon v-model="search" class="input-icon" :type="'text'" :placeholder="'Поиск'" :src="'search.png'" :width="'18'"
                 :height="'18'" />
@@ -19,8 +13,8 @@
         </div>
     </div>
     <footer class="create-footer">
-        <MyButton @click="createChat($event)">
-            Создать
+        <MyButton @click="deleteMembers($event)">
+            Удалить
         </MyButton>
     </footer>
     
@@ -41,17 +35,17 @@ export default {
         return {
             user: {},
             choosenUsers: [],
-            file:null,
             chatName:'',
-            search:''
+            search:'',
+            usersIds:[]
         }
     },
     components: {
-    PageHeader,
-    SubscrView,
-    InputIcon,
-    MyButton
-},
+        PageHeader,
+        SubscrView,
+        InputIcon,
+        MyButton
+    },
     methods: {
         choose(subId) {
             if (this.choosenUsers.indexOf(+subId) > -1) {
@@ -69,11 +63,10 @@ export default {
             }
             return -1;
         },
-        createChat(e){
-            if(this.chatName!==''){
-                let chat = { name: this.chatName, isPrivate: false, userIds: this.choosenUsers }
-                ChatService.createChat(chat).then((response) => {
-                this.$router.push('chat/' + response.data.id)
+        deleteMembers(e){
+            if(this.choosenUsers.length!=0){
+                ChatService.deleteMembersFromChat(this.$route.params.id, this.choosenUsers).then((response) => {
+                this.$router.push('/chat/' + response.data.id)
             })
             }
             
@@ -85,27 +78,33 @@ export default {
             if (response.status == 200) {
                 this.user = response.data
             }
+        })
+        let chatId = this.$route.params.id
+        ChatService.getChatById(chatId).then((response) => {
+            if (response.status == 200) {
+                this.usersIds = response.data.users.map(user=>user.id)
+            }
             NProgress.done(true)
         })
     },
     computed: {
         filter(){
             return this.user.subscribers.filter(sub => 
-            (sub.name.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1 
+            ((sub.name.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1 
             || (sub.surname.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1
             || (sub.name.toLowerCase() +' '+sub.surname.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1
-            || (sub.login.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1)
+            || (sub.login.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1) && this.usersIds.includes(sub.id))
         }
     }
 }
 </script>
 <style scoped>
-.page-chat-create {
+.page-delete-members {
     display: flex;
     flex-direction: column;
 }
 
-.page-chat-edit-body {
+.page-delete-members-body {
     margin: 15px 300px 20px 300px;
     padding: 0px 0px 20px 0px;
     background-color: white;
@@ -149,71 +148,17 @@ input[type=checkbox] {
     align-items: center;
 }
 
-.snippet {
-    -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: #D276FD;
-
-}
-
 .btn{    
     padding: 10px;
     min-width: 150px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
-.btn-bar{
-    display: flex;
-    justify-content: space-evenly;
-}
-
-input[type=file]{
-    display: none;
-}
-
-.input-file-btn {
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
-	outline: none;
-	text-decoration: none;
-	font-size: 10pt;
-	vertical-align: middle;
-	color: rgb(255 255 255);
-	text-align: center;
-	background-color: #D276FD;
-	line-height: 22px;
-	height: 40px;
-	padding: 10px 20px;
-	box-sizing: border-box;
-	border: none;
-	margin: 0;
-	transition: background-color 0.2s;
-    border-radius: 50px;    
-    border: 1px solid;
-    border-color: #D276FD;
-    margin-bottom: 20px;
-}
 
 h4{
     margin: 30px;
 }
 
-.image-area{
-    border: 2px solid;
-    align-self: center;
-    border-color: #D276FD;
-    margin-bottom: 10px;
-    overflow: hidden;
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    margin-inline: auto;
-}
-img{
-    width: auto;
-    height: 100%;
-    margin: 0 auto;
-}
 footer{
     bottom: 0;
     position: fixed;

@@ -25,6 +25,7 @@ import MessageView from "@/components/MessageView";
 import SockJS from 'sockjs-client'
 import { Stomp } from '@stomp/stompjs'
 import UserService from "@/services/UserService";
+import NProgress from "nprogress";
 
 let stompClient = null
 
@@ -134,12 +135,14 @@ export default{
             if (response.status == 200) {
                 this.chat = response.data
             }
+            UserService.me().then((response) => {
+                if (response.status == 200) {
+                    this.me = response.data
+                }
+            })
+            NProgress.done(true)
         })
-        UserService.me().then((response) => {
-            if (response.status == 200) {
-                this.me = response.data
-            }
-        })
+        
         this.connect(chatId, vm);
     },
 

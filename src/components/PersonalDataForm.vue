@@ -57,10 +57,12 @@
 
 <script>
 import UserService from "@/services/UserService";
-//import dayjs from 'dayjs';
 
 import MyButton from './MyButton.vue';
 import InputIcon from './InputIcon.vue';
+
+import NProgress from "nprogress";
+
 export default {
     data(){
         return {
@@ -115,11 +117,9 @@ export default {
             this.user = response.data
             if(this.user.borthdate!=null){
                 this.user.borthdate = new Date(this.user.borthdate)
-                //let date = dayjs(this.user.borthdate);
-                //date = date.format('MM.DD.YYYY')
-                // console.log(date | dayjs('add', 1, 'day'))
             }
-          }          
+          } 
+          NProgress.done(true)         
         })
     },    
 }

@@ -28,6 +28,8 @@ import InputIcon from "@/components/InputIcon";
 import MyButton from "@/components/MyButton.vue";
 import ChatService from "@/services/ChatService";
 
+import NProgress from "nprogress";
+
 export default {
     data() {
         return {
@@ -82,6 +84,7 @@ export default {
             if (response.status == 200) {
                 this.usersIds = response.data.users.map(user=>user.id)
             }
+            NProgress.done(true)
         })
     },
     computed: {

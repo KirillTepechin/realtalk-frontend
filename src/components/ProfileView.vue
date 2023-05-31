@@ -68,21 +68,13 @@ export default {
         goTo(){
             this.$router.push("/edit-profile")
         },
-        // checkSub(){
-        //     return (this.me.login!=this.user.login && 
-        //         !this.user.subscribers.map(x => x.login)
-        //         .includes(this.me.login))
-        // },
         subscribe(e){
             UserService.subscribe(this.user.id).then((response)=>{
                 if(response.status == 200){
-                    //let but = document.querySelector("#app > div.profile-body > div.profile-container.profile-top > div.user-info > div:nth-child(6) > button")
                     if(response.data==true) {
-                        //but.innerHTML = "Отписаться"
                         this.isSubscription = true
                     }
                     else {
-                        //but.innerHTML = "Подписаться"
                         this.isSubscription = false
                     }
                 }
@@ -103,7 +95,7 @@ export default {
             e.preventDefault()
         },
         checkPrivateChat(chats){
-            this.createdId = chats.find(chat=> chat.isPrivate==true &&chat.users.map(user=>user.id).includes(this.user.id)).id
+            this.createdId = chats.find(chat=> chat.isPrivate==true &&chat.users.map(user=>user.id).includes(this.user.id))?.id
         },
         checkIsSubscription(){            
             this.me.subscriptions.forEach(sub => {
@@ -112,7 +104,6 @@ export default {
             })
         },
         changeButtonName(){
-            //this.checkIsSubscription()
             if(this.isSubscription)
                 this.textButton = "Отписаться"
             else
@@ -131,12 +122,13 @@ export default {
                     this.checkIsSubscription()
                 }
             }
-        }),
-        ChatService.getChatsByUser().then((response)=>{
-            if (response.status == 200) {
-                this.checkPrivateChat(response.data)
-            }
+            ChatService.getChatsByUser().then((response) => {
+                if (response.status == 200) {
+                    this.checkPrivateChat(response.data)
+                }
+            })
         })
+
     },
     watch:{
         'isSubscription'(){

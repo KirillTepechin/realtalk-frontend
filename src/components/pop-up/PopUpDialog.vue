@@ -83,7 +83,7 @@ export default {
         flex-direction: column;
         justify-content: space-between;
         width: 100%;
-        max-width: 500px;
+        max-width: 700px;
         margin: 1.75rem auto;
         padding: 20px 30px;
         border-radius: 5px;
@@ -112,6 +112,7 @@ export default {
         min-width: 170px;
         margin-top: 30px;
         margin-bottom: 30px;
+        margin-inline: 10px;
     }
 
     &-enter,

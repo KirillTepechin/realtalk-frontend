@@ -9,6 +9,10 @@ class ChatService{
         let URL = CHAT_API_BASE_URL+"/"+id+"/add-members"
         return axios.put(URL, members)
     }
+    deleteMembersFromChat(id, members){
+        let URL = CHAT_API_BASE_URL+"/"+id+"/delete-members"
+        return axios.put(URL, members)
+    }
     leaveChat(id){
         let URL = CHAT_API_BASE_URL+"/leave/"+id
         return axios.put(URL)

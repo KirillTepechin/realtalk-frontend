@@ -84,6 +84,8 @@ import PostView from "@/components/PostView";
 import SubcrList from "@/components/SubcrList";
 import MyButton from "@/components/MyButton";
 
+import NProgress from "nprogress";
+
 export default {
     data(){
         return {
@@ -170,17 +172,24 @@ export default {
                     this.user = response.data
                     this.me = response.data
                 }
+                NProgress.inc(0.33);
+                UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
+                    if (response.status == 200) {
+                        this.anotherUser = response.data
+                    }
+                    if (!response.data) {
+                        this.$router.push("not-found")
+                    }
+                    NProgress.inc(0.33);
+                    UserService.getUserPosts(this.getLoginByRoute()).then((response) => {
+                        if (response.status == 200) {
+                            this.posts = response.data
+                        }
+                        NProgress.done(true);
+                    })
+                })
             })
-            UserService.getUserProfile(this.getLoginByRoute()).then((response) => {
-                if (response.status == 200) {
-                    this.anotherUser = response.data
-                }
-            })
-            UserService.getUserPosts(this.getLoginByRoute()).then((response) => {
-                if (response.status == 200) {
-                    this.posts = response.data
-                }
-            })
+            
         },
         getIndex(list, id) {
             for (let i = 0; i < list.length; i++) {

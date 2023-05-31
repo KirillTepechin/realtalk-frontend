@@ -25,6 +25,8 @@ import PageHeader from "@/components/PageHeader";
 import SubscrView from "@/components/SubscrView";
 import InputIcon from "@/components/InputIcon";
 
+import NProgress from "nprogress";
+
 export default {
     data(){
         return {
@@ -41,7 +43,8 @@ export default {
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user = response.data
-          }          
+          }
+          NProgress.done(true)          
         })        
     },
     computed: {

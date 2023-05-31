@@ -52,6 +52,8 @@ import UserService from "@/services/UserService";
 import MyButton from "@/components/MyButton";
 import FilterSearchUsers from "@/components/FilterSearchUsers";
 
+import NProgress from "nprogress";
+
 export default {
     data() {
         return {
@@ -148,6 +150,7 @@ export default {
                         this.choosen = this.me.tags
                         this.users.splice(this.getIndex(this.users, this.me.id), 1)
                     }
+                    NProgress.done(true)
                 })
             }
         })

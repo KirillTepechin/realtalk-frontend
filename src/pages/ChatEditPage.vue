@@ -37,6 +37,8 @@ import InputIcon from "@/components/InputIcon";
 import MyButton from "@/components/MyButton.vue";
 import ChatService from "@/services/ChatService";
 
+import NProgress from "nprogress";
+
 export default {
     data() {
         return {
@@ -94,6 +96,7 @@ export default {
                 this.chat = response.data
                 this.chatName = this.chat.name
             }
+            NProgress.done(true)
         })
 
     },

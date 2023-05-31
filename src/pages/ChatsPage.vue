@@ -35,6 +35,7 @@ import InputIcon from "@/components/InputIcon";
 import MyButton from "@/components/MyButton";
 import UserService from "@/services/UserService";
 
+import NProgress from "nprogress";
 export default {
     data(){
         return {
@@ -52,28 +53,33 @@ export default {
         MyButton
     },
     mounted(){
-        ChatService.getChatsByUser().then((response)=> {
-            if(response.status == 200) {            
-                this.chats = response.data
-                let usersInChat = this.chats.map(chat => chat.users)
-                usersInChat.forEach(userInChat => {
-                    userInChat.forEach(user => {
-                        if(user.login==="bot"){
-                            this.bot = user
-                        }
-                    });
-                });
-            }
-        })
-
-        UserService.me().then((response)=> {
-          if(response.status == 200) {            
-            this.user = response.data
-            this.choosen = this.user.tags
-          }
-        })  
+        this.loadData()
     },
     methods:{
+        loadData() {
+            ChatService.getChatsByUser().then((response) => {
+                if (response.status == 200) {
+                    this.chats = response.data
+                    let usersInChat = this.chats.map(chat => chat.users)
+                    usersInChat.forEach(userInChat => {
+                        userInChat.forEach(user => {
+                            if (user.login === "bot") {
+                                this.bot = user
+                            }
+                        });
+                    });
+                    
+                }
+                NProgress.done(true)
+            })
+
+            UserService.me().then((response) => {
+                if (response.status == 200) {
+                    this.user = response.data
+                    this.choosen = this.user.tags
+                }
+            })
+        },
         click(chatId, e){
             ChatService.getChatById(chatId).then((response)=> {
                 if(response.status == 200) {            
@@ -122,6 +128,11 @@ export default {
             || (chat.name.toLowerCase()).indexOf(this.search.toLowerCase().trim()) !== -1)
         },
     },
+    watch: {
+        '$route'() {
+            this.loadData()
+        }
+    }
 }
 </script>
   

@@ -1,8 +1,13 @@
 <template>
     <PopUpDialogVue
-      v-show="isShowModal"
+      v-show="isShowModalDelete"
       text='Вы действительно хотите удалить чат?'
-      @modalAction="this.onModalAction"
+      @modalAction="onModalActionDelete"
+    />
+    <PopUpDialogVue
+      v-show="isShowModalLeave"
+      text='Вы действительно хотите покинуть чат?'
+      @modalAction="onModalActionLeave"
     />
     <div class="companion-container">
         <div class="user">
@@ -41,10 +46,10 @@
                 <img class="icon" src="../assets/edit.png" width="25" height="25" @click="editChat">
                 <img class="icon" src="../assets/add.png" width="25" height="25" @click="addMembers">
                 <img class="icon" src="../assets/delete-member.png" width="25" height="25" @click="deleteMembers">
-                <img class="icon" src="../assets/delete.png" width="25" height="25" @click="this.toggleModal">
+                <img class="icon" src="../assets/delete.png" width="25" height="25" @click="toggleModalDelete">
             </div>
             <div class="btns-bar" v-else-if="this.chat && this.me.login!=this.chat.creator.login">
-                <img class="icon" src="../assets/exit.png" width="25" height="25" @click="leaveChat">
+                <img class="icon" src="../assets/exit.png" width="25" height="25" @click="toggleModalLeave">
             </div>                
         </div>
     </div>
@@ -62,7 +67,8 @@
         data(){
             return{
                 me:{},
-                isShowModal: false,
+                isShowModalDelete: false,
+                isShowModalLeave: false,
             }
         },
         props:{
@@ -82,20 +88,28 @@
                 this.$router.push("/chat/"+this.chat.id+"/add-members")
             },
             deleteMembers(){
-                //TODO: 
+                this.$router.push("/chat/"+this.chat.id+"/delete-members")
             },
-            leaveChat(){
-                ChatService.leaveChat(this.$route.params.id).then( this.$router.push("/chats"))
+            toggleModalDelete() {
+                this.isShowModalDelete = !this.isShowModalDelete;
             },
-            toggleModal() {
-                this.isShowModal = !this.isShowModal;
+            toggleModalLeave() {
+                this.isShowModalLeave = !this.isShowModalLeave;
             },
-            onModalAction(flag){
+            onModalActionDelete(flag){
                 if(!flag){
-                    this.isShowModal = false
+                    this.isShowModalDelete = false
                 }
                 else{
                     ChatService.deleteChat(this.$route.params.id).then( this.$router.push("/chats"))
+                }
+            },
+            onModalActionLeave(flag){
+                if(!flag){
+                    this.isShowModalLeave = false
+                }
+                else{
+                    ChatService.leaveChat(this.$route.params.id).then( this.$router.push("/chats"))
                 }
             }
         },

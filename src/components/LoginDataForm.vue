@@ -33,6 +33,9 @@ import UserService from "@/services/UserService";
 
 import MyButton from './MyButton.vue';
 import InputIcon from './InputIcon.vue';
+
+import NProgress from "nprogress";
+
 export default {
     data(){
         return {
@@ -60,7 +63,8 @@ export default {
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user.login = response.data.login
-          }          
+          } 
+          NProgress.done(true)         
         })        
     }
   

@@ -1,5 +1,7 @@
 import * as VueRouter from 'vue-router'
 
+import NProgress from 'nprogress'
+
 import LoginPage from "@/pages/LoginPage";
 import RegistrationPage from "@/pages/RegistrationPage";
 import FeedPage from "@/pages/FeedPage";
@@ -12,18 +14,22 @@ import SearchPage from "@/pages/SearchPage";
 import ChatCreatePage from "@/pages/ChatCreatePage";
 import ChatEditPage from "@/pages/ChatEditPage";
 import AddMembersPage from "@/pages/AddMembersPage";
+import DeleteMembersPage from "@/pages/DeleteMembersPage";
+import NotFoundPage from "@/pages/NotFoundPage";
+import ForbiddenPage from "@/pages/ForbiddenPage";
+import ChatPage from "@/pages/ChatPage"; 
+
 
 import RegistrationForm from "@/components/RegistrationForm";
 import BirthdateCityForm from "@/components/BirthdateCityForm";
 import PhotoForm from "@/components/PhotoForm";
 import PersonalDataForm from "@/components/PersonalDataForm";
 import LoginDataForm from "@/components/LoginDataForm";
-import ChatView from "@/components/ChatView"; 
 
 
 const routes = [
-    { path: '/', component: LoginPage, },
-    { path: '/auth', component: LoginPage },
+    { path: '/', component: LoginPage, name:'login' },
+    { path: '/auth', component: LoginPage, name:'login' },
     { path: '/registration', component: RegistrationPage, redirect: { path: "/registration/step-1" },
      children: [
         {
@@ -58,13 +64,45 @@ const routes = [
     { path: '/chat-create', component: ChatCreatePage },
     { path: '/chat/:id/edit', component: ChatEditPage },
     { path: '/chat/:id/add-members', component: AddMembersPage },
-    { path: '/chat/:id', component: ChatView },
+    { path: '/chat/:id/delete-members', component: DeleteMembersPage },
+    { path: '/chat/:id', component: ChatPage },
     { path: '/subscribers', component: SubscribersPage },
     { path: '/subscriptions', component: SubscriptionsPage },
     { path: '/search', component: SearchPage },
+    { path: '/forbidden', component: ForbiddenPage, name:'forbidden' },
+    { path: '/not-found', component: NotFoundPage, name: 'not-found' },
+    { path: '/:pathMatch(.*)*', component: NotFoundPage, name: 'not-found' },
 ]
 
-export default new VueRouter.createRouter({
+
+
+let router = new VueRouter.createRouter({
     history: VueRouter.createWebHistory(),
     routes 
 })
+
+router.beforeEach((to, from, next) => {
+
+    NProgress.start()
+
+    if (localStorage.getItem('jwt') == 'null') {
+        if (to.path == '/auth' || to.path == '/' || to.path.startsWith('/registration')) {
+            next()
+        }
+        else {
+            router.push("/auth")
+        }
+    }
+    else {
+        next()
+    }
+
+})
+
+router.afterEach((to) => {
+    if (to.name == "not-found" || to.name == "forbidden" || to.name == 'login' || to.path.startsWith('/registration')) {
+        NProgress.done(true)
+    }
+})
+
+export default router

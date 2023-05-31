@@ -44,6 +44,8 @@ import PostView from "@/components/PostView";
 import FilterNews from "@/components/FilterNews";
 import MyButton from "@/components/MyButton";
 
+import NProgress from "nprogress";
+
 export default {
     data(){
         return {
@@ -118,6 +120,7 @@ export default {
             this.user = response.data
             this.choosen = this.user.tags
           }
+          NProgress.done(true)
         })        
     },
     watch: {
