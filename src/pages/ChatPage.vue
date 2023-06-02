@@ -9,7 +9,7 @@
                     <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>  
                 </div>                               
             </div> 
-            <MessageSend @createMessage="onCreateMessage" @editMessage ="onEditMessage" :messageEdit="messageEdit"/>
+            <MessageSend ref="message-send" @createMessage="onCreateMessage" @editMessage ="onEditMessage" :messageEdit="messageEdit"/>
         </div>
     </div> 
 </template>
@@ -35,7 +35,7 @@ export default{
         return {
             chat: {},
             me: {},
-            messageEdit: {}
+            messageEdit: {},
         }
     },
     components: {
@@ -46,11 +46,27 @@ export default{
     },
     methods: {
         onCreateMessage(data){
-            const message = {
-                user: {login: this.me.login},
-                text: data.text,
-            };
-            stompClient.send("/app/create-message/"  +this.$route.params.id , {}, JSON.stringify(message));
+            var message = null
+            if(data.file){
+                message = {
+                    user: {login: this.me.login},
+                    text: data.text,
+                    binaryFile: {
+                        base64: data.binaryFile,
+                        name: data.file.name,
+                        lastModified: data.file.lastModified,
+                        type: data.file.type
+                    }
+                };
+            }
+            else{
+                message = {
+                    user: {login: this.me.login},
+                    text: data.text,
+                };
+            }
+            
+            stompClient.send("/app/create-message/"  +this.$route.params.id , {}, JSON.stringify(message))
         },
         onDeleteMessage(id){
             stompClient.send("/app/delete-message/" + id , {}, {});            
@@ -60,11 +76,27 @@ export default{
             this.messageEdit = data
         },
         onEditMessage(data){
-            const message = {
-                id: data.id,
-                text: data.text,
-            };
-            console.log(message)
+            var message=null
+            if(data.file){
+                message = {
+                    id: data.id,
+                    text: data.text,
+                    binaryFile: {
+                        base64: data.binaryFile,
+                        name: data.file.name,
+                        lastModified: data.file.lastModified,
+                        type: data.file.type
+                    },
+                    isFileDeleted: data.isFileDeleted
+                };
+            }
+            else{
+                message = {
+                    id: data.id,
+                    text: data.text,
+                    isFileDeleted: data.isFileDeleted
+                };
+            }
             stompClient.send("/app/update-message/"  + message.id , {}, JSON.stringify(message));
         },
         connect(chatId, vm) {
@@ -84,11 +116,10 @@ export default{
                         vm.updateMessage(messageData)
                     }
                 });
-            });
+            })
         },
         addMessage(data) {
             if(data.user.login==='bot'){
-                console.log(data.user.login)
                 setTimeout(() => {
                     this.chat.messages.push(data)
                 }, 2000);
@@ -141,10 +172,19 @@ export default{
                 }
             })
             NProgress.done(true)
+            console.log(this.chat.messages)
+            
         })
-        
         this.connect(chatId, vm);
+        
     },
+    watch:{
+        "chat.messages"(){
+            setTimeout(() => {
+                this.$refs["message-send"].scrollToTextArea()
+            }, 500);            
+        }
+    }
 
 }
 </script>

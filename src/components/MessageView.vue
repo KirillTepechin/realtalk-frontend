@@ -51,6 +51,13 @@
                     
                     <label class="username">{{ this.message.user.name + ' '+ this.message.user.surname }}</label>
                     <label class="message-text">{{ this.message.text }}</label>
+                    <div v-if="this.message.file">
+                        <img v-if="this.message.isFileImage" class="message-image" v-bind:src= "'/photos/'+ this.message.file">
+                        <a v-else v-bind:href= "'/photos/'+ this.message.file" class ="message-file" target="_blank">
+                            <img src="../assets/file.png" width="20" height="20">
+                            <p>{{ this.message.file.split('.')[1]+'.'+this.message.file.split('.')[2]}}</p>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div>
@@ -167,12 +174,18 @@ label{
     text-align: left;
 }
 
-img{
-    align-self: center;
-}
-
 .icon{
     cursor: pointer;
 }
-
+.message-file{
+    align-self: center;
+    border-color: #D276FD;
+    margin-block: 10px;
+    margin-inline: 2px;
+    height: 50px;
+    font-size: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 </style>

@@ -147,7 +147,6 @@ export default {
             return this.$route.path.toString().substring(1)
         },
         onFileChange(e) {
-            //console.log(e)
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length)
                 return;
@@ -214,9 +213,7 @@ export default {
                         if(data.file != null || data.deletePhoto == true){
                             PostService.uploadPostPhoto(response.data.id, {file: data.file}).then((response1) => {
                                 if (response1.status == 200) {
-                                    console.log(response1.data)
                                     this.posts.splice(this.getIndex(this.posts, data.post.id), 1, response1.data)
-                                    console.log('1')                                    
                                 }
                             })
                         }

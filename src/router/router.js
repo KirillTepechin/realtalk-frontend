@@ -28,8 +28,7 @@ import LoginDataForm from "@/components/LoginDataForm";
 
 
 const routes = [
-    { path: '/', component: LoginPage, name:'login' },
-    { path: '/auth', component: LoginPage, name:'login' },
+    
     { path: '/registration', component: RegistrationPage, redirect: { path: "/registration/step-1" },
      children: [
         {
@@ -71,6 +70,8 @@ const routes = [
     { path: '/search', component: SearchPage },
     { path: '/forbidden', component: ForbiddenPage, name:'forbidden' },
     { path: '/not-found', component: NotFoundPage, name: 'not-found' },
+    { path: '/', component: LoginPage, name:'login'},
+    { path: '/auth', component: LoginPage, name:'login' },
     { path: '/:pathMatch(.*)*', component: NotFoundPage, name: 'not-found' },
 ]
 
@@ -82,11 +83,10 @@ let router = new VueRouter.createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-
     NProgress.start()
 
     if (localStorage.getItem('jwt') == 'null') {
-        if (to.path == '/auth' || to.path == '/' || to.path.startsWith('/registration')) {
+        if (to.path == '/auth' || to.path.startsWith('/registration')) {
             next()
         }
         else {
