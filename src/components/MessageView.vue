@@ -48,7 +48,6 @@
                  height="50"
                  >
                 <div class="user-info">
-                    
                     <label class="username">{{ this.message.user.name + ' '+ this.message.user.surname }}</label>
                     <label class="message-text">{{ this.message.text }}</label>
                     <div v-if="this.message.file">
@@ -58,10 +57,10 @@
                             <p>{{ this.message.file.split('.')[1]+'.'+this.message.file.split('.')[2]}}</p>
                         </a>
                     </div>
+                    <ReplyPostView v-if="this.message.replyPost" :post="this.message.replyPost" class="reply" @click="goToPost(this.message.replyPost)"/>
                 </div>
             </div>
             <div>
-               
                 <div class="date">
                     <label style="font-size: 11pt;">{{this.message.date}}</label>
                 </div> 
@@ -77,52 +76,57 @@
 
 <script>
     import UserService from "@/services/UserService";
+    import ReplyPostView from "./ReplyPostView.vue";
 
     export default{
-        data(){
-            return{
-                me:{},
+    data() {
+        return {
+            me: {},
+        };
+    },
+    props: {
+        chat: null,
+        message: null,
+    },
+    components: { ReplyPostView },
+    methods: {
+        getLastMessage() {
+            if (this.chat.messages.length != 0) {
+                let lastMessage = this.chat.messages[this.chat.messages.length - 1];
+                let text = lastMessage.text;
+                let owner = lastMessage.user.name + " " + lastMessage.user.surname;
+                return owner + ": " + text;
+            }
+            return "";
+        },
+        getLastMessageDate() {
+            if (this.chat.messages.length != 0) {
+                let date = this.chat.messages[this.chat.messages.length - 1].date;
+                return date;
+            }
+            return "";
+        },
+        withUser() {
+            if (this.chat.users[0].login == this.me.login) {
+                return this.chat.users[1];
+            }
+            else {
+                return this.chat.users[0];
             }
         },
-        props:{
-            chat: null,
-            message:{},
+        goToPost(post){
+            this.$router.push("/"+post.user.login+"?post="+post.id)
         },
-        methods:{
-            getLastMessage(){
-                if(this.chat.messages.length!=0){
-                    let lastMessage = this.chat.messages[this.chat.messages.length-1]
-                    let text = lastMessage.text
-                    let owner = lastMessage.user.name+ ' '+ lastMessage.user.surname
-                    return owner + ': '+ text
-                }
-                return ""
-            },
-            getLastMessageDate(){
-                if(this.chat.messages.length!=0){
-                    let date = this.chat.messages[this.chat.messages.length-1].date
-                    return date
-                }
-                return ""
-            },
-            withUser(){
-                if(this.chat.users[0].login == this.me.login){
-                    return this.chat.users[1]
-                }
-                else{
-                    return this.chat.users[0]
-                }
-            },
-        },
-        mounted(){
-            UserService.me().then((response) => {
-                if (response.status == 200) {
-                    this.me = response.data
-                }
-            })
-        }
-        
-    }
+    },
+    mounted() {
+        UserService.me().then((response) => {
+            if (response.status == 200) {
+                this.me = response.data;
+            }
+        });
+    },
+    
+}
 </script>
 
 <style scoped>
@@ -187,5 +191,8 @@ label{
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+.reply{
+    cursor: pointer;
 }
 </style>

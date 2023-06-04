@@ -1,8 +1,15 @@
 <template>
+    <PopUpSendReplyVue
+      v-show="isShowModalSendReply"
+      @modalAction="onModalActionSendReply"
+      :me="me"
+      :stompClient="stompClient"
+      :post="post"
+    />
     <div class="post-container">
         <div class="post-area">
             <div class="user">
-                <div class="user-profile">
+                <div class="user-profile" v-if="this.post.user">
                     <img class="user-photo"
                     v-if="this.post.user.photo"
                     v-bind:src= "'/photos/'+ this.post.user.photo"
@@ -20,9 +27,10 @@
                         <label style="font-size: 10pt;">{{post.date}}</label>
                     </div>
                 </div>
-                <div class="btns-bar" v-if="post.user.login == this.me.login">
-                    <img class="icon" src="../assets/edit.png" width="20" height="20" @click="onEditPostMode()">
-                    <img class="icon" src="../assets/delete.png" width="20" height="20" @click="this.$emit('deletePost', post.id)">
+                <div class="btns-bar" >
+                    <img v-if="post.user.login == this.me.login" class="icon" src="../assets/edit.png" width="20" height="20" @click="onEditPostMode()">
+                    <img v-if="post.user.login == this.me.login" class="icon" src="../assets/delete.png" width="20" height="20" @click="this.$emit('deletePost', post.id)">
+                    <img class="icon" src="../assets/reply.png" width="22" height="22" @click="toggleModalSendReply">
                 </div>
             </div>
 
@@ -123,7 +131,7 @@ import PostService from "@/services/PostService";
 import MyButton from "@/components/MyButton";
 import CommentView from "@/components/CommentView";
 import CommentService from "@/services/CommentService";
-
+import PopUpSendReplyVue from "@/components/pop-up/PopUpSendReply"
     export default{
     data(){
         return {
@@ -152,24 +160,18 @@ import CommentService from "@/services/CommentService";
                 id: null,
                 text:""
             },
-            comments:[]
+            comments:[],
+            isShowModalSendReply: false
         }
     },
     components:{
         MyButton,
-        CommentView
+        CommentView,
+        PopUpSendReplyVue
     },
     props: {
-        post: {
-            id: Number,
-            text: "",
-            date: "",
-            tags: {},
-            user: {},
-            comments: [],
-            likes: {},
-            photo: null
-        }
+        post:null,
+        stompClient: null,
     },
     methods: {
         showComments(e){
@@ -271,7 +273,11 @@ import CommentService from "@/services/CommentService";
                 }
             }
             return -1;
-        }
+        },
+        toggleModalSendReply(){
+            this.isShowModalSendReply = !this.isShowModalSendReply;
+        },
+    
     },
     mounted() {
         UserService.me().then((response) => {

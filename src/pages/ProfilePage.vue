@@ -40,7 +40,8 @@
                         </div>
                     </div>
                     <div class="post" v-for='post in posts' v-bind:key="post.id">
-                        <PostView :post="post" @deletePost ="onDeletePost($event)" @editPost ="onEditPost($event)"/>
+                        <a :id="'post-' + post.id"></a>
+                        <PostView :post="post" @deletePost ="onDeletePost($event)" @editPost ="onEditPost($event)" :stompClient="this.stompClient"/>
                     </div>
             </div>
             <div class="sub-sub" v-if="this.user.subscribers && this.user.subscriptions">
@@ -58,8 +59,9 @@
         <ProfileView class ="profile-top" :user="this.anotherUser" :posts="this.posts"/>
         <div class="profile-bottom">
             <div class="posts-form">
-                    <div class="post" v-for='post in posts' v-bind:key="post.id">
-                    <PostView :post="post"/>
+                    <div class="post" v-for='post in posts' v-bind:key="post.id" :id="post.id">
+                    <a :id="'post-' + post.id"></a>
+                    <PostView :post="post" :stompClient="this.stompClient"/>
                     </div>
             </div>
             <div class="sub-sub">
@@ -86,6 +88,10 @@ import MyButton from "@/components/MyButton";
 
 import NProgress from "nprogress";
 
+import SockJS from 'sockjs-client'
+import { Stomp } from '@stomp/stompjs'
+
+
 export default {
     data(){
         return {
@@ -106,7 +112,8 @@ export default {
                 {tag:"Мемы"},
             ],
             file: null,
-            me:{}
+            me:{},
+            stompClient: null
         }
     },
     components:{
@@ -177,7 +184,7 @@ export default {
                         this.anotherUser = response.data
                     }
                     if (!response.data) {
-                        this.$router.push("not-found")
+                        this.$router.push({name: "not-found"})
                     }
                     NProgress.inc(0.33);
                     UserService.getUserPosts(this.getLoginByRoute()).then((response) => {
@@ -187,6 +194,14 @@ export default {
                         NProgress.done(true);
                     })
                 })
+            }).then(()=>{
+                if(this.$route.query.post){
+                    setTimeout(() => {
+                        var post = document.querySelector('#post-'+this.$route.query.post)
+                        post.scrollIntoView({ behavior: "smooth" })
+
+                    }, 500);    
+                }
             })
             
         },
@@ -227,10 +242,22 @@ export default {
         removePhoto(e){
             this.file=null
             e.preventDefault()
-        }
+        },
+        connect() {
+            var socket = new SockJS('http://localhost:9000/gs-guide-websocket');
+            this.stompClient = Stomp.over(socket);
+            this.stompClient.debug = f => f;
+            this.stompClient.connect({}, {})
+        },
     },
     mounted() {
         this.loadData()
+        this.connect()
+    },
+    unmounted(){
+        if (this.stompClient !== null) {
+            this.stompClient.disconnect()
+        }
     },
     watch: {
         '$route'() {

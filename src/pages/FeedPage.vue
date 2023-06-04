@@ -3,7 +3,7 @@
     <div class="feed-body">
         <div class="feed-posts" v-if="this.posts.length > 0">
             <div class="post" v-for='post in posts' v-bind:key="post.id">
-            <PostView :post="post"/>
+            <PostView :post="post" :stompClient="stompClient"/>
             </div>
         </div>
         <div class="noNews" v-else>            
@@ -46,6 +46,10 @@ import MyButton from "@/components/MyButton";
 
 import NProgress from "nprogress";
 
+import SockJS from 'sockjs-client'
+import { Stomp } from '@stomp/stompjs'
+
+
 export default {
     data(){
         return {
@@ -64,7 +68,8 @@ export default {
                 {tag:"Машина"},
                 {tag:"Мемы"},
             ],
-            recsMode: false
+            recsMode: false,
+            stompClient: null
         }
     },
     components:{
@@ -111,10 +116,17 @@ export default {
                     this.posts = response.data
                 }          
             })
-        }
+        },
+        connect() {
+            var socket = new SockJS('http://localhost:9000/gs-guide-websocket');
+            this.stompClient = Stomp.over(socket);
+            this.stompClient.debug = f => f;
+            this.stompClient.connect({}, {})
+        },
     },
     mounted(){
-        this.findRecommends(),
+        this.findRecommends()
+        this.connect()
         UserService.me().then((response)=> {
           if(response.status == 200) {            
             this.user = response.data
@@ -122,6 +134,11 @@ export default {
           }
           NProgress.done(true)
         })        
+    },
+    unmounted(){
+        if (this.stompClient !== null) {
+            this.stompClient.disconnect()
+        }
     },
     watch: {
         'preferences'() {

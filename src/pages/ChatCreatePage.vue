@@ -149,12 +149,6 @@ input[type=checkbox] {
     align-items: center;
 }
 
-.snippet {
-    -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: #D276FD;
-
-}
-
 .btn{    
     padding: 10px;
     min-width: 150px;

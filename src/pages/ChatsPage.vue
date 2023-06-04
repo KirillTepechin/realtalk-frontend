@@ -105,7 +105,6 @@ export default {
     },
     computed: {
         filter() {
-
             let usersInChat = this.chats.map(chat => chat.users)
             usersInChat.forEach(userInChat => {
                 if (userInChat[0].login == this.me.login) {

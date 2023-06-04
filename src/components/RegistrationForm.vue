@@ -1,16 +1,6 @@
 <template>    
         <form novalidate="true" @submit.prevent>
         <h4>Регистрация</h4>
-
-        <!-- <div class="errors">
-            <p v-if="errors.length">
-            <b>Пожалуйста, исправьте указанные ошибки:</b>
-            <ul>
-              <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-            </ul>
-          </p>
-        </div> -->
-        
         <InputIcon
         v-model="name"
         :type = "'text'"

@@ -4,7 +4,7 @@
         <div class="page-chat-container">        
             <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
             <CompanionView v-else-if="this.getChatUsers()" :users="this.getChatUsers()" :chat="this.chat" /> 
-            <div class="sms-list">
+            <div class="sms-list" v-if="this.chat.messages">
                 <div class="sms" v-for='msg in this.chat.messages' v-bind:key="msg.id">
                     <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>  
                 </div>                               
@@ -102,6 +102,7 @@ export default{
         connect(chatId, vm) {
             var socket = new SockJS('http://localhost:9000/gs-guide-websocket');
             stompClient = Stomp.over(socket);
+            stompClient.debug = f => f;
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
                 stompClient.subscribe('/topic/'+chatId, function (message) {
@@ -171,12 +172,15 @@ export default{
                     this.me = response.data
                 }
             })
-            NProgress.done(true)
-            console.log(this.chat.messages)
-            
+            NProgress.done(true)            
         })
         this.connect(chatId, vm);
         
+    },
+    unmounted(){
+        if (stompClient !== null) {
+            stompClient.disconnect()
+        }
     },
     watch:{
         "chat.messages"(){
