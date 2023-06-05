@@ -198,8 +198,7 @@ export default {
                 if(this.$route.query.post){
                     setTimeout(() => {
                         var post = document.querySelector('#post-'+this.$route.query.post)
-                        post.scrollIntoView({ behavior: "smooth" })
-
+                        post.scrollIntoView({ behavior: "smooth" , block: "center"})
                     }, 500);    
                 }
             })

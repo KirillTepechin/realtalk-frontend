@@ -1,6 +1,6 @@
 import * as VueRouter from 'vue-router'
 
-//import NProgress from 'nprogress'
+import NProgress from 'nprogress'
 
 import LoginPage from "@/pages/LoginPage";
 import RegistrationPage from "@/pages/RegistrationPage";
@@ -80,27 +80,27 @@ let router = new VueRouter.createRouter({
     routes 
 })
 
-// router.beforeEach((to, from, next) => {
-//     NProgress.start()
+router.beforeEach((to, from, next) => {
+    NProgress.start()
 
-//     if (localStorage.getItem('jwt') == 'null') {
-//         if (to.path == '/auth' || to.path.startsWith('/registration')) {
-//             next()
-//         }
-//         else {
-//             router.push("/auth")
-//         }
-//     }
-//     else {
-//         next()
-//     }
+    if (localStorage.getItem('jwt') == 'null') {
+        if (to.path == '/auth' || to.path.startsWith('/registration')) {
+            next()
+        }
+        else {
+            router.push("/auth")
+        }
+    }
+    else {
+        next()
+    }
 
-// })
+})
 
-// router.afterEach((to) => {
-//     if (to.name == "not-found" || to.name == "forbidden" || to.name == 'login' || to.path.startsWith('/registration')) {
-//         NProgress.done(true)
-//     }
-// })
+router.afterEach((to) => {
+    if (to.name == "not-found" || to.name == "forbidden" || to.name == 'login' || to.path.startsWith('/registration')) {
+        NProgress.done(true)
+    }
+})
 
 export default router

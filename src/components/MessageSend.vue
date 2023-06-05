@@ -1,12 +1,12 @@
 <template>
     <div class="sms-create">
-        <textarea ref="text-area" v-model="text" type="text" placeholder="Напишите сообщение..."></textarea>
+        <textarea :class="{flash: focusOnTextArea}" ref="text-area" v-model="text" type="text" placeholder="Напишите сообщение..."></textarea>
         <div>
             <img @click="createOrEdit" src="../assets/send.png" width="35" height="35">
             <MyButton v-if="this.internalMessage" @click="cancel">Отменить</MyButton>
         </div>
         <input @change="onFileChange" id="file" type="file">
-        <label for="file" class="input-file-btn">
+        <label for="file" class="input-file-btn"  v-bind:class="{ disabled: fileDisabled }">
             <div class="label-photo">
                 <img src="../assets/file.png" width="20" height="20">
                 <span>Файл</span>
@@ -26,15 +26,23 @@
     </div>
     <div class="message-file" v-else-if="this.internalMessage?.file">
         <div v-if="this.internalMessage.isFileImage" class="image-area">
-            <img v-bind:src="'/photos/'+this.internalMessage.file" @dblclick="removePhoto($event)">
+            <img v-bind:src="'/photos/'+this.internalMessage.file" @dblclick="removeAttachment($event)">
         </div>
         <div v-else class="file-area">
-            <div @dblclick="removePhoto($event)">
+            <div @dblclick="removeAttachment($event)">
                 <img src="../assets/file.png" width="20" height="20">
                 <p>{{ this.internalMessage.file.split('.')[1]+'.'+this.internalMessage.file.split('.')[2]}}</p>
             </div>
         </div>
     </div>
+    <div class="message-post-reply" v-else-if="this.internalMessage?.replyPost">
+        <div class="post-reply-area">
+            <div @dblclick="removeAttachment($event)">
+                <p>Прикреплённый пост</p>
+            </div>
+        </div>
+    </div>
+    
 </template>
 
 <script>
@@ -51,7 +59,9 @@ export default {
             internalMessage: null,
             file:null,
             binaryFile:null,
-            isFileDeleted: false
+            isFileDeleted: false,
+            fileDisabled:false,
+            focusOnTextArea: false
         }
     },
     props:{
@@ -65,17 +75,32 @@ export default {
                     file: this.file,
                     binaryFile: this.binaryFile
                 })
+                console.log("create")
+                this.cancel()
             }
-            else if(this.text!=='' || this.file){
+            else if(this.text!=='' || this.file || this.internalMessage?.replyPost || this.internalMessage?.file){
                 this.$emit('editMessage', {
                     id : this.internalMessage.id,
                     text: this.text,
                     file: this.file,
                     binaryFile: this.binaryFile,
-                    isFileDeleted: this.isFileDeleted
+                    isFileDeleted: this.isFileDeleted,
+                    isReplyDeleted: this.internalMessage.isReplyDeleted
                 })
+                console.log("update")
+
+                this.cancel()
             }
-            this.cancel()
+            else{
+                this.scrollToTextArea()
+                this.flashingTextArea()
+            }
+        },
+        flashingTextArea() {
+            this.focusOnTextArea = true
+            setTimeout(() => {
+                this.focusOnTextArea = false
+            }, 800);
         },
         cancel(){
             this.file=null
@@ -83,6 +108,8 @@ export default {
             this.text=''
             this.internalMessage = null
             this.isFileDeleted = false
+            document.getElementById('file').disabled = false;
+            this.fileDisabled = false;
         },
         onFileChange(e) {
             var files = e.target.files || e.dataTransfer.files;
@@ -106,12 +133,14 @@ export default {
             this.file = file;
             this.isFileDeleted = false
         },
-        removePhoto(e){
+        removeAttachment(e){
             this.file=null
             if(this.internalMessage){
                 this.internalMessage.file = null
                 this.internalMessage.isFileImage = null
                 this.isFileDeleted = true
+                this.internalMessage.replyPost = null
+                this.internalMessage.isReplyDeleted = true
             }
             e.preventDefault()
         },
@@ -124,7 +153,15 @@ export default {
         'messageEdit.key'() {
             this.internalMessage = JSON.parse(JSON.stringify(this.messageEdit)) 
             this.text = this.internalMessage.text
-           
+            if(this.internalMessage.replyPost){
+                document.getElementById('file').disabled = true;
+                this.fileDisabled = true;
+            }
+            else{
+                document.getElementById('file').disabled = false;
+                this.fileDisabled = false;
+            }
+            this.internalMessage.isReplyDeleted = false
             this.scrollToTextArea()
         },
 
@@ -159,7 +196,7 @@ export default {
 
 .sms-create img{
     align-self: center;
-    cursor: pointer;
+    cursor: pointer
 }
 
 .input-file-btn {	
@@ -181,6 +218,7 @@ export default {
     border: 1px solid;
     margin-bottom: 5px;
 }
+
 #file{
     display: none;
 }
@@ -207,21 +245,27 @@ span{
     border: 2px solid;
     align-self: center;
     border-color: #D276FD;
+    border-radius: 10px;
     margin-block: 10px;
     margin-left: 2px;
     overflow: hidden;
     width: 50px;
     height: 50px;
+    cursor: pointer
 }
-.file-area{
+
+.file-area, .post-reply-area{
     border: 2px solid;
     align-self: center;
     border-color: #D276FD;
+    border-radius: 10px;
     margin-block: 10px;
     margin-inline: 2px;
     height: 50px;
+    cursor: pointer
 }
-.file-area div{
+
+.file-area div, .post-reply-area div{
     font-size: 15px;
     display: flex;
     flex-direction: row;
@@ -234,5 +278,12 @@ span{
     margin: 0 auto;
     cursor: pointer;
 }
+
+.disabled{
+    cursor:auto;
+    background-color:#dddddd;
+}
+
+.flash { border-color: red !important }
 
 </style>

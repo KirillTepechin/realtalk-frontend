@@ -12,9 +12,8 @@
                             <InputIcon v-model="search" class="input-icon" :type="'text'" :placeholder="'Поиск'"
                                 :src="'search.png'" :width="'18'" :height="'18'" />
                             <div :class="`${modalClass}-scrollable`">
-                                <div v-for='chat in filter' v-bind:key="chat.id" class="chats">
-                                    <MessageView :chat="chat" class="chat-choose"
-                                        @click="this.choose(chat.id)" />
+                                <div v-for='chat in filter' v-bind:key="chat.id" class="chats"  @click="this.choose(chat.id)">
+                                    <MessageView :chat="chat" class="chat-choose"/>
                                     <input name="chat" type="radio" :checked="choosenChat==chat.id"
                                         :value="chat.id">
                                 </div>

@@ -94,7 +94,8 @@ export default{
                 message = {
                     id: data.id,
                     text: data.text,
-                    isFileDeleted: data.isFileDeleted
+                    isFileDeleted: data.isFileDeleted,
+                    isReplyDeleted: data.isReplyDeleted
                 };
             }
             stompClient.send("/app/update-message/"  + message.id , {}, JSON.stringify(message));

@@ -101,7 +101,7 @@
                     this.isShowModalDelete = false
                 }
                 else{
-                    ChatService.deleteChat(this.$route.params.id).then( this.$router.push("/chats"))
+                    ChatService.deleteChat(this.$route.params.id).then( ()=>{this.$router.push("/chats"); this.$forceUpdate()})
                 }
             },
             onModalActionLeave(flag){
