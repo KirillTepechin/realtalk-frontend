@@ -104,13 +104,13 @@ export default {
                 if(this.wrongData.includes('surname')) this.wrongData.splice(this.getIndex(this.wrongData, 'surname'), 1)
             }
             //Логин
-            if(this.login == '' || this.login.length < 2 || this.login.length > 30){
+            if(this.login == '' || this.login.length < 3 || this.login.length > 30){
                 this.wrongData.push('login')                
             }else{
                 if(this.wrongData.includes('login')) this.wrongData.splice(this.getIndex(this.wrongData, 'login'), 1)
             }
             //Пароль
-            if(this.password == '' || this.password.length < 6 || this.password.length > 30){
+            if(this.password == '' || this.password.length < 3 || this.password.length > 30){
                 this.wrongData.push('password')
             }else{
                 if(this.wrongData.includes('password')) this.wrongData.splice(this.getIndex(this.wrongData, 'password'), 1)
