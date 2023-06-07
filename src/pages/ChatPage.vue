@@ -87,7 +87,8 @@ export default{
                         lastModified: data.file.lastModified,
                         type: data.file.type
                     },
-                    isFileDeleted: data.isFileDeleted
+                    isFileDeleted: data.isFileDeleted,
+                    isReplyDeleted: data.isReplyDeleted
                 };
             }
             else{

@@ -16,9 +16,6 @@ axios.interceptors.response.use( null,function (error) {
     else if(error.response.status===404){
         router.push("/not-found")
     }
-    else{
-        alert(error.response)
-    }
 });
 
 createApp(App)

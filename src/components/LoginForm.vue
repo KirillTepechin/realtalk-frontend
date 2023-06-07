@@ -53,10 +53,8 @@ export default {
               }              
               window.location.href = '/feed'
             }
-        ).catch(error =>{
-          if(error.response.status){
-            this.wrongData = true
-          }
+        ).catch(() =>{
+          this.wrongData = true
         })
         e.preventDefault()
       },

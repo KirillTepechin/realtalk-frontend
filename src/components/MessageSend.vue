@@ -1,6 +1,6 @@
 <template>
     <div class="sms-create">
-        <textarea :class="{flash: focusOnTextArea}" ref="text-area" v-model="text" type="text" placeholder="Напишите сообщение..."></textarea>
+        <textarea @keyup.enter.exact="createOrEdit" :class="{flash: focusOnTextArea}" ref="text-area" v-model="text" type="text" placeholder="Напишите сообщение..."></textarea>
         <div>
             <img @click="createOrEdit" src="../assets/send.png" width="35" height="35">
             <MyButton v-if="this.internalMessage" @click="cancel">Отменить</MyButton>
@@ -69,16 +69,15 @@ export default {
     },
     methods:{
         createOrEdit() {
-            if (!this.internalMessage && (this.text!=='' || this.file)) {
+            if (!this.internalMessage && (this.text.trim()!=='' || this.file)) {
                 this.$emit('createMessage', {
                     text: this.text,
                     file: this.file,
                     binaryFile: this.binaryFile
                 })
-                console.log("create")
                 this.cancel()
             }
-            else if(this.text!=='' || this.file || this.internalMessage?.replyPost || this.internalMessage?.file){
+            else if(this.text.trim()!=='' || this.file || this.internalMessage?.replyPost || this.internalMessage?.file){
                 this.$emit('editMessage', {
                     id : this.internalMessage.id,
                     text: this.text,
@@ -87,8 +86,6 @@ export default {
                     isFileDeleted: this.isFileDeleted,
                     isReplyDeleted: this.internalMessage.isReplyDeleted
                 })
-                console.log("update")
-
                 this.cancel()
             }
             else{
