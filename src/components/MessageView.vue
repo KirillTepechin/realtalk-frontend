@@ -36,7 +36,7 @@
                 <div class="date">
                     <label style="font-size: 11pt;">{{this.getLastMessageDate()}}</label>
                 </div>  
-                <div v-if="unreadCount>0" class="unread-count">
+                <div v-if="unreadCount>0 && unread" class="unread-count">
                     <label>
                         {{ unreadCount }}
                     </label>
@@ -144,9 +144,13 @@
         if(this.chat){
             ChatService.getUnreadCount(this.chat.id).then((response) => {
                 this.unreadCount=response.data
+                this.unread = this.unreadP
             });
         }
-        this.unread = this.unreadP
+        else{
+            this.unread = false
+        }
+        
 
     },
     

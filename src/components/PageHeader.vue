@@ -58,7 +58,6 @@ export default {
         getCountOfUnread(){
             ChatService.getCountOfUnreadChats().then((response)=>{
                 this.countOfUnread = response.data
-                console.log(this.countOfUnread)
             })
         }
     },

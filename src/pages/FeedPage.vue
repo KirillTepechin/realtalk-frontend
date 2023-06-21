@@ -22,7 +22,7 @@
                             type="checkbox" 
                             :value="cat.tag"
                             v-model="choosen"
-                            :checked="choosen.includes(cat)"
+                            :checked="choosen?.includes(cat)"
                             >
                         <label>{{ cat.tag }}</label>
                     </div>

@@ -41,7 +41,6 @@ export default {
     data(){
         return {
             chats:[],
-            chat:{},
             bot:null,
             search:'',
             me:{}
@@ -81,11 +80,6 @@ export default {
             })
         },
         click(chatId, e){
-            ChatService.getChatById(chatId).then((response)=> {
-                if(response.status == 200) {            
-                    this.chat = response.data
-                }
-            })
             this.$router.push('/chat'+'/'+chatId)            
             e.preventDefault()
         },

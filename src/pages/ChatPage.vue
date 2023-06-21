@@ -177,14 +177,11 @@ export default{
 
         let chatId = this.$route.params.id
         ChatService.getChatById(chatId).then((response) => {
-            if (response.status == 200) {
-                this.chat = response.data
-            }
+            this.chat=response.data
             UserService.me().then((response) => {
                 if (response.status == 200) {
                     this.me = response.data
                 }
-                ChatService.readChat(this.chat.id)
                 NProgress.done(true)
             })
         })
@@ -195,7 +192,7 @@ export default{
         if (stompClient !== null) {
             stompClient.disconnect()
         }
-        ChatService.readChat(this.chat.id)
+        ChatService.getChatById(this.chat.id)
     },
     watch:{
         "chat.messages"(){
