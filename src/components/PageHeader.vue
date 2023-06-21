@@ -16,7 +16,7 @@
             </li>
             <li>
                 <img src="../assets/message.png" width="20" height="20">
-                <router-link :to="'/chats'">Сообщения</router-link>
+                <router-link :to="'/chats'">Сообщения  {{ countOfUnread>0?  '('+countOfUnread+')':'' }}</router-link>
             </li>
             <li>
                 <img src="../assets/subscriptions.png" width="20" height="20">
@@ -38,10 +38,12 @@
 
 <script>
 import UserService from "@/services/UserService";
+import ChatService from "@/services/ChatService";
 export default {
     data(){
         return{
-            login:{}
+            login:{},
+            countOfUnread: Number
         }
     },
     methods:{
@@ -52,6 +54,12 @@ export default {
         },
         getUserLogin(){
             return '/'+this.login
+        },
+        getCountOfUnread(){
+            ChatService.getCountOfUnreadChats().then((response)=>{
+                this.countOfUnread = response.data
+                console.log(this.countOfUnread)
+            })
         }
     },
     mounted(){
@@ -59,16 +67,14 @@ export default {
           if(response.status == 200) {            
             this.login = response.data.login 
           }          
-        })       
+        })
+        this.getCountOfUnread()       
     }
   
 }
 </script>
 
 <style scoped>
-/* .sticky {
-  width: 100%;
-} */
 
 #navbar{
     position: fixed;

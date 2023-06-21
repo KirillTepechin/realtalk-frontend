@@ -39,7 +39,20 @@ class ChatService{
         let URL = CHAT_API_BASE_URL+"/"+id
         return axios.get(URL)
     }
-
+    //GET
+    readChat(id){
+        let URL = CHAT_API_BASE_URL+"/"+id+"/read"
+        axios.get(URL)
+    }
+    //GET
+    getUnreadCount(id){
+        let URL = CHAT_API_BASE_URL+"/"+id+"/unread-count"
+        return axios.get(URL)
+    }
+    getCountOfUnreadChats(){
+        let URL = CHAT_API_BASE_URL+"/unread-count"
+        return axios.get(URL)
+    }
     //DELETE
     deleteChat(id){
         let URL = CHAT_API_BASE_URL+"/"+id

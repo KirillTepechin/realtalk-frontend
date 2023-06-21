@@ -16,7 +16,8 @@
             </div>
            
             <div v-for='chat in filter' v-bind:key="chat.id">
-                <MessageView :chat="chat" @click="click(chat.id)" class="chat"/>               
+                <MessageView v-if="readByMe(chat)" :chat="chat" @click="click(chat.id)" class="chat" :unreadP="false"/>
+                <MessageView v-else :chat="chat" @click="click(chat.id)" class="chat" :unreadP="true"/>                
             </div>
             <div v-if="!bot">
                 <p>Не с кем пообщаться? </p>
@@ -75,8 +76,7 @@ export default {
 
             UserService.me().then((response) => {
                 if (response.status == 200) {
-                    this.user = response.data
-                    this.choosen = this.user.tags
+                    this.me = response.data
                 }
             })
         },
@@ -101,6 +101,9 @@ export default {
         },
         createChat(){
             this.$router.push('/chat-create')
+        },
+        readByMe(chat) {
+           return chat.messages[chat.messages.length - 1].readBy.map(user => user.login).includes(this.me.login)
         }
     },
     computed: {

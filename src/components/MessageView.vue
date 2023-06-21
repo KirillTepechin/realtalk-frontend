@@ -1,5 +1,5 @@
 <template>
-    <div class="message-container" @click="$emit('click')">
+    <div class="message-container" @click="$emit('click')" :class="{unread: unread}">
         <div v-if="chat!=null" class="user">
             <div class="user-profile">
                 <img class="user-photo"
@@ -24,14 +24,27 @@
                     <label class="username" 
                     v-if="this.chat.isPrivate">{{ this.withUser().name }} {{ this.withUser().surname }}</label>
                     <label class="username" v-else>{{ this.chat.name }}</label>
-                    <label class="message-text">{{ this.getLastMessage() }}</label>
+                    <div class="message-data">
+                        <div>
+                            <label class="message-text">{{ this.getLastMessage() }}</label>
+                        </div>
+                    </div>
                 </div>
             </div>
+           
+            <div>
+                <div class="date">
+                    <label style="font-size: 11pt;">{{this.getLastMessageDate()}}</label>
+                </div>  
+                <div v-if="unreadCount>0" class="unread-count">
+                    <label>
+                        {{ unreadCount }}
+                    </label>
+                </div>         
+            </div>
             
-            <div class="date">
-                <label style="font-size: 11pt;">{{this.getLastMessageDate()}}</label>
-            </div>            
         </div>
+        
 
         <div v-else class="user">
             <div class="user-profile">
@@ -76,17 +89,21 @@
 
 <script>
     import UserService from "@/services/UserService";
+    import ChatService from "@/services/ChatService";
     import ReplyPostView from "./ReplyPostView.vue";
 
     export default{
     data() {
         return {
             me: {},
+            unreadCount: 0,
+            unread: Boolean
         };
     },
     props: {
         chat: null,
         message: null,
+        unreadP: Boolean,
     },
     components: { ReplyPostView },
     methods: {
@@ -124,6 +141,13 @@
                 this.me = response.data;
             }
         });
+        if(this.chat){
+            ChatService.getUnreadCount(this.chat.id).then((response) => {
+                this.unreadCount=response.data
+            });
+        }
+        this.unread = this.unreadP
+
     },
     
 }
@@ -141,7 +165,9 @@
     padding: 15px 20px;
     border-color: #D276FD;
 }
-
+.unread{
+    background-color: #eccefa;
+}
 .user{
     display: flex;
     flex-direction: row;
@@ -158,6 +184,15 @@
     flex-direction: column;
     align-items: flex-start;
     margin-left: 15px;
+}
+.unread-count{
+    border: 2px solid;
+    border-color: #D276FD;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-inline: auto;
+    margin-top: 10px;
 }
 .user-photo{
     border: 2px solid;

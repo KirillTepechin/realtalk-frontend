@@ -6,20 +6,7 @@
 
   export default {
   name: 'App',
-  components: {
-  },
   methods:{
-    foo(path){
-      let e = 0
-      for (var i = 1; i < path.length; i++) {
-        if(path[i]==='/'){
-          e=i
-        }
-      }
-      console.log(path)
-      console.log(path.substring(0,e))
-      return path.substring(0, e)
-    }
 
   }
 }

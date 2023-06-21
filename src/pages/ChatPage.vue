@@ -4,9 +4,10 @@
         <div class="page-chat-container">        
             <CompanionView v-if="this.getChatUsers() && this.withUser()" :users="this.getChatUsers()" :with="this.withUser()"/> 
             <CompanionView v-else-if="this.getChatUsers()" :users="this.getChatUsers()" :chat="this.chat" /> 
-            <div class="sms-list" v-if="this.chat.messages">
+            <div class="sms-list" v-if="this.chat.messages && this.me">
                 <div class="sms" v-for='msg in this.chat.messages' v-bind:key="msg.id">
-                    <MessageView :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent"/>  
+                    <MessageView v-if="readByMe(msg)" :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent" :unreadP="false"/> 
+                    <MessageView v-else :message="msg" @deleteMessage ="onDeleteMessage" @editMessageEvent ="onEditMessageEvent" :unreadP="true"/>  
                 </div>                               
             </div> 
             <MessageSend ref="message-send" @createMessage="onCreateMessage" @editMessage ="onEditMessage" :messageEdit="messageEdit"/>
@@ -127,6 +128,10 @@ export default{
                     this.chat.messages.push(data)
                 }, 2000);
             }
+            else if(data.user.login===this.me.login){
+                data.readBy = [{login: this.me.login}]
+                this.chat.messages.push(data)
+            }
             else{
                 this.chat.messages.push(data)
             }
@@ -136,6 +141,9 @@ export default{
         },
         updateMessage(data){
             let index = this.getIndex(this.chat.messages, data.id);
+            if(data.user.login===this.me.login){
+                data.readBy = [{login: this.me.login}]
+            }
             this.chat.messages.splice(index, 1, data);
         },
         getIndex(list, id) {
@@ -160,6 +168,9 @@ export default{
             }
             return null
         },
+        readByMe(msg) {
+            return msg.readBy?.map(user => user.login).includes(this.me.login)
+        }
     },   
     mounted() {
         const vm = this; // сохраняем ссылку на объект Vue
@@ -173,8 +184,9 @@ export default{
                 if (response.status == 200) {
                     this.me = response.data
                 }
+                ChatService.readChat(this.chat.id)
+                NProgress.done(true)
             })
-            NProgress.done(true)            
         })
         this.connect(chatId, vm);
         
@@ -183,6 +195,7 @@ export default{
         if (stompClient !== null) {
             stompClient.disconnect()
         }
+        ChatService.readChat(this.chat.id)
     },
     watch:{
         "chat.messages"(){
