@@ -36,6 +36,9 @@ export default {
         if (messageData.action === "ON_CREATE" && messageData.user.login !== vm.me.login 
             && !vm.$route.path.startsWith("/chat/"+cloneChat.id)) {
           vm.chats.push(cloneChat)
+           var audio = new Audio('notification.mp3'); // path to file
+            //audio.load()
+            audio.play();
         }
       });
     },
@@ -54,6 +57,7 @@ export default {
   },
   
   mounted() {
+   
     const vm = this; // сохраняем ссылку на объект Vue
     UserService.me().then((response) => {
       this.me = response.data

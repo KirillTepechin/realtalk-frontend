@@ -27,6 +27,17 @@
                     <div class="message-data">
                         <div>
                             <label class="message-text">{{ this.getLastMessage() }}</label>
+                           
+                            <div style="display: inline-block;" v-if="this.chat.messages.length != 0 && (this.chat.messages[this.chat.messages.length - 1].file || this.chat.messages[this.chat.messages.length - 1].replyPost)">
+                                <div v-if="this.chat.messages[this.chat.messages.length - 1].file">
+                                    <label v-if="this.chat.messages[this.chat.messages.length - 1].isFileImage" class="message-attachment">Фото</label>
+                                    <label v-else class="message-attachment">Файл</label>
+                                </div>
+                                <div v-else>
+                                    <label class="message-attachment">Прикрепленный пост</label>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -112,6 +123,7 @@
                 let lastMessage = this.chat.messages[this.chat.messages.length - 1];
                 let text = lastMessage.text;
                 let owner = lastMessage.user.name + " " + lastMessage.user.surname;
+                console.log(this.chat.messages[this.chat.messages.length - 1])
                 return owner + ": " + text;
             }
             return "";
@@ -136,6 +148,7 @@
         },
     },
     mounted() {
+        this.chat
         UserService.me().then((response) => {
             if (response.status == 200) {
                 this.me = response.data;
@@ -237,5 +250,9 @@ label{
 .message-image{
     max-width: 500px;
     max-height: 500px;
+}
+.message-attachment{
+    color: gray;
+    margin-left: 5px;
 }
 </style>
